@@ -18,15 +18,11 @@ const SiderContent = ({ selectedOption }) => {
   };
 
   const subMenus = {
-    Merchants: [{ key: "merchant-list", label: "Merchant List" }],
-    Services: [
-      { key: "service-list", label: "Service List" },
-      { key: "category-list", label: "Category List" },
+    Security: [
+      { key: "roles", label: "Roles" },
+      { key: "permissions", label: "Permissions" },
     ],
-    Connects: [{ key: "connect-list", label: "Connect List" }],
-    Providers: [{ key: "provider-list", label: "Provider List" }],
-    Security: [{ key: "roles", label: "Roles" }],
-    Users: [{ key: "users", label: <Link to="/user-list">User List</Link> }],
+    Users: [{ key: "users", label: "User List" }],
   };
 
   const createMenuItems = (items) =>

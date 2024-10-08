@@ -1,16 +1,11 @@
 import { Menu } from "antd";
 import React from "react";
+// import UserService from "../services/UserService";
 
 const buildMenuItems = () => {
   return [
-    { label: "Merchants", key: "Merchants" },
-    { label: "Services", key: "Services" },
-    { label: "Connects", key: "Connects" },
-    { label: "Providers", key: "Providers" },
-    { label: "Security", key: "Security" },
     { label: "Users", key: "Users" },
-    { label: "Reports", key: "Reports" },
-    { label: "Receipts", key: "Receipts" },
+    { label: "Security", key: "Security" },
   ];
 };
 
