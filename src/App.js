@@ -3,9 +3,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Login from "./pages/login/Login";
 import TheLayout from "./containers/TheLayout";
-import UserList from "./pages/user/UserList"; // Import the UserList component
+import UserList from "./pages/user/UserList";
 import ErrorBoundary from "./containers/ErrorBoundary";
 import RoleList from "./pages/security/role/RoleList";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import UserForm from "./pages/user/UserForm";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -46,6 +48,14 @@ const App = () => {
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <RoleList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="user-form" // Nested route
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <UserForm />
               </PrivateRoute>
             }
           />
