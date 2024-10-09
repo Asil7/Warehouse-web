@@ -120,12 +120,12 @@ const UserForm = () => {
               />
             </Form.Item>
             <div className="text-end">
-              <Button htmlType="submit" className="me-1" type="primary">
+              <Link to={"/users"}>
+                <Button className="me-1">Cancel</Button>
+              </Link>
+              <Button htmlType="submit" type="primary">
                 Save
               </Button>
-              <Link to={"/users"}>
-                <Button>Cancel</Button>
-              </Link>
             </div>
           </Form>
         </Col>

@@ -154,6 +154,7 @@ const PermissionList = () => {
           loading={isLoading}
           dataSource={permissionList}
           columns={columns}
+          rowKey="id"
           pagination={{ pageSize: 10 }}
         />
       </Card>

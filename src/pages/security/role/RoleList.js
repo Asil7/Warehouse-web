@@ -90,6 +90,7 @@ const RoleList = () => {
           loading={isLoading}
           dataSource={roleList}
           columns={columns}
+          rowKey="id"
         />
       </Card>
     </div>

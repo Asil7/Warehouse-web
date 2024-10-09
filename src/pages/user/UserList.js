@@ -270,7 +270,9 @@ const UserList = () => {
               <Button onClick={handleModalClose} className="me-1">
                 Cancel
               </Button>
-              <Button htmlType="submit">Change</Button>
+              <Button type="primary" htmlType="submit">
+                Change
+              </Button>
             </div>
           </Form>
         </div>
@@ -303,7 +305,9 @@ const UserList = () => {
               <Button onClick={handlePasswordModalClose} className="me-1">
                 Cancel
               </Button>
-              <Button htmlType="submit">Save</Button>
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
             </div>
           </Form>
         </div>
