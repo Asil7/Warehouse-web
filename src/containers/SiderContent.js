@@ -20,7 +20,7 @@ const SiderContent = ({ selectedOption }) => {
   const subMenus = {
     Security: [
       { key: "roles", label: "Roles" },
-      { key: "permissions", label: "Permissions" },
+      { key: "permission-list", label: "Permissions" },
     ],
     Users: [{ key: "users", label: "User List" }],
   };
@@ -28,7 +28,11 @@ const SiderContent = ({ selectedOption }) => {
   const createMenuItems = (items) =>
     items.map((item) => ({
       label: (
-        <Link to={item.key} onClick={() => handleItemClick(item.key)}>
+        <Link
+          to={item.key}
+          onClick={() => handleItemClick(item.key)}
+          className="textDecoration"
+        >
           {item.label}
         </Link>
       ),
@@ -39,12 +43,15 @@ const SiderContent = ({ selectedOption }) => {
 
   return (
     <div>
-      <Typography.Title level={5}>{selectedOption}</Typography.Title>
+      <Typography.Title className="ms-3 mt-3" level={4}>
+        {selectedOption}
+      </Typography.Title>
       <Menu
         mode="vertical"
         selectedKeys={[selectedItem]}
         items={contentItems}
-        style={{ borderRight: 0 }}
+        className="ms-3"
+        style={{ borderLeft: "solid gray 1px" }}
       />
     </div>
   );

@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUsersList } from "../../actions/user/user";
+import { getUsersList, getUserById } from "../../actions/user/user";
 
 const slice = createSlice({
   name: "user",
   initialState: {
     userList: [],
+    userById: {},
     isLoading: false,
   },
   reducers: {
@@ -24,6 +25,18 @@ const slice = createSlice({
       .addCase(getUsersList.rejected, (state) => {
         state.isLoading = false;
         state.userList = [];
+      })
+
+      .addCase(getUserById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUserById.fulfilled, (state, action) => {
+        state.userById = action.payload.data.object;
+        state.isLoading = false;
+      })
+      .addCase(getUserById.rejected, (state) => {
+        state.isLoading = false;
+        state.userById = [];
       });
   },
 });

@@ -19,7 +19,7 @@ const TheLayout = () => {
         style={{
           display: "flex",
           alignItems: "center",
-          backgroundColor: "#001529",
+          backgroundColor: "#fff",
         }}
       >
         <MenuItems

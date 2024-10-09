@@ -1,36 +1,157 @@
-import { Table, Card, Button } from "antd";
+import {
+  Table,
+  Card,
+  Button,
+  message,
+  Popconfirm,
+  Form,
+  Input,
+  Radio,
+  Tag,
+} from "antd";
 import UserService from "../../services/UserService";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getUsersList } from "../../store/actions/user/user";
+import { useEffect, useState } from "react";
+import {
+  deleteUser,
+  getUsersList,
+  updateUserPassword,
+  updateUserStatus,
+} from "../../store/actions/user/user";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import DraggableModal from "../../components/modal/DraggableModal";
+import { Controller, useForm } from "react-hook-form";
+import { LockFilled } from "@ant-design/icons";
 
 const UserList = () => {
   const dispatch = useDispatch();
-  const { userList } = useSelector((state) => state.user);
+  const { userList, isLoading } = useSelector((state) => state.user);
+  const [user, setUser] = useState();
+  const [password, setPassword] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [passwordModal, setPasswordModal] = useState(false);
+  const { control, handleSubmit, reset, register, watch } = useForm();
+  const {
+    control: passwordControl,
+    handleSubmit: passwordHandleSubmit,
+    reset: passwordReset,
+  } = useForm();
+  const status = watch("status");
 
   useEffect(() => {
     dispatch(getUsersList());
   }, [dispatch]);
 
-  const ActionComponent = () => {
+  useEffect(() => {
+    reset(user);
+    passwordReset(password);
+  }, [reset, user, passwordReset, password]);
+
+  const ActionComponent = ({ item, handleDeleteUser, handleOpenModal }) => {
     return (
       <div>
-        <button title="Edit" className="btn btn-sm btn-outline-success me-1">
-          <i className="bi bi-pencil-square" />
-        </button>
+        <Link to={`/user-form/${item.id}`}>
+          <button title="Edit" className="btn btn-sm btn-outline-success me-1">
+            <i className="bi bi-pencil-square" />
+          </button>
+        </Link>
         <button
+          onClick={() => handleOpenModal(item)}
           title="Change Status"
           className="btn btn-sm btn-outline-warning me-1"
         >
           <i className="bi bi-tag" />
         </button>
-        <button title="Delete" className="btn btn-sm btn-outline-danger me-1">
-          <i className="bi bi-trash" />
+        <button
+          onClick={() => handleOpenModalPassword(item)}
+          title="Change Password"
+          className="btn btn-sm btn-outline-primary me-1"
+        >
+          <LockFilled />
         </button>
+        <Popconfirm
+          title="Are you sure to Delete"
+          okText="Yes"
+          cancelText="No"
+          onConfirm={() => handleDeleteUser(item.id)}
+        >
+          <button title="Delete" className="btn btn-sm btn-outline-danger me-1">
+            <i className="bi bi-trash" />
+          </button>
+        </Popconfirm>
       </div>
     );
+  };
+
+  const handleDeleteUser = async (id) => {
+    let res = await dispatch(deleteUser(id));
+    if (res.payload.status === 200) {
+      message.success(res.payload.data.message);
+      dispatch(getUsersList());
+    } else if (res.payload.status === 409) {
+      message.error(res.payload.response.data.message);
+    }
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    reset({});
+  };
+
+  const handleOpenModal = (item) => {
+    setModalVisible(true);
+    setUser(item);
+  };
+
+  const handlePasswordModalClose = () => {
+    setPasswordModal(false);
+    passwordReset({});
+  };
+
+  const handleOpenModalPassword = (item) => {
+    setPasswordModal(true);
+    setPassword(item);
+  };
+
+  const handleUpdateStatus = async (data) => {
+    try {
+      const payload = {
+        id: data.id,
+        status: data.new_status,
+      };
+      let res = await dispatch(updateUserStatus(payload));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getUsersList());
+        handleModalClose();
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
+  const handleUpdatePassword = async (data) => {
+    try {
+      const payload = {
+        id: data.id,
+        password: data.password,
+      };
+      let res = await dispatch(updateUserPassword(payload));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getUsersList());
+        handlePasswordModalClose();
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
+  const layout = {
+    labelCol: {
+      span: 6,
+    },
   };
 
   const columns = [
@@ -58,6 +179,10 @@ const UserList = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (status) => {
+        let color = status === "ACTIVE" ? "green" : "red";
+        return <Tag color={color}>{status.toUpperCase()}</Tag>;
+      },
     },
     {
       title: "Created At",
@@ -69,7 +194,13 @@ const UserList = () => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (_, item) => <ActionComponent />,
+      render: (_, item) => (
+        <ActionComponent
+          item={item}
+          handleDeleteUser={handleDeleteUser}
+          handleOpenModal={handleOpenModal}
+        />
+      ),
     },
   ];
 
@@ -85,12 +216,98 @@ const UserList = () => {
         }
       >
         <Table
+          loading={isLoading}
           scroll={{ x: 800 }}
           size="small"
           dataSource={userList}
           columns={columns}
+          rowKey="id"
         />
       </Card>
+      <DraggableModal
+        title="Change Status"
+        visible={modalVisible}
+        modalClose={handleModalClose}
+      >
+        <div>
+          <Form {...layout} onFinish={handleSubmit(handleUpdateStatus)}>
+            <Form.Item label="Username" labelAlign="left">
+              <Controller
+                name="username"
+                control={control}
+                disabled={true}
+                render={({ field, fieldState }) => (
+                  <Input
+                    {...field}
+                    className={
+                      fieldState.invalid ? "custom-input error" : "custom-input"
+                    }
+                  />
+                )}
+              />
+            </Form.Item>
+            <Form.Item label="New" labelAlign="left">
+              {(status === "ACTIVE" && (
+                <>
+                  <Radio.Group {...register("new_status")}>
+                    <Radio value="INACTIVE" id="field-inactive">
+                      INACTIVE
+                    </Radio>
+                  </Radio.Group>
+                </>
+              )) ||
+                (status === "INACTIVE" && (
+                  <>
+                    <Radio.Group {...register("new_status")}>
+                      <Radio value="ACTIVE" id="field-inactive">
+                        ACTIVE
+                      </Radio>
+                    </Radio.Group>
+                  </>
+                ))}
+            </Form.Item>
+            <div className="text-end">
+              <Button onClick={handleModalClose} className="me-1">
+                Cancel
+              </Button>
+              <Button htmlType="submit">Change</Button>
+            </div>
+          </Form>
+        </div>
+      </DraggableModal>
+      <DraggableModal
+        title="Update Password"
+        visible={passwordModal}
+        modalClose={handlePasswordModalClose}
+      >
+        <div>
+          <Form
+            {...layout}
+            onFinish={passwordHandleSubmit(handleUpdatePassword)}
+          >
+            <Form.Item label="Password" labelAlign="left">
+              <Controller
+                name="password"
+                control={passwordControl}
+                render={({ field, fieldState }) => (
+                  <Input.Password
+                    {...field}
+                    className={
+                      fieldState.invalid ? "custom-input error" : "custom-input"
+                    }
+                  />
+                )}
+              />
+            </Form.Item>
+            <div className="text-end">
+              <Button onClick={handlePasswordModalClose} className="me-1">
+                Cancel
+              </Button>
+              <Button htmlType="submit">Save</Button>
+            </div>
+          </Form>
+        </div>
+      </DraggableModal>
     </div>
   );
 };

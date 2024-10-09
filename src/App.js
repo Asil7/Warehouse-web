@@ -8,6 +8,8 @@ import ErrorBoundary from "./containers/ErrorBoundary";
 import RoleList from "./pages/security/role/RoleList";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import UserForm from "./pages/user/UserForm";
+import PermissionList from "./pages/security/permission/PermissionList";
+import "./App.css";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -19,13 +21,11 @@ const App = () => {
   return (
     <ErrorBoundary>
       <Routes>
-        {/* Public Route */}
         <Route
           path="/login"
           element={isAuthenticated ? <Navigate to="/" /> : <Login />}
         />
 
-        {/* Protected Route with layout */}
         <Route
           path="/"
           element={
@@ -34,9 +34,9 @@ const App = () => {
             </PrivateRoute>
           }
         >
-          {/* Route for User List inside TheLayout */}
+          {/* USER */}
           <Route
-            path="users" // Nested route
+            path="users"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <UserList />
@@ -44,18 +44,36 @@ const App = () => {
             }
           />
           <Route
-            path="roles" // Nested route
+            path="user-form"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <UserForm />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="user-form/:id"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <UserForm />
+              </PrivateRoute>
+            }
+          />
+          {/* ROLE */}
+          <Route
+            path="roles"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <RoleList />
               </PrivateRoute>
             }
           />
+          {/* PERMISSION */}
           <Route
-            path="user-form" // Nested route
+            path="permission-list"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
-                <UserForm />
+                <PermissionList />
               </PrivateRoute>
             }
           />

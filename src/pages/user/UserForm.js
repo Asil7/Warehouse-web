@@ -1,23 +1,41 @@
 import { Button, Card, Col, Form, Input, Select, message } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getRoleList } from "../../store/actions/role/role";
 import { useEffect } from "react";
-import { createUser } from "../../store/actions/user/user";
+import {
+  createUser,
+  getUserById,
+  updateUser,
+} from "../../store/actions/user/user";
 
 const UserForm = () => {
-  const { control, handleSubmit, reset } = useForm();
+  const { control, handleSubmit, reset, setValue } = useForm();
   const dispatch = useDispatch();
   const { roleList, isLoading } = useSelector((state) => state.role);
+  const { userById } = useSelector((state) => state.user);
+  const { id } = useParams();
 
   useEffect(() => {
     dispatch(getRoleList());
-  }, [dispatch]);
+    if (id) dispatch(getUserById(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (id) {
+      reset(userById);
+      // setValue("roleId", userById.roleName);
+    }
+  }, [reset, id, userById, setValue]);
 
   const onFinish = async (data) => {
-    let res = await dispatch(createUser(data));
-    console.log(res);
+    let res;
+    if (id) {
+      res = await dispatch(updateUser(data));
+    } else {
+      res = await dispatch(createUser(data));
+    }
     if (res.payload.status === 200) {
       reset({});
       message.success(res.payload.data.message);
@@ -55,18 +73,20 @@ const UserForm = () => {
                 )}
               />
             </Form.Item>
-            <Form.Item label="Password" labelAlign="left">
-              <Controller
-                name="password"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <Input.Password
-                    {...field}
-                    status={fieldState.invalid ? "error" : ""}
-                  />
-                )}
-              />
-            </Form.Item>
+            {!id && (
+              <Form.Item label="Password" labelAlign="left">
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <Input.Password
+                      {...field}
+                      status={fieldState.invalid ? "error" : ""}
+                    />
+                  )}
+                />
+              </Form.Item>
+            )}
             <Form.Item label="Role">
               <Controller
                 name="roleId"
