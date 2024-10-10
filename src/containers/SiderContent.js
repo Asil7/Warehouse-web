@@ -23,6 +23,7 @@ const SiderContent = ({ selectedOption }) => {
       { key: "permission-list", label: "Permissions" },
     ],
     Users: [{ key: "users", label: "User List" }],
+    Organization: [{ key: "organization", label: "Organization" }],
   };
 
   const createMenuItems = (items) =>
