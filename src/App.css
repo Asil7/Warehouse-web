@@ -56,3 +56,15 @@
 .textDecoration {
   text-decoration: none;
 }
+
+/* Horizontal scroll when screen size is less than 500px */
+@media (max-width: 600px) {
+  .scroll-role-card {
+    overflow-x: auto;
+  }
+}
+
+.ant-card .ant-card-body {
+  padding: 12px;
+  border-radius: 0 0 8px 8px;
+}

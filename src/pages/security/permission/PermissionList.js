@@ -141,6 +141,7 @@ const PermissionList = () => {
   return (
     <div>
       <Card
+        size="small"
         extra={
           UserService.hasPermission("ADD_PERMISSION") && (
             <Button onClick={() => handleOpenModal()} type="primary">
@@ -183,10 +184,12 @@ const PermissionList = () => {
             />
           </Form.Item>
           <div className="text-end">
-            <Button htmlType="submit" className="me-1" type="primary">
+            <Button className="me-1" onClick={handleModalClose}>
+              Cancel
+            </Button>
+            <Button htmlType="submit" type="primary">
               Save
             </Button>
-            <Button onClick={handleModalClose}>Cancel</Button>
           </div>
         </Form>
       </DraggableModal>

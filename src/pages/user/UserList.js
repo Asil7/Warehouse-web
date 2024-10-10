@@ -207,6 +207,7 @@ const UserList = () => {
   return (
     <div>
       <Card
+        size="small"
         extra={
           UserService.hasPermission("ADD_USER") && (
             <Link to={"/user-form"}>

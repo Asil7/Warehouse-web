@@ -10,6 +10,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import UserForm from "./pages/user/UserForm";
 import PermissionList from "./pages/security/permission/PermissionList";
 import "./App.css";
+import RoleForm from "./pages/security/role/RoleForm";
+import RolePermissionForm from "./pages/security/role/RolePermissionForm";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -65,6 +67,30 @@ const App = () => {
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <RoleList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="role-form"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <RoleForm />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="role-form/:id"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <RoleForm />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="role-permission/:id"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <RolePermissionForm />
               </PrivateRoute>
             }
           />

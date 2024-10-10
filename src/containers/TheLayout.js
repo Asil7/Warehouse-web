@@ -2,15 +2,18 @@ import React, { useState } from "react";
 import { Layout } from "antd";
 import MenuItems from "./MenuItems";
 import SiderContent from "./SiderContent";
-import { Outlet } from "react-router-dom"; // Import Outlet
+import { Outlet } from "react-router-dom";
 
 const { Header, Sider } = Layout;
 
 const TheLayout = () => {
-  const [selectedOption, setSelectedOption] = useState("Users");
+  const [selectedOption, setSelectedOption] = useState(() => {
+    return localStorage.getItem("SelectedMenu") || "Users";
+  });
 
   const handleNavbarClick = ({ key }) => {
     setSelectedOption(key);
+    localStorage.setItem("SelectedMenu", key);
   };
 
   return (
@@ -32,7 +35,7 @@ const TheLayout = () => {
           <SiderContent selectedOption={selectedOption} />
         </Sider>
         <Layout style={{ padding: "24px" }}>
-          <Outlet /> {/* Render the child routes here */}
+          <Outlet />
         </Layout>
       </Layout>
     </Layout>

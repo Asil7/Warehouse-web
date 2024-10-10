@@ -1,12 +1,19 @@
 import { Menu } from "antd";
 import React from "react";
-// import UserService from "../services/UserService";
+import UserService from "../services/UserService";
 
 const buildMenuItems = () => {
-  return [
-    { label: "Users", key: "Users" },
-    { label: "Security", key: "Security" },
-  ];
+  const menuItems = [];
+
+  if (UserService.hasPermission("VIEW_USER_LIST")) {
+    menuItems.push({ label: "Users", key: "Users" });
+  }
+
+  if (UserService.hasPermission("VIEW_ROLE_LIST" && "VIEW_PERMISSION_LIST")) {
+    menuItems.push({ label: "Security", key: "Security" });
+  }
+
+  return menuItems;
 };
 
 const MenuItems = ({ handleNavbarClick, selectedOption }) => {
