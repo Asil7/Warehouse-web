@@ -38,39 +38,45 @@ const RoleForm = () => {
         <div className="scroll-role-card">
           <Form onFinish={handleSubmit(onFinish)} layout="vertical">
             <Col xs={24} sm={24} md={18} lg={14} xl={10} xxl={6}>
-              <Form.Item
-                label="Name"
-                labelAlign="left"
-                rules={[{ required: true, message: "Please input the name!" }]}
-              >
+              <Form.Item label="Name" labelAlign="left">
                 <Controller
                   name="name"
                   control={control}
+                  rules={{ required: "Name is required" }}
                   render={({ field, fieldState }) => (
-                    <Input
-                      {...field}
-                      status={fieldState.invalid ? "error" : ""}
-                    />
+                    <>
+                      <Input
+                        {...field}
+                        status={fieldState.invalid ? "error" : ""}
+                      />
+                      {fieldState.invalid && (
+                        <span className="text-danger">
+                          {fieldState.error?.message}
+                        </span>
+                      )}
+                    </>
                   )}
                 />
               </Form.Item>
             </Col>
             <Col xs={24} sm={24} md={18} lg={14} xl={10} xxl={6}>
-              <Form.Item
-                label="Description"
-                labelAlign="left"
-                rules={[
-                  { required: true, message: "Please input the description!" },
-                ]}
-              >
+              <Form.Item label="Description" labelAlign="left">
                 <Controller
                   name="description"
                   control={control}
+                  rules={{ required: "Description is required" }}
                   render={({ field, fieldState }) => (
-                    <Input
-                      {...field}
-                      status={fieldState.invalid ? "error" : ""}
-                    />
+                    <>
+                      <Input
+                        {...field}
+                        status={fieldState.invalid ? "error" : ""}
+                      />
+                      {fieldState.invalid && (
+                        <span className="text-danger">
+                          {fieldState.error?.message}
+                        </span>
+                      )}
+                    </>
                   )}
                 />
               </Form.Item>

@@ -2,13 +2,12 @@ import axios from "axios";
 import UserService from "../services/UserService";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api", // Set your base URL
+  baseURL: "http://localhost:8080/api",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Function to clear empty fields from request payload
 const clearEmptyFields = (config) => {
   if (config.data) {
     Object.keys(config.data).forEach((key) => {
@@ -35,7 +34,6 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Handle response errors here, if needed
     return Promise.reject(error);
   }
 );

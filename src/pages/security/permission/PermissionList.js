@@ -145,7 +145,11 @@ const PermissionList = () => {
         size="small"
         extra={
           UserService.hasPermission("ADD_PERMISSION") && (
-            <Button onClick={() => handleOpenModal()} type="primary">
+            <Button
+              className="mt-1 mb-1"
+              onClick={() => handleOpenModal()}
+              type="primary"
+            >
               Create Permission
             </Button>
           )
@@ -155,6 +159,7 @@ const PermissionList = () => {
           size="small"
           loading={isLoading}
           dataSource={permissionList}
+          scroll={{ x: 1000 }}
           columns={columns}
           rowKey="id"
           pagination={{ pageSize: 10 }}
@@ -170,8 +175,19 @@ const PermissionList = () => {
             <Controller
               name="name"
               control={control}
+              rules={{ required: "Name is required" }}
               render={({ field, fieldState }) => (
-                <Input {...field} status={fieldState.invalid ? "error" : ""} />
+                <>
+                  <Input
+                    {...field}
+                    status={fieldState.invalid ? "error" : ""}
+                  />
+                  {fieldState.invalid && (
+                    <span className="text-danger">
+                      {fieldState.error?.message}
+                    </span>
+                  )}
+                </>
               )}
             />
           </Form.Item>
@@ -179,8 +195,19 @@ const PermissionList = () => {
             <Controller
               name="description"
               control={control}
+              rules={{ required: "Description is required" }}
               render={({ field, fieldState }) => (
-                <Input {...field} status={fieldState.invalid ? "error" : ""} />
+                <>
+                  <Input
+                    {...field}
+                    status={fieldState.invalid ? "error" : ""}
+                  />
+                  {fieldState.invalid && (
+                    <span className="text-danger">
+                      {fieldState.error?.message}
+                    </span>
+                  )}
+                </>
               )}
             />
           </Form.Item>

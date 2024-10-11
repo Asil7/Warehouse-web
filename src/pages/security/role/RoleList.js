@@ -43,7 +43,7 @@ const RoleList = () => {
             title="Permissions"
             className="btn btn-sm btn-outline-primary me-1"
           >
-            <i className="bi bi-link" />
+            <i className="bi bi-link-45deg" />
           </button>
         </Link>
         <Popconfirm
@@ -143,7 +143,9 @@ const RoleList = () => {
         extra={
           UserService.hasPermission("ADD_ROLE") && (
             <Link to={"/role-form"}>
-              <Button type="primary">Create Role</Button>
+              <Button className="mt-1 mb-1" type="primary">
+                Create Role
+              </Button>
             </Link>
           )
         }
@@ -152,6 +154,7 @@ const RoleList = () => {
           size="small"
           loading={isLoading}
           dataSource={roleList}
+          scroll={{ x: 1200 }}
           columns={columns}
           rowKey="id"
         />

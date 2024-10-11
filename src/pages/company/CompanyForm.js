@@ -54,11 +54,19 @@ const CompanyForm = () => {
               <Controller
                 name="name"
                 control={control}
+                rules={{ required: "Name is required" }}
                 render={({ field, fieldState }) => (
-                  <Input
-                    {...field}
-                    status={fieldState.invalid ? "error" : ""}
-                  />
+                  <>
+                    <Input
+                      {...field}
+                      status={fieldState.invalid ? "error" : ""}
+                    />
+                    {fieldState.invalid && (
+                      <span className="text-danger">
+                        {fieldState.error?.message}
+                      </span>
+                    )}
+                  </>
                 )}
               />
             </Form.Item>
@@ -66,11 +74,19 @@ const CompanyForm = () => {
               <Controller
                 name="phone"
                 control={control}
+                rules={{ required: "Phone is required" }}
                 render={({ field, fieldState }) => (
-                  <Input
-                    {...field}
-                    status={fieldState.invalid ? "error" : ""}
-                  />
+                  <>
+                    <Input
+                      {...field}
+                      status={fieldState.invalid ? "error" : ""}
+                    />
+                    {fieldState.invalid && (
+                      <span className="text-danger">
+                        {fieldState.error?.message}
+                      </span>
+                    )}
+                  </>
                 )}
               />
             </Form.Item>
@@ -102,11 +118,19 @@ const CompanyForm = () => {
               <Controller
                 name="location"
                 control={control}
+                rules={{ required: "Location is required" }}
                 render={({ field, fieldState }) => (
-                  <Input
-                    {...field}
-                    status={fieldState.invalid ? "error" : ""}
-                  />
+                  <>
+                    <Input
+                      {...field}
+                      status={fieldState.invalid ? "error" : ""}
+                    />
+                    {fieldState.invalid && (
+                      <span className="text-danger">
+                        {fieldState.error?.message}
+                      </span>
+                    )}
+                  </>
                 )}
               />
             </Form.Item>

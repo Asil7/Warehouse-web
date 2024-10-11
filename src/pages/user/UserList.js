@@ -218,7 +218,7 @@ const UserList = () => {
       >
         <Table
           loading={isLoading}
-          scroll={{ x: 800 }}
+          scroll={{ x: 1200 }}
           size="small"
           dataSource={userList}
           columns={columns}
