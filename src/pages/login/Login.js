@@ -14,6 +14,7 @@ const Login = () => {
   const onFinish = async (data) => {
     try {
       let res = await dispatch(login(data));
+      console.log();
 
       if (res.payload.status === 200) {
         const token = res.payload.data.object;
@@ -24,11 +25,14 @@ const Login = () => {
         navigate("/");
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
+      } else if (res.payload.response.data.message === 403) {
+        message.error("Error");
       }
     } catch (error) {
-      message.error("An error occurred. Please try again.");
+      message.error("An error occurred. Please try again." + error, 30);
     }
   };
+
   return (
     <Row justify="center" align="middle" style={{ height: "100vh" }}>
       <Col xs={24} sm={18} md={14} lg={12} xl={8} xxl={6}>

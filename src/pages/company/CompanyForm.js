@@ -35,7 +35,10 @@ const CompanyForm = () => {
       res = await dispatch(createCompany(data));
     }
     if (res.payload.status === 200) {
-      dispatch(getCompanyById(id));
+      reset({});
+      if (id) {
+        dispatch(getCompanyById(id));
+      }
       message.success(res.payload.data.message);
     } else if (res.payload.status === 409) {
       message.error(res.payload.response.data.message);
