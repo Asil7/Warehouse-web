@@ -5,7 +5,7 @@ import UserService from "../services/UserService";
 const buildMenuItems = () => {
   const menuItems = [];
 
-  if (UserService.hasPermission("VIEW_ROLE_LIST")) {
+  if (UserService.hasPermission("VIEW_COMPANY_LIST")) {
     menuItems.push({ label: "Company", key: "Company" });
   }
 
