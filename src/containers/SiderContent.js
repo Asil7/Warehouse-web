@@ -20,10 +20,10 @@ const SiderContent = ({ selectedOption }) => {
   const subMenus = {
     Security: [
       { key: "roles", label: "Roles" },
-      { key: "permission-list", label: "Permissions" },
+      { key: "permissions", label: "Permissions" },
     ],
-    Users: [{ key: "users", label: "User List" }],
-    Organization: [{ key: "organization", label: "Organization" }],
+    User: [{ key: "users", label: "Users" }],
+    Company: [{ key: "companies", label: "Companies" }],
   };
 
   const createMenuItems = (items) =>

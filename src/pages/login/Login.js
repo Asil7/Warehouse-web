@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../store/actions/login/login";
 import { useNavigate } from "react-router-dom";
 import { loginSuccess } from "../../store/slice/auth/authSlice";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 const Login = () => {
   const { control, handleSubmit } = useForm();
@@ -39,6 +40,7 @@ const Login = () => {
                 control={control}
                 render={({ field, fieldState }) => (
                   <Input
+                    prefix={<UserOutlined />}
                     {...field}
                     status={fieldState.invalid ? "error" : ""}
                   />
@@ -51,14 +53,15 @@ const Login = () => {
                 control={control}
                 render={({ field, fieldState }) => (
                   <Input.Password
+                    prefix={<LockOutlined />}
                     {...field}
                     status={fieldState.invalid ? "error" : ""}
                   />
                 )}
               />
             </Form.Item>
-            <div className="text-end">
-              <Button htmlType="submit" type="primary">
+            <div>
+              <Button block htmlType="submit" type="primary">
                 Login
               </Button>
             </div>

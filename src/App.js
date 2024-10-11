@@ -12,6 +12,8 @@ import PermissionList from "./pages/security/permission/PermissionList";
 import "./App.css";
 import RoleForm from "./pages/security/role/RoleForm";
 import RolePermissionForm from "./pages/security/role/RolePermissionForm";
+import CompanyList from "./pages/company/CompanyList";
+import CompanyForm from "./pages/company/CompanyForm";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -96,10 +98,35 @@ const App = () => {
           />
           {/* PERMISSION */}
           <Route
-            path="permission-list"
+            path="permissions"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <PermissionList />
+              </PrivateRoute>
+            }
+          />
+          {/*COMPANY*/}
+          <Route
+            path="companies"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <CompanyList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="company-form"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <CompanyForm />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="company-form/:id"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <CompanyForm />
               </PrivateRoute>
             }
           />

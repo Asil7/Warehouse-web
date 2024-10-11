@@ -5,6 +5,7 @@ import auth from "./slice/auth/authSlice";
 import user from "./slice/user/user";
 import role from "./slice/role/role";
 import permission from "./slice/permission/permission";
+import company from "./slice/company/company";
 
 export const throwMiddleware = () => (next) => (action) => {
   next(action);
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   user,
   role,
   permission,
+  company,
 });
 
 export default configureStore({

@@ -6,11 +6,11 @@ const buildMenuItems = () => {
   const menuItems = [];
 
   if (UserService.hasPermission("VIEW_ROLE_LIST")) {
-    menuItems.push({ label: "Organization", key: "Organization" });
+    menuItems.push({ label: "Company", key: "Company" });
   }
 
   if (UserService.hasPermission("VIEW_USER_LIST")) {
-    menuItems.push({ label: "Users", key: "Users" });
+    menuItems.push({ label: "User", key: "User" });
   }
 
   if (UserService.hasPermission("VIEW_ROLE_LIST" && "VIEW_PERMISSION_LIST")) {

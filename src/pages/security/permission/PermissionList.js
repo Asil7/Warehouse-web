@@ -138,6 +138,7 @@ const PermissionList = () => {
       ),
     },
   ];
+
   return (
     <div>
       <Card
