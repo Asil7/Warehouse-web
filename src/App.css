@@ -92,3 +92,9 @@
     background-color: #f1f1f1;
   }
 }
+
+.ant-layout-header {
+  height: 64px;
+  padding: 0 25px;
+  line-height: 64px;
+}

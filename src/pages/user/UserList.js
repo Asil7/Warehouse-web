@@ -171,6 +171,21 @@ const UserList = () => {
       key: "username",
     },
     {
+      title: "Phone",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "Salary",
+      dataIndex: "salary",
+      key: "salary",
+    },
+    {
+      title: "Date of Employment",
+      dataIndex: "dateOfEmployment",
+      key: "dateOfEmployment",
+    },
+    {
       title: "Role",
       dataIndex: "roleName",
       key: "roleName",
