@@ -59,9 +59,11 @@ import Header from "./Header";
 import { getMenuItems } from "./getMenuItems";
 
 const { Content, Sider } = Layout;
+const { defaultAlgorithm } = theme;
 
 const TheLayout = () => {
-  const [customTheme, setCustomTheme] = useState([theme.defaultAlgorithm]);
+  const [customTheme, setCustomTheme] = useState([defaultAlgorithm]);
+  const [them, setThem] = useState();
   const [collapsed, setCollapsed] = useState(false);
   const [collapsedForPhone, setCollapsedForPhone] = useState(false);
   const [selectedKey, setSelectedKey] = useState("1");
@@ -100,6 +102,8 @@ const TheLayout = () => {
     };
   }, []);
 
+  console.log(them);
+
   return (
     <ConfigProvider
       theme={{
@@ -111,6 +115,7 @@ const TheLayout = () => {
     >
       <Layout style={{ minHeight: "100vh" }}>
         <Sider
+          theme={them === "light" ? "dark" : "light"}
           collapsible
           collapsed={isMobile ? collapsedForPhone : collapsed}
           collapsedWidth={isMobile ? 0 : 80}
@@ -125,7 +130,7 @@ const TheLayout = () => {
         >
           <div />
           <Menu
-            theme="dark"
+            theme={them === "light" ? "dark" : "light"}
             selectedKeys={[selectedKey]}
             mode="inline"
             items={items}
@@ -134,11 +139,13 @@ const TheLayout = () => {
         </Sider>
         <Layout>
           <Header
+            setThem={setThem}
+            them={them}
             isMobile={isMobile}
-            setCustomTheme={setCustomTheme}
             colorBgContainer={colorBgContainer}
             collapsedForPhone={collapsedForPhone}
             setCollapsedForPhone={setCollapsedForPhone}
+            setCustomTheme={setCustomTheme}
           />
           <Content style={{ margin: "16px 16px" }}>
             <div

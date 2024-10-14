@@ -20,6 +20,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import UserService from "../services/UserService";
+const { darkAlgorithm, defaultAlgorithm } = theme;
 
 const { Header: AntHeader } = Layout;
 
@@ -29,11 +30,12 @@ const Header = ({
   collapsedForPhone,
   setCustomTheme,
   isMobile,
+  setThem,
+  them,
 }) => {
   const { Text } = Typography;
-  const {
-    token: { colorBgLayout },
-  } = theme.useToken();
+  const { token } = theme.useToken();
+  const colorBgLayout = token?.colorBgLayout;
   const username = UserService.getSubject();
 
   const profile = [
@@ -77,8 +79,20 @@ const Header = ({
     },
   ];
 
+  const handleThemeChange = (value) => {
+    if (value === "light") {
+      setCustomTheme([defaultAlgorithm]);
+      setThem("light");
+    } else {
+      setCustomTheme([darkAlgorithm]);
+      setThem("dark");
+    }
+  };
+
   return (
-    <AntHeader style={{ backgroundColor: colorBgContainer }}>
+    <AntHeader
+      style={{ backgroundColor: them === "dark" ? "#141414" : "#ffffff" }}
+    >
       <Row justify="space-between" align="middle">
         <Col>
           <Row align="middle">
@@ -109,6 +123,7 @@ const Header = ({
               { value: "light", icon: <SunOutlined />, title: "light" },
               { value: "dark", icon: <MoonOutlined />, title: "dark" },
             ]}
+            onChange={handleThemeChange}
           />
           <Dropdown
             menu={{
