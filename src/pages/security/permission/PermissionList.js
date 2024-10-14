@@ -179,13 +179,14 @@ const PermissionList = () => {
               render={({ field, fieldState }) => (
                 <>
                   <Input
+                    placeholder="Name"
                     {...field}
                     status={fieldState.invalid ? "error" : ""}
                   />
                   {fieldState.invalid && (
-                    <span className="text-danger">
+                    <div className="position-fixed text-danger">
                       {fieldState.error?.message}
-                    </span>
+                    </div>
                   )}
                 </>
               )}
@@ -199,13 +200,14 @@ const PermissionList = () => {
               render={({ field, fieldState }) => (
                 <>
                   <Input
+                    placeholder="Description"
                     {...field}
                     status={fieldState.invalid ? "error" : ""}
                   />
                   {fieldState.invalid && (
-                    <span className="text-danger">
+                    <div className="position-fixed text-danger">
                       {fieldState.error?.message}
-                    </span>
+                    </div>
                   )}
                 </>
               )}

@@ -165,16 +165,24 @@ const RoleList = () => {
         modalClose={handleCloseModal}
       >
         <Form {...layout} onFinish={handleSubmit(onFinish)}>
-          <Form.Item
-            label="Name"
-            labelAlign="left"
-            rules={[{ required: true, message: "Please input the name!" }]}
-          >
+          <Form.Item label="Name" labelAlign="left">
             <Controller
               name="name"
               control={control}
+              rules={{ required: "Name is required" }}
               render={({ field, fieldState }) => (
-                <Input {...field} status={fieldState.invalid ? "error" : ""} />
+                <>
+                  <Input
+                    placeholder="Name"
+                    {...field}
+                    status={fieldState.invalid ? "error" : ""}
+                  />
+                  {fieldState.invalid && (
+                    <div className="position-fixed text-danger">
+                      {fieldState.error?.message}
+                    </div>
+                  )}
+                </>
               )}
             />
           </Form.Item>

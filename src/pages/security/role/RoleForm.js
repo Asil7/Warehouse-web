@@ -1,4 +1,14 @@
-import { Button, Card, Form, Input, Checkbox, Row, Col, message } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  Checkbox,
+  Row,
+  Col,
+  message,
+  Tag,
+} from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getPermissionList } from "../../../store/actions/permission/permission";
@@ -34,7 +44,7 @@ const RoleForm = () => {
 
   return (
     <div>
-      <Card>
+      <Card size="small" title={<Tag color="cyan">Create Role</Tag>}>
         <div className="scroll-role-card">
           <Form onFinish={handleSubmit(onFinish)} layout="vertical">
             <Col xs={24} sm={24} md={18} lg={14} xl={10} xxl={6}>
@@ -46,13 +56,14 @@ const RoleForm = () => {
                   render={({ field, fieldState }) => (
                     <>
                       <Input
+                        placeholder="Name"
                         {...field}
                         status={fieldState.invalid ? "error" : ""}
                       />
                       {fieldState.invalid && (
-                        <span className="text-danger">
+                        <div className="position-fixed text-danger">
                           {fieldState.error?.message}
-                        </span>
+                        </div>
                       )}
                     </>
                   )}
@@ -64,19 +75,12 @@ const RoleForm = () => {
                 <Controller
                   name="description"
                   control={control}
-                  rules={{ required: "Description is required" }}
                   render={({ field, fieldState }) => (
-                    <>
-                      <Input
-                        {...field}
-                        status={fieldState.invalid ? "error" : ""}
-                      />
-                      {fieldState.invalid && (
-                        <span className="text-danger">
-                          {fieldState.error?.message}
-                        </span>
-                      )}
-                    </>
+                    <Input
+                      placeholder="Description"
+                      {...field}
+                      status={fieldState.invalid ? "error" : ""}
+                    />
                   )}
                 />
               </Form.Item>

@@ -98,3 +98,10 @@
   padding: 0 25px;
   line-height: 64px;
 }
+
+.ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-title-content {
+  display: flow;
+  align-items: center;
+  flex: auto;
+  text-align: center;
+}

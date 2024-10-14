@@ -56,7 +56,7 @@ import React, { useEffect, useState } from "react";
 import { Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
-import Header from "../components/Header";
+import Header from "./Header";
 
 const { Content, Sider } = Layout;
 
@@ -71,7 +71,9 @@ function getItem(label, key, icon, children) {
 
 const TheLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [collapsedForPhone, setCollapsedForPhone] = useState(false);
   const [selectedKey, setSelectedKey] = useState("1");
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -103,12 +105,31 @@ const TheLayout = () => {
     }
   }, [location.pathname, navigate]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 700);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
         collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
+        collapsed={isMobile ? collapsedForPhone : collapsed}
+        collapsedWidth={isMobile ? 0 : 80}
+        onCollapse={(value) => {
+          if (isMobile) {
+            setCollapsedForPhone(value);
+          } else {
+            setCollapsed(value);
+          }
+        }}
+        trigger={!isMobile ? undefined : null}
       >
         <div />
         <Menu
@@ -120,16 +141,15 @@ const TheLayout = () => {
         />
       </Sider>
       <Layout>
-        {/* <Header style={{ padding: 0, background: colorBgContainer }} /> */}
-        <Header colorBgContainer={colorBgContainer} />
+        <Header
+          isMobile={isMobile}
+          colorBgContainer={colorBgContainer}
+          collapsedForPhone={collapsedForPhone}
+          setCollapsedForPhone={setCollapsedForPhone}
+        />
         <Content style={{ margin: "16px 16px" }}>
-          {/* <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-          </Breadcrumb> */}
           <div
             style={{
-              padding: 24,
-              minHeight: 360,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}

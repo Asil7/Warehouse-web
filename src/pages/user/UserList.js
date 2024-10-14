@@ -18,7 +18,6 @@ import {
   updateUserPassword,
   updateUserStatus,
 } from "../../store/actions/user/user";
-import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import DraggableModal from "../../components/modal/DraggableModal";
 import { Controller, useForm } from "react-hook-form";
@@ -199,12 +198,12 @@ const UserList = () => {
         return <Tag color={color}>{status.toUpperCase()}</Tag>;
       },
     },
-    {
-      title: "Created At",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (createdAt) => dayjs(createdAt).format("MM-DD-YYYY hh:mm"),
-    },
+    // {
+    //   title: "Created At",
+    //   dataIndex: "createdAt",
+    //   key: "createdAt",
+    //   render: (createdAt) => dayjs(createdAt).format("MM-DD-YYYY hh:mm"),
+    // },
     {
       title: "Action",
       dataIndex: "action",
@@ -307,16 +306,28 @@ const UserList = () => {
               <Controller
                 name="password"
                 control={passwordControl}
+                rules={{ required: "Password is required" }}
                 render={({ field, fieldState }) => (
-                  <Input.Password
-                    {...field}
-                    className={
-                      fieldState.invalid ? "custom-input error" : "custom-input"
-                    }
-                  />
+                  <>
+                    <Input.Password
+                      placeholder="Password"
+                      {...field}
+                      className={
+                        fieldState.invalid
+                          ? "custom-input error"
+                          : "custom-input"
+                      }
+                    />
+                    {fieldState.invalid && (
+                      <div className="position-fixed text-danger">
+                        {fieldState.error.message}
+                      </div>
+                    )}
+                  </>
                 )}
               />
             </Form.Item>
+
             <div className="text-end">
               <Button onClick={handlePasswordModalClose} className="me-1">
                 Cancel

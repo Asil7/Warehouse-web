@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Input, message } from "antd";
+import { Button, Card, Col, Form, Input, message, Tag } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -47,7 +47,10 @@ const CompanyForm = () => {
 
   return (
     <div>
-      <Card>
+      <Card
+        size="small"
+        title={<Tag color="cyan">{id ? "Edit Company" : "Create Company"}</Tag>}
+      >
         <Col xs={24} sm={24} md={18} lg={14} xl={10} xxl={6}>
           <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
             <Form.Item label="Name" labelAlign="left">
@@ -58,13 +61,14 @@ const CompanyForm = () => {
                 render={({ field, fieldState }) => (
                   <>
                     <Input
+                      placeholder="Name"
                       {...field}
                       status={fieldState.invalid ? "error" : ""}
                     />
                     {fieldState.invalid && (
-                      <span className="text-danger">
+                      <div className="position-fixed text-danger">
                         {fieldState.error?.message}
-                      </span>
+                      </div>
                     )}
                   </>
                 )}
@@ -78,13 +82,14 @@ const CompanyForm = () => {
                 render={({ field, fieldState }) => (
                   <>
                     <Input
+                      placeholder="Phone"
                       {...field}
                       status={fieldState.invalid ? "error" : ""}
                     />
                     {fieldState.invalid && (
-                      <span className="text-danger">
+                      <div className="position-fixed text-danger">
                         {fieldState.error?.message}
-                      </span>
+                      </div>
                     )}
                   </>
                 )}
@@ -96,6 +101,7 @@ const CompanyForm = () => {
                 control={control}
                 render={({ field, fieldState }) => (
                   <Input
+                    placeholder="Additional Phone"
                     {...field}
                     status={fieldState.invalid ? "error" : ""}
                   />
@@ -108,6 +114,7 @@ const CompanyForm = () => {
                 control={control}
                 render={({ field, fieldState }) => (
                   <Input
+                    placeholder="Description"
                     {...field}
                     status={fieldState.invalid ? "error" : ""}
                   />
@@ -122,13 +129,14 @@ const CompanyForm = () => {
                 render={({ field, fieldState }) => (
                   <>
                     <Input
+                      placeholder="Location"
                       {...field}
                       status={fieldState.invalid ? "error" : ""}
                     />
                     {fieldState.invalid && (
-                      <span className="text-danger">
+                      <div className="position-fixed text-danger">
                         {fieldState.error?.message}
-                      </span>
+                      </div>
                     )}
                   </>
                 )}
@@ -140,6 +148,7 @@ const CompanyForm = () => {
                 control={control}
                 render={({ field, fieldState }) => (
                   <Input
+                    placeholder="Location Map"
                     {...field}
                     status={fieldState.invalid ? "error" : ""}
                   />

@@ -23,7 +23,7 @@ import {
 } from "../../store/actions/user/user";
 
 const UserForm = () => {
-  const { control, handleSubmit, reset, setValue } = useForm();
+  const { control, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
   const { roleList, isLoading } = useSelector((state) => state.role);
   const { userById } = useSelector((state) => state.user);
@@ -35,10 +35,13 @@ const UserForm = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (id) {
-      reset(userById);
+    if (id && userById) {
+      reset({
+        ...userById,
+        phone: userById.phone ? { phone: userById.phone } : { phone: "" },
+      });
     }
-  }, [reset, id, userById, setValue]);
+  }, [reset, id, userById]);
 
   const onFinish = async (data) => {
     data.phone = data.phone.phone;
@@ -61,7 +64,7 @@ const UserForm = () => {
     <div>
       <Card
         size="small"
-        title={<Tag color="cyan">{id ? "Edit user" : "Create User"}</Tag>}
+        title={<Tag color="cyan">{id ? "Edit User" : "Create User"}</Tag>}
       >
         <Col xs={24} sm={24} md={18} lg={14} xl={10} xxl={6}>
           <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
@@ -79,15 +82,9 @@ const UserForm = () => {
                       {...field}
                       status={fieldState.invalid ? "error" : ""}
                     />
-                    {fieldState.error && (
-                      <div
-                        style={{
-                          position: "fixed",
-                          color: "red",
-                          fontSize: "12px",
-                        }}
-                      >
-                        {fieldState.error.message}
+                    {fieldState.invalid && (
+                      <div className="position-fixed text-danger">
+                        {fieldState.error?.message}
                       </div>
                     )}
                   </>
@@ -109,15 +106,9 @@ const UserForm = () => {
                       {...field}
                       status={fieldState.invalid ? "error" : ""}
                     />
-                    {fieldState.error && (
-                      <div
-                        style={{
-                          position: "fixed",
-                          color: "red",
-                          fontSize: "12px",
-                        }}
-                      >
-                        {fieldState.error.message}
+                    {fieldState.invalid && (
+                      <div className="position-fixed text-danger">
+                        {fieldState.error?.message}
                       </div>
                     )}
                   </>
@@ -163,15 +154,9 @@ const UserForm = () => {
                         {...field}
                         status={fieldState.invalid ? "error" : ""}
                       />
-                      {fieldState.error && (
-                        <div
-                          style={{
-                            position: "fixed",
-                            color: "red",
-                            fontSize: "12px",
-                          }}
-                        >
-                          {fieldState.error.message}
+                      {fieldState.invalid && (
+                        <div className="position-fixed text-danger">
+                          {fieldState.error?.message}
                         </div>
                       )}
                     </>
@@ -184,7 +169,7 @@ const UserForm = () => {
                 name="roleId"
                 control={control}
                 rules={{
-                  required: { value: true, message: "Role is required" }, // Add custom error message here
+                  required: { value: true, message: "Role is required" },
                 }}
                 render={({ field, fieldState }) => (
                   <>
@@ -209,15 +194,9 @@ const UserForm = () => {
                         label: value.name,
                       }))}
                     />
-                    {fieldState.error && (
-                      <div
-                        style={{
-                          position: "fixed",
-                          color: "red",
-                          fontSize: "12px",
-                        }}
-                      >
-                        {fieldState.error.message}
+                    {fieldState.invalid && (
+                      <div className="position-fixed text-danger">
+                        {fieldState.error?.message}
                       </div>
                     )}
                   </>
@@ -239,15 +218,9 @@ const UserForm = () => {
                       {...field}
                       status={fieldState.invalid ? "error" : ""}
                     />
-                    {fieldState.error && (
-                      <div
-                        style={{
-                          position: "fixed",
-                          color: "red",
-                          fontSize: "12px",
-                        }}
-                      >
-                        {fieldState.error.message}
+                    {fieldState.invalid && (
+                      <div className="position-fixed text-danger">
+                        {fieldState.error?.message}
                       </div>
                     )}
                   </>
@@ -275,15 +248,9 @@ const UserForm = () => {
                       }
                       status={fieldState.invalid ? "error" : ""}
                     />
-                    {fieldState.error && (
-                      <div
-                        style={{
-                          position: "fixed",
-                          color: "red",
-                          fontSize: "12px",
-                        }}
-                      >
-                        {fieldState.error.message}
+                    {fieldState.invalid && (
+                      <div className="position-fixed text-danger">
+                        {fieldState.error?.message}
                       </div>
                     )}
                   </>
