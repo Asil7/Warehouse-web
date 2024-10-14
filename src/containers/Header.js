@@ -8,11 +8,14 @@ import {
   Typography,
   Dropdown,
   theme,
+  Segmented,
 } from "antd";
 import {
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  MoonOutlined,
+  SunOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -24,6 +27,7 @@ const Header = ({
   colorBgContainer,
   setCollapsedForPhone,
   collapsedForPhone,
+  setCustomTheme,
   isMobile,
 }) => {
   const { Text } = Typography;
@@ -39,7 +43,9 @@ const Header = ({
       style: { backgroundColor: colorBgLayout },
       label: (
         <div>
-          <Text className="fs-6">{username}</Text>
+          <Text className="fs-6">
+            <strong>{username}</strong>
+          </Text>
         </div>
       ),
     },
@@ -97,6 +103,13 @@ const Header = ({
         </Col>
 
         <Col>
+          <Segmented
+            className="me-4"
+            options={[
+              { value: "light", icon: <SunOutlined />, title: "light" },
+              { value: "dark", icon: <MoonOutlined />, title: "dark" },
+            ]}
+          />
           <Dropdown
             menu={{
               items: profile,

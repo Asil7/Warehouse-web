@@ -53,23 +53,15 @@
 // export default TheLayout;
 
 import React, { useEffect, useState } from "react";
-import { Layout, Menu, theme } from "antd";
+import { ConfigProvider, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { UserOutlined } from "@ant-design/icons";
 import Header from "./Header";
+import { getMenuItems } from "./getMenuItems";
 
 const { Content, Sider } = Layout;
 
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
 const TheLayout = () => {
+  const [customTheme, setCustomTheme] = useState([theme.defaultAlgorithm]);
   const [collapsed, setCollapsed] = useState(false);
   const [collapsedForPhone, setCollapsedForPhone] = useState(false);
   const [selectedKey, setSelectedKey] = useState("1");
@@ -77,18 +69,10 @@ const TheLayout = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const items = getMenuItems();
 
   const navigate = useNavigate();
   const location = useLocation();
-
-  const items = [
-    getItem("Company", "companies", <i className="bi bi-building-fill"></i>),
-    getItem("User", "user", <UserOutlined />, [getItem("Users", "users")]),
-    getItem("Security", "security", <i className="bi bi-shield-lock"></i>, [
-      getItem("Roles", "roles"),
-      getItem("Permissions", "permissions"),
-    ]),
-  ];
 
   const onMenuClick = ({ key }) => {
     setSelectedKey(key);
@@ -117,48 +101,58 @@ const TheLayout = () => {
   }, []);
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Sider
-        collapsible
-        collapsed={isMobile ? collapsedForPhone : collapsed}
-        collapsedWidth={isMobile ? 0 : 80}
-        onCollapse={(value) => {
-          if (isMobile) {
-            setCollapsedForPhone(value);
-          } else {
-            setCollapsed(value);
-          }
-        }}
-        trigger={!isMobile ? undefined : null}
-      >
-        <div />
-        <Menu
-          theme="dark"
-          selectedKeys={[selectedKey]}
-          mode="inline"
-          items={items}
-          onClick={onMenuClick}
-        />
-      </Sider>
-      <Layout>
-        <Header
-          isMobile={isMobile}
-          colorBgContainer={colorBgContainer}
-          collapsedForPhone={collapsedForPhone}
-          setCollapsedForPhone={setCollapsedForPhone}
-        />
-        <Content style={{ margin: "16px 16px" }}>
-          <div
-            style={{
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            <Outlet />
-          </div>
-        </Content>
+    <ConfigProvider
+      theme={{
+        algorithm: customTheme,
+        token: {
+          // fontFamily: "Advent Pro",
+        },
+      }}
+    >
+      <Layout style={{ minHeight: "100vh" }}>
+        <Sider
+          collapsible
+          collapsed={isMobile ? collapsedForPhone : collapsed}
+          collapsedWidth={isMobile ? 0 : 80}
+          onCollapse={(value) => {
+            if (isMobile) {
+              setCollapsedForPhone(value);
+            } else {
+              setCollapsed(value);
+            }
+          }}
+          trigger={!isMobile ? undefined : null}
+        >
+          <div />
+          <Menu
+            theme="dark"
+            selectedKeys={[selectedKey]}
+            mode="inline"
+            items={items}
+            onClick={onMenuClick}
+          />
+        </Sider>
+        <Layout>
+          <Header
+            isMobile={isMobile}
+            setCustomTheme={setCustomTheme}
+            colorBgContainer={colorBgContainer}
+            collapsedForPhone={collapsedForPhone}
+            setCollapsedForPhone={setCollapsedForPhone}
+          />
+          <Content style={{ margin: "16px 16px" }}>
+            <div
+              style={{
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+              }}
+            >
+              <Outlet />
+            </div>
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   );
 };
 
