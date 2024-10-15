@@ -6,6 +6,8 @@ import user from "./slice/user/user";
 import role from "./slice/role/role";
 import permission from "./slice/permission/permission";
 import company from "./slice/company/company";
+import product from "./slice/product/product";
+import span from "./slice/span/span";
 
 export const throwMiddleware = () => (next) => (action) => {
   next(action);
@@ -19,6 +21,8 @@ const reducer = combineReducers({
   role,
   permission,
   company,
+  product,
+  span,
 });
 
 export default configureStore({

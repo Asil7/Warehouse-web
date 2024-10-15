@@ -15,7 +15,6 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   MoonOutlined,
-  SunOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -25,7 +24,6 @@ const { darkAlgorithm, defaultAlgorithm } = theme;
 const { Header: AntHeader } = Layout;
 
 const Header = ({
-  colorBgContainer,
   setCollapsedForPhone,
   collapsedForPhone,
   setCustomTheme,
@@ -83,9 +81,11 @@ const Header = ({
     if (value === "light") {
       setCustomTheme([defaultAlgorithm]);
       setThem("light");
+      localStorage.setItem("theme", "light");
     } else {
       setCustomTheme([darkAlgorithm]);
       setThem("dark");
+      localStorage.setItem("theme", "dark");
     }
   };
 
@@ -111,7 +111,7 @@ const Header = ({
               />
             )}
             <div className="logo" style={{ fontSize: "24px" }}>
-              MyLogo
+              Logo
             </div>
           </Row>
         </Col>
@@ -120,7 +120,11 @@ const Header = ({
           <Segmented
             className="me-4"
             options={[
-              { value: "light", icon: <SunOutlined />, title: "light" },
+              {
+                value: "light",
+                icon: <i className="bi bi-sun-fill text-warning"></i>,
+                title: "light",
+              },
               { value: "dark", icon: <MoonOutlined />, title: "dark" },
             ]}
             onChange={handleThemeChange}

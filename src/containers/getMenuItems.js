@@ -4,6 +4,16 @@ import { UserOutlined } from "@ant-design/icons";
 export const getMenuItems = () => {
   return [
     {
+      key: "span",
+      icon: <i className="bi bi-graph-down-arrow"></i>,
+      label: "Span",
+    },
+    {
+      key: "products",
+      icon: <i className="bi bi-basket2"></i>,
+      label: "Product",
+    },
+    {
       key: "companies",
       icon: <i className="bi bi-building-fill"></i>,
       label: "Company",

@@ -15,6 +15,8 @@ import RolePermissionForm from "./pages/security/role/RolePermissionForm";
 import CompanyList from "./pages/company/CompanyList";
 import CompanyForm from "./pages/company/CompanyForm";
 import Profile from "./containers/Profile";
+import ProductList from "./pages/product/ProductList";
+import Span from "./pages/span/Span";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -137,6 +139,24 @@ const App = () => {
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <Profile />
+              </PrivateRoute>
+            }
+          />
+          {/*Product*/}
+          <Route
+            path="products"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <ProductList />
+              </PrivateRoute>
+            }
+          />
+          {/*SPAN*/}
+          <Route
+            path="span"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <Span />
               </PrivateRoute>
             }
           />

@@ -59,11 +59,16 @@ import Header from "./Header";
 import { getMenuItems } from "./getMenuItems";
 
 const { Content, Sider } = Layout;
-const { defaultAlgorithm } = theme;
+const { defaultAlgorithm, darkAlgorithm } = theme;
 
 const TheLayout = () => {
-  const [customTheme, setCustomTheme] = useState([defaultAlgorithm]);
-  const [them, setThem] = useState();
+  // Initialize the theme state based on the value stored in localStorage
+  const savedTheme = localStorage.getItem("theme") || "light";
+  const initialTheme =
+    savedTheme === "light" ? [defaultAlgorithm] : [darkAlgorithm];
+
+  const [customTheme, setCustomTheme] = useState(initialTheme);
+  const [them, setThem] = useState(savedTheme); // Set the initial theme (light or dark)
   const [collapsed, setCollapsed] = useState(false);
   const [collapsedForPhone, setCollapsedForPhone] = useState(false);
   const [selectedKey, setSelectedKey] = useState("1");
@@ -101,8 +106,6 @@ const TheLayout = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  console.log(them);
 
   return (
     <ConfigProvider
