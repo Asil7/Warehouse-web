@@ -54,6 +54,9 @@ const UserForm = () => {
     }
     if (res.payload.status === 200) {
       reset({});
+      if (id) {
+        dispatch(getUserById(id));
+      }
       message.success(res.payload.data.message);
     } else if (res.payload.status === 409) {
       message.error(res.payload.response.data.message);

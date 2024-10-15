@@ -1,10 +1,29 @@
-import { Button, Card, Form, Input, Popconfirm, Table } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Popconfirm,
+  Row,
+  Select,
+  Table,
+  message,
+} from "antd";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { getSpanList } from "../../store/actions/span/span";
+import {
+  createSpan,
+  deleteSpan,
+  getSpanList,
+  updateSpan,
+} from "../../store/actions/span/span";
 import UserService from "../../services/UserService";
 import DraggableModal from "../../components/modal/DraggableModal";
+import dayjs from "dayjs";
+import { getUsersList } from "../../store/actions/user/user";
 
 const Span = () => {
   const { control, handleSubmit, reset } = useForm();
@@ -12,6 +31,7 @@ const Span = () => {
   const [span, setSpan] = useState();
   const dispatch = useDispatch();
   const { spanList, isLoading } = useSelector((state) => state.span);
+  const { userList } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getSpanList());
@@ -19,6 +39,10 @@ const Span = () => {
       reset(span);
     }
   }, [dispatch, span, reset]);
+
+  useEffect(() => {
+    dispatch(getUsersList());
+  }, [dispatch]);
 
   const handleOpenModal = (item) => {
     setModal(true);
@@ -31,19 +55,41 @@ const Span = () => {
     reset({});
   };
 
-  const onFinish = (data) => {
-    console.log(data);
+  const onFinish = async (data) => {
+    try {
+      let res;
+      if (span) {
+        res = await dispatch(updateSpan(data));
+      } else {
+        res = await dispatch(createSpan(data));
+      }
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        handleModalClose();
+        dispatch(getSpanList());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
   };
 
-  const ActionComponent = ({
-    item,
-    // handleDeletePermission,
-    // handleOpenModal,
-  }) => {
+  const handleDeleteSpan = async (id) => {
+    try {
+      let res = await dispatch(deleteSpan(id));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getSpanList());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
+  const ActionComponent = ({ item, handleDeleteSpan, handleOpenModal }) => {
     return (
       <div>
         <button
-          //   onClick={() => handleOpenModal(item)}
+          onClick={() => handleOpenModal(item)}
           title="Edit"
           className="btn btn-sm btn-outline-success me-1"
         >
@@ -53,7 +99,7 @@ const Span = () => {
           title="Are you sure to Delete"
           okText="Yes"
           cancelText="No"
-          //   onConfirm={() => handleDeletePermission(item.id)}
+          onConfirm={() => handleDeleteSpan(item.id)}
         >
           <button title="Delete" className="btn btn-sm btn-outline-danger me-1">
             <i className="bi bi-trash" />
@@ -70,15 +116,15 @@ const Span = () => {
       key: "id",
     },
     {
-      title: "Why",
-      dataIndex: "why",
-      key: "why",
+      title: "Reason",
+      dataIndex: "reason",
+      key: "reason",
       width: 700,
     },
     {
-      title: "How Much",
-      dataIndex: "howMuch",
-      key: "howMuch",
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
     },
     {
       title: "Username",
@@ -97,8 +143,8 @@ const Span = () => {
       render: (_, item) => (
         <ActionComponent
           item={item}
-          //   handleDeletePermission={handleDeletePermission}
-          //   handleOpenModal={handleOpenModal}
+          handleDeleteSpan={handleDeleteSpan}
+          handleOpenModal={handleOpenModal}
         />
       ),
     },
@@ -130,53 +176,127 @@ const Span = () => {
         />
       </Card>
       <DraggableModal
+        width={800}
         title={span ? "Edit Span" : "Create Span"}
         visible={modal}
         modalClose={handleModalClose}
       >
-        <Form onFinish={handleSubmit(onFinish)}>
-          <Form.Item label="Why" labelAlign="left">
-            <Controller
-              name="why"
-              control={control}
-              rules={{ required: "Why is required" }}
-              render={({ field, fieldState }) => (
-                <>
-                  <Input
-                    placeholder="Why"
-                    {...field}
-                    status={fieldState.invalid ? "error" : ""}
-                  />
-                  {fieldState.invalid && (
-                    <div className="position-fixed text-danger">
-                      {fieldState.error?.message}
-                    </div>
+        <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
+          <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item label="Reason" labelAlign="left">
+                <Controller
+                  name="reason"
+                  control={control}
+                  rules={{ required: "Reason is required" }}
+                  render={({ field, fieldState }) => (
+                    <>
+                      <Input
+                        placeholder="Reason"
+                        {...field}
+                        status={fieldState.invalid ? "error" : ""}
+                      />
+                      {fieldState.invalid && (
+                        <div className="position-fixed text-danger">
+                          {fieldState.error?.message}
+                        </div>
+                      )}
+                    </>
                   )}
-                </>
-              )}
-            />
-          </Form.Item>
-          <Form.Item label="Description" labelAlign="left">
-            <Controller
-              name="description"
-              control={control}
-              rules={{ required: "Description is required" }}
-              render={({ field, fieldState }) => (
-                <>
-                  <Input
-                    placeholder="Description"
-                    {...field}
-                    status={fieldState.invalid ? "error" : ""}
-                  />
-                  {fieldState.invalid && (
-                    <div className="position-fixed text-danger">
-                      {fieldState.error?.message}
-                    </div>
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={8}>
+              <Form.Item label="Price" labelAlign="left">
+                <Controller
+                  name="price"
+                  control={control}
+                  rules={{ required: "Price is required" }}
+                  render={({ field, fieldState }) => (
+                    <>
+                      <Input
+                        placeholder="Price"
+                        {...field}
+                        status={fieldState.invalid ? "error" : ""}
+                      />
+                      {fieldState.invalid && (
+                        <div className="position-fixed text-danger">
+                          {fieldState.error?.message}
+                        </div>
+                      )}
+                    </>
                   )}
-                </>
-              )}
-            />
-          </Form.Item>
+                />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Username">
+                <Controller
+                  name="username"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <>
+                      <Select
+                        placeholder="--Choose--"
+                        allowClear
+                        {...field}
+                        loading={isLoading}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          (option?.label ?? "").includes(input)
+                        }
+                        filterSort={(optionA, optionB) =>
+                          (optionA?.label ?? "")
+                            .toLowerCase()
+                            .localeCompare((optionB?.label ?? "").toLowerCase())
+                        }
+                        status={fieldState.invalid ? "error" : ""}
+                        options={userList.map((value) => ({
+                          value: value.username,
+                          label: value.username,
+                        }))}
+                      />
+                    </>
+                  )}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Date" labelAlign="left">
+                <Controller
+                  name="date"
+                  control={control}
+                  rules={{
+                    required: {
+                      value: true,
+                      message: "Date is required",
+                    },
+                  }}
+                  render={({ field, fieldState }) => (
+                    <>
+                      <DatePicker
+                        className="w-100"
+                        {...field}
+                        value={field.value ? dayjs(field.value) : null}
+                        onChange={(date) =>
+                          field.onChange(date ? date.toISOString() : null)
+                        }
+                        status={fieldState.invalid ? "error" : ""}
+                      />
+                      {fieldState.invalid && (
+                        <div className="position-fixed text-danger">
+                          {fieldState.error?.message}
+                        </div>
+                      )}
+                    </>
+                  )}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
           <div className="text-end">
             <Button className="me-1" onClick={handleModalClose}>
               Cancel
