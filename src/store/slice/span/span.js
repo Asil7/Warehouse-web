@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSpanList } from "../../actions/span/span";
+import { getSpanList, getSpanByUsername } from "../../actions/span/span";
 
 const slice = createSlice({
   name: "span",
   initialState: {
     spanList: [],
+    spanByUsername: [],
     isLoading: false,
   },
   reducers: {
@@ -24,6 +25,18 @@ const slice = createSlice({
       .addCase(getSpanList.rejected, (state) => {
         state.isLoading = false;
         state.spanList = [];
+      })
+
+      .addCase(getSpanByUsername.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSpanByUsername.fulfilled, (state, action) => {
+        state.spanByUsername = action.payload.data.object || [];
+        state.isLoading = false;
+      })
+      .addCase(getSpanByUsername.rejected, (state) => {
+        state.isLoading = false;
+        state.spanByUsername = [];
       });
   },
 });

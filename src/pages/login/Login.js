@@ -5,6 +5,7 @@ import { login } from "../../store/actions/login/login";
 import { useNavigate } from "react-router-dom";
 import { loginSuccess } from "../../store/slice/auth/authSlice";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import "./login.css";
 
 const Login = () => {
   const { control, handleSubmit } = useForm();
@@ -34,10 +35,21 @@ const Login = () => {
   };
 
   return (
-    <Row justify="center" align="middle" style={{ height: "100vh" }}>
-      <Col xs={24} sm={18} md={14} lg={12} xl={8} xxl={6}>
-        <Card>
-          <Form onFinish={handleSubmit(onFinish)}>
+    <Row justify="center" align="top" className="login-background">
+      <Col
+        className="login-card-container"
+        xs={24}
+        sm={18}
+        md={14}
+        lg={12}
+        xl={8}
+        xxl={6}
+      >
+        <Card className="p-3">
+          <div className="text-center">
+            <div className="fs-3 mb-2">Log in to your account</div>
+          </div>
+          <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
             <Form.Item label="Username" labelAlign="left">
               <Controller
                 name="username"
@@ -66,7 +78,7 @@ const Login = () => {
             </Form.Item>
             <div>
               <Button block htmlType="submit" type="primary">
-                Login
+                Log in
               </Button>
             </div>
           </Form>

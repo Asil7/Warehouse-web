@@ -6,7 +6,6 @@ import {
   Form,
   Input,
   Select,
-  Space,
   Tag,
   message,
 } from "antd";
@@ -35,16 +34,14 @@ const UserForm = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (id && userById) {
-      reset({
-        ...userById,
-        phone: userById.phone ? { phone: userById.phone } : { phone: "" },
-      });
+    if (id) {
+      reset(userById);
     }
   }, [reset, id, userById]);
 
   const onFinish = async (data) => {
-    data.phone = data.phone.phone;
+    console.log(data);
+
     data.dateOfEmployment = dayjs(data.dateOfEmployment).format("YYYY-MM-DD");
     let res;
     if (id) {
@@ -123,25 +120,26 @@ const UserForm = () => {
               <Controller
                 name="phone"
                 control={control}
+                rules={{
+                  required: { value: true, message: "Phone is required" },
+                }}
                 render={({ field, fieldState }) => (
-                  <Space.Compact style={{ width: "100%" }}>
-                    <Input readOnly value="🇺🇿 +998" style={{ width: "20%" }} />
+                  <>
                     <Input
-                      placeholder="Phone number"
-                      style={{ width: "80%" }}
-                      value={field.value?.phone || ""}
-                      onChange={(e) =>
-                        field.onChange({
-                          ...field.value,
-                          phone: e.target.value,
-                        })
-                      }
+                      placeholder="Phone"
+                      {...field}
                       status={fieldState.invalid ? "error" : ""}
                     />
-                  </Space.Compact>
+                    {fieldState.invalid && (
+                      <div className="position-fixed text-danger">
+                        {fieldState.error?.message}
+                      </div>
+                    )}
+                  </>
                 )}
               />
             </Form.Item>
+
             {!id && (
               <Form.Item label="Password" labelAlign="left">
                 <Controller

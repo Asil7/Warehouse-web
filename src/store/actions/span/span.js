@@ -10,6 +10,19 @@ export const getSpanList = createAsyncThunk("get/SpanList", async () => {
   }
 });
 
+export const getSpanByUsername = createAsyncThunk(
+  "get/SpanByUsername",
+  async (username) => {
+    try {
+      const res = await api.get(`span/${username}`);
+      console.log(res);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
 export const createSpan = createAsyncThunk("create/Span", async (data) => {
   try {
     const res = await api.post(`span`, data);

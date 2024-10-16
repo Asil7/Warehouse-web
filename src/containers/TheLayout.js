@@ -118,6 +118,7 @@ const TheLayout = () => {
     >
       <Layout style={{ minHeight: "100vh" }}>
         <Sider
+          width={205}
           theme={them === "light" ? "dark" : "light"}
           collapsible
           collapsed={isMobile ? collapsedForPhone : collapsed}

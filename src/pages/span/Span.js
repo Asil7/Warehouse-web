@@ -119,12 +119,13 @@ const Span = () => {
       title: "Reason",
       dataIndex: "reason",
       key: "reason",
-      width: 700,
+      // width: 700,
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (text) => new Intl.NumberFormat("en-US").format(text),
     },
     {
       title: "Username",
@@ -149,6 +150,7 @@ const Span = () => {
       ),
     },
   ];
+
   return (
     <div>
       <Card

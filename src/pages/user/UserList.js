@@ -178,6 +178,7 @@ const UserList = () => {
       title: "Salary",
       dataIndex: "salary",
       key: "salary",
+      render: (text) => new Intl.NumberFormat("en-US").format(text),
     },
     {
       title: "Date of Employment",

@@ -8,6 +8,7 @@ import permission from "./slice/permission/permission";
 import company from "./slice/company/company";
 import product from "./slice/product/product";
 import span from "./slice/span/span";
+import warehouse from "./slice/warehouse/warehouse";
 
 export const throwMiddleware = () => (next) => (action) => {
   next(action);
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   company,
   product,
   span,
+  warehouse,
 });
 
 export default configureStore({
