@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Layout,
   Row,
@@ -19,8 +19,8 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import UserService from "../services/UserService";
-const { darkAlgorithm, defaultAlgorithm } = theme;
 
+const { darkAlgorithm, defaultAlgorithm } = theme;
 const { Header: AntHeader } = Layout;
 
 const Header = ({
@@ -35,6 +35,30 @@ const Header = ({
   const { token } = theme.useToken();
   const colorBgLayout = token?.colorBgLayout;
   const username = UserService.getSubject();
+
+  const [selectedTheme, setSelectedTheme] = useState("light");
+
+  const handleThemeChange = useCallback(
+    (value) => {
+      setSelectedTheme(value);
+      if (value === "light") {
+        setCustomTheme([defaultAlgorithm]);
+        setThem("light");
+        localStorage.setItem("theme", "light");
+      } else {
+        setCustomTheme([darkAlgorithm]);
+        setThem("dark");
+        localStorage.setItem("theme", "dark");
+      }
+    },
+    [setCustomTheme, setThem]
+  );
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setSelectedTheme(savedTheme);
+    handleThemeChange(savedTheme);
+  }, [handleThemeChange]);
 
   const profile = [
     {
@@ -77,18 +101,6 @@ const Header = ({
     },
   ];
 
-  const handleThemeChange = (value) => {
-    if (value === "light") {
-      setCustomTheme([defaultAlgorithm]);
-      setThem("light");
-      localStorage.setItem("theme", "light");
-    } else {
-      setCustomTheme([darkAlgorithm]);
-      setThem("dark");
-      localStorage.setItem("theme", "dark");
-    }
-  };
-
   return (
     <AntHeader
       style={{ backgroundColor: them === "dark" ? "#141414" : "#ffffff" }}
@@ -128,6 +140,7 @@ const Header = ({
               { value: "dark", icon: <MoonOutlined />, title: "dark" },
             ]}
             onChange={handleThemeChange}
+            value={selectedTheme}
           />
           <Dropdown
             menu={{
