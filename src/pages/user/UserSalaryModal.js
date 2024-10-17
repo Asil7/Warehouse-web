@@ -3,7 +3,11 @@ import DraggableModal from "../../components/modal/DraggableModal";
 import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserSalary, giveSalary } from "../../store/actions/user/user";
+import {
+  getUserSalary,
+  getUsersList,
+  giveSalary,
+} from "../../store/actions/user/user";
 import { useEffect, useState } from "react";
 
 const UserSalaryModal = ({ salaryModal, setSalaryModal, userDetail }) => {
@@ -64,6 +68,8 @@ const UserSalaryModal = ({ salaryModal, setSalaryModal, userDetail }) => {
       let res = await dispatch(giveSalary(payload));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
+        dispatch(getUsersList());
+        handleModalClose();
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }

@@ -89,7 +89,7 @@ export const getUserSalary = createAsyncThunk(
 export const giveSalary = createAsyncThunk("get/GiveSalary", async (data) => {
   try {
     const res = await api.post(
-      `user/${data.userId}/give-salary?username=${data.username}&salary=${data.salary}&givenSalary=${data.givenSalary}`
+      `user/give-salary?username=${data.username}&salary=${data.salary}&givenSalary=${data.givenSalary}`
     );
     return res;
   } catch (e) {
