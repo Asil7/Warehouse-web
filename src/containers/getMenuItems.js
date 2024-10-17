@@ -29,15 +29,15 @@ export const getMenuItems = () => {
       label: "Company",
     },
     {
-      key: "user",
+      key: "users",
       icon: <UserOutlined />,
       label: "User",
-      children: [
-        {
-          key: "users",
-          label: "Users",
-        },
-      ],
+      // children: [
+      //   {
+      //     key: "users",
+      //     label: "Users",
+      //   },
+      // ],
     },
     {
       key: "security",

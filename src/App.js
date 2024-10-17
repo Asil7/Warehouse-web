@@ -18,6 +18,7 @@ import Profile from "./containers/Profile";
 import ProductList from "./pages/product/ProductList";
 import Span from "./pages/span/Span";
 import WarehouseProducts from "./pages/warehouse/WarehouseProducts";
+import UserSpan from "./pages/user/UserSpan";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -158,6 +159,14 @@ const App = () => {
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <Span />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="user-span/:username"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <UserSpan />
               </PrivateRoute>
             }
           />

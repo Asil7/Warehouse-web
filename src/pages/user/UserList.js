@@ -22,9 +22,12 @@ import { Link } from "react-router-dom";
 import DraggableModal from "../../components/modal/DraggableModal";
 import { Controller, useForm } from "react-hook-form";
 import { LockFilled } from "@ant-design/icons";
+import UserSalaryModal from "./UserSalaryModal";
 
 const UserList = () => {
   const dispatch = useDispatch();
+  const [userDetail, setUserDetail] = useState();
+  const [salaryModal, setSalaryModal] = useState(false);
   const { userList, isLoading } = useSelector((state) => state.user);
   const [user, setUser] = useState();
   const [password, setPassword] = useState();
@@ -47,9 +50,29 @@ const UserList = () => {
     passwordReset(password);
   }, [reset, user, passwordReset, password]);
 
-  const ActionComponent = ({ item, handleDeleteUser, handleOpenModal }) => {
+  const ActionComponent = ({
+    item,
+    handleDeleteUser,
+    handleOpenModal,
+    handleOpenSalaryModal,
+  }) => {
     return (
       <div>
+        <button
+          onClick={() => handleOpenSalaryModal(item)}
+          title="Salary"
+          className="btn btn-sm btn-outline-info me-1"
+        >
+          <i className="bi bi-cash-stack"></i>
+        </button>
+        <Link to={`/user-span/${item.username}`}>
+          <button
+            title="User span"
+            className="btn btn-sm btn-outline-secondary me-1"
+          >
+            <i className="bi bi-graph-down-arrow" />
+          </button>
+        </Link>
         <Link to={`/user-form/${item.id}`}>
           <button title="Edit" className="btn btn-sm btn-outline-success me-1">
             <i className="bi bi-pencil-square" />
@@ -91,6 +114,11 @@ const UserList = () => {
     } else if (res.payload.status === 409) {
       message.error(res.payload.response.data.message);
     }
+  };
+
+  const handleOpenSalaryModal = (item) => {
+    setSalaryModal(true);
+    setUserDetail(item);
   };
 
   const handleModalClose = () => {
@@ -214,6 +242,7 @@ const UserList = () => {
           item={item}
           handleDeleteUser={handleDeleteUser}
           handleOpenModal={handleOpenModal}
+          handleOpenSalaryModal={handleOpenSalaryModal}
         />
       ),
     },
@@ -240,6 +269,13 @@ const UserList = () => {
           rowKey="id"
         />
       </Card>
+      {salaryModal && (
+        <UserSalaryModal
+          salaryModal={salaryModal}
+          setSalaryModal={setSalaryModal}
+          userDetail={userDetail}
+        />
+      )}
       <DraggableModal
         title="Change Status"
         visible={modalVisible}

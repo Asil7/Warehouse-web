@@ -71,3 +71,28 @@ export const getUserById = createAsyncThunk("get/UserById", async (id) => {
     return e;
   }
 });
+
+export const getUserSalary = createAsyncThunk(
+  "get/UserSalary",
+  async (data) => {
+    try {
+      const res = await api.get(
+        `user/${data.userId}/calculate-salary?givenDate=${data.givenDate}`
+      );
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
+export const giveSalary = createAsyncThunk("get/GiveSalary", async (data) => {
+  try {
+    const res = await api.post(
+      `user/${data.userId}/give-salary?username=${data.username}&salary=${data.salary}&givenSalary=${data.givenSalary}`
+    );
+    return res;
+  } catch (e) {
+    return e;
+  }
+});

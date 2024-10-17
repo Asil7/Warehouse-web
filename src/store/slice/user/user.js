@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUsersList, getUserById } from "../../actions/user/user";
+import {
+  getUsersList,
+  getUserById,
+  getUserSalary,
+} from "../../actions/user/user";
 
 const slice = createSlice({
   name: "user",
   initialState: {
     userList: [],
     userById: {},
+    userSalary: {},
     isLoading: false,
+    salaryLoading: false,
   },
   reducers: {
     clearCart: (state) => {
@@ -36,7 +42,19 @@ const slice = createSlice({
       })
       .addCase(getUserById.rejected, (state) => {
         state.isLoading = false;
-        state.userById = [];
+        state.userById = {};
+      })
+
+      .addCase(getUserSalary.pending, (state) => {
+        state.salaryLoading = true;
+      })
+      .addCase(getUserSalary.fulfilled, (state, action) => {
+        state.userSalary = action.payload.data.object;
+        state.salaryLoading = false;
+      })
+      .addCase(getUserSalary.rejected, (state) => {
+        state.salaryLoading = false;
+        state.userSalary = {};
       });
   },
 });
