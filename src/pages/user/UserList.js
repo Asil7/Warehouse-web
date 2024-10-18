@@ -58,13 +58,15 @@ const UserList = () => {
   }) => {
     return (
       <div>
-        <button
-          onClick={() => handleOpenSalaryModal(item)}
-          title="Salary"
-          className="btn btn-sm btn-outline-info me-1"
-        >
-          <i className="bi bi-cash-stack"></i>
-        </button>
+        {item.dateOfEmployment && (
+          <button
+            onClick={() => handleOpenSalaryModal(item)}
+            title="Salary"
+            className="btn btn-sm btn-outline-info me-1"
+          >
+            <i className="bi bi-cash-stack"></i>
+          </button>
+        )}
         <Link to={`/user-span/${item.username}`}>
           <button
             title="User span"

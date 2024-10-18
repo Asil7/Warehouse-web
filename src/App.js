@@ -19,6 +19,7 @@ import ProductList from "./pages/product/ProductList";
 import Span from "./pages/span/Span";
 import WarehouseProducts from "./pages/warehouse/WarehouseProducts";
 import UserSpan from "./pages/user/UserSpan";
+import OrderList from "./pages/order/OrderList";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -43,6 +44,15 @@ const App = () => {
             </PrivateRoute>
           }
         >
+          {/*ORDER*/}
+          <Route
+            path="orders"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <OrderList />
+              </PrivateRoute>
+            }
+          />
           {/* USER */}
           <Route
             path="users"

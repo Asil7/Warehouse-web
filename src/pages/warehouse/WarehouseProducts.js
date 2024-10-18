@@ -25,9 +25,16 @@ import { useForm, Controller } from "react-hook-form";
 import { getProductList } from "../../store/actions/product/product";
 
 const WarehouseProducts = () => {
-  const { control, handleSubmit, reset } = useForm();
+  const { control, handleSubmit, reset, setValue } = useForm();
+  const {
+    control: quantityControl,
+    handleSubmit: quantityHandleSubmit,
+    reset: quantityReset,
+  } = useForm();
   const [modal, setModal] = useState(false);
+  const [quantityModal, setQuantityModal] = useState(false);
   const [product, setProduct] = useState();
+  const [selectedProductType, setSelectedProductType] = useState("");
   const dispatch = useDispatch();
   const { productList } = useSelector((state) => state.product);
   const { warehouseProductList, isLoading } = useSelector(
@@ -45,15 +52,27 @@ const WarehouseProducts = () => {
   const handleOpenModal = (item) => {
     setModal(true);
     setProduct(item);
+    setSelectedProductType(item?.type || "");
   };
 
   const handleModalClose = () => {
     setModal(false);
     setProduct({});
     reset({});
+    setSelectedProductType("");
+  };
+
+  const handleOpenQuantityModal = (item) => {
+    setQuantityModal(true);
+  };
+
+  const handleCloseQuantityModal = () => {
+    setQuantityModal(false);
+    quantityReset({});
   };
 
   const onFinish = async (data) => {
+    console.log(data);
     try {
       let res;
       if (product) {
@@ -84,9 +103,25 @@ const WarehouseProducts = () => {
     } catch (e) {}
   };
 
+  const quantityOperations = async (data) => {
+    console.log(data);
+  };
+
   const ActionComponent = ({ item, handleOpenModal }) => {
     return (
       <div>
+        <button
+          title="Add quantity"
+          className="btn btn-sm btn-outline-primary me-1"
+        >
+          <i className="bi bi-plus-circle"></i>
+        </button>
+        <button
+          title="Subtract quantity"
+          className="btn btn-sm btn-outline-warning me-1"
+        >
+          <i className="bi bi-dash-circle"></i>
+        </button>
         <button
           onClick={() => handleOpenModal(item)}
           title="Edit"
@@ -130,6 +165,11 @@ const WarehouseProducts = () => {
       ),
     },
     {
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
+    },
+    {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
@@ -143,6 +183,7 @@ const WarehouseProducts = () => {
         <ActionComponent
           item={item}
           handleOpenModal={handleOpenModal}
+          handleOpenQuantityModal={handleOpenQuantityModal}
           handleDeleteProduct={handleDeleteProduct}
         />
       ),
@@ -176,14 +217,14 @@ const WarehouseProducts = () => {
         />
       </Card>
       <DraggableModal
-        width={700}
+        width={800}
         title={product ? "Edit Product" : "Add Product"}
         visible={modal}
         modalClose={handleModalClose}
       >
         <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item labelAlign="left" label="Product">
                 <Controller
                   name="product"
@@ -213,6 +254,14 @@ const WarehouseProducts = () => {
                           value: value.name,
                           label: value.name,
                         }))}
+                        onChange={(value) => {
+                          const selectedProduct = productList.find(
+                            (p) => p.name === value
+                          );
+                          setSelectedProductType(selectedProduct?.type || "");
+                          setValue("product", value);
+                          setValue("type", selectedProduct?.type);
+                        }}
                       />
                       {fieldState.invalid && (
                         <div className="position-fixed text-danger">
@@ -224,7 +273,7 @@ const WarehouseProducts = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item label="Quantity" labelAlign="left">
                 <Controller
                   name="quantity"
@@ -247,6 +296,22 @@ const WarehouseProducts = () => {
                 />
               </Form.Item>
             </Col>
+            <Col span={8}>
+              <Form.Item label="Type" labelAlign="left">
+                <Controller
+                  name="type"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <Input
+                      placeholder="Type"
+                      {...field}
+                      value={selectedProductType} // Automatically set type
+                      status={fieldState.invalid ? "error" : ""}
+                    />
+                  )}
+                />
+              </Form.Item>
+            </Col>
           </Row>
           <div className="text-end">
             <Button className="me-1" onClick={handleModalClose}>
@@ -256,6 +321,37 @@ const WarehouseProducts = () => {
               Save
             </Button>
           </div>
+        </Form>
+      </DraggableModal>
+      <DraggableModal
+        visible={quantityModal}
+        modalClose={handleCloseQuantityModal}
+      >
+        <Form
+          layout="vertical"
+          onFinish={quantityHandleSubmit(quantityOperations)}
+        >
+          <Form.Item label="Quantity" labelAlign="left">
+            <Controller
+              name="quantity"
+              control={quantityControl}
+              rules={{ required: "Quantity is required" }}
+              render={({ field, fieldState }) => (
+                <>
+                  <Input
+                    placeholder="Quantity"
+                    {...field}
+                    status={fieldState.invalid ? "error" : ""}
+                  />
+                  {fieldState.invalid && (
+                    <div className="position-fixed text-danger">
+                      {fieldState.error?.message}
+                    </div>
+                  )}
+                </>
+              )}
+            />
+          </Form.Item>
         </Form>
       </DraggableModal>
     </div>

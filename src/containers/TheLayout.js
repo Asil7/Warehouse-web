@@ -62,13 +62,12 @@ const { Content, Sider } = Layout;
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
 const TheLayout = () => {
-  // Initialize the theme state based on the value stored in localStorage
   const savedTheme = localStorage.getItem("theme") || "light";
   const initialTheme =
     savedTheme === "light" ? [defaultAlgorithm] : [darkAlgorithm];
 
   const [customTheme, setCustomTheme] = useState(initialTheme);
-  const [them, setThem] = useState(savedTheme); // Set the initial theme (light or dark)
+  const [them, setThem] = useState(savedTheme);
   const [collapsed, setCollapsed] = useState(false);
   const [collapsedForPhone, setCollapsedForPhone] = useState(false);
   const [selectedKey, setSelectedKey] = useState("1");
@@ -151,7 +150,7 @@ const TheLayout = () => {
             setCollapsedForPhone={setCollapsedForPhone}
             setCustomTheme={setCustomTheme}
           />
-          <Content style={{ margin: "16px 16px" }}>
+          <Content className="custom-scrollbar content-scroll">
             <div
               style={{
                 background: colorBgContainer,
