@@ -18,6 +18,8 @@ import {
   deleteWarehouseProduct,
   getWarehouseProducts,
   updateWarehouseProduct,
+  addQuantity,
+  subtractQuantity,
 } from "../../store/actions/warehouse/warehouse";
 import { useEffect, useState } from "react";
 import DraggableModal from "../../components/modal/DraggableModal";
@@ -40,6 +42,8 @@ const WarehouseProducts = () => {
   const { warehouseProductList, isLoading } = useSelector(
     (state) => state.warehouse
   );
+  const [operationType, setOperationType] = useState("");
+  const [productId, setProductId] = useState();
 
   useEffect(() => {
     dispatch(getWarehouseProducts());
@@ -62,8 +66,10 @@ const WarehouseProducts = () => {
     setSelectedProductType("");
   };
 
-  const handleOpenQuantityModal = (item) => {
+  const handleOpenQuantityModal = (id, operationType) => {
     setQuantityModal(true);
+    setOperationType(operationType);
+    setProductId(id);
   };
 
   const handleCloseQuantityModal = () => {
@@ -72,7 +78,6 @@ const WarehouseProducts = () => {
   };
 
   const onFinish = async (data) => {
-    console.log(data);
     try {
       let res;
       if (product) {
@@ -104,19 +109,47 @@ const WarehouseProducts = () => {
   };
 
   const quantityOperations = async (data) => {
-    console.log(data);
+    try {
+      let res;
+      const payload = {
+        id: productId,
+        quantity: data.quantity,
+      };
+      console.log(payload);
+      if (operationType === "add") {
+        res = await dispatch(addQuantity(payload));
+      } else if (operationType === "subtract") {
+        res = await dispatch(subtractQuantity(payload));
+      }
+
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        handleCloseQuantityModal();
+        dispatch(getWarehouseProducts());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const ActionComponent = ({ item, handleOpenModal }) => {
+  const ActionComponent = ({
+    item,
+    handleOpenModal,
+    handleOpenQuantityModal,
+  }) => {
     return (
       <div>
         <button
+          onClick={() => handleOpenQuantityModal(item.id, "add")}
           title="Add quantity"
           className="btn btn-sm btn-outline-primary me-1"
         >
           <i className="bi bi-plus-circle"></i>
         </button>
         <button
+          onClick={() => handleOpenQuantityModal(item.id, "subtract")}
           title="Subtract quantity"
           className="btn btn-sm btn-outline-warning me-1"
         >
@@ -331,7 +364,7 @@ const WarehouseProducts = () => {
           layout="vertical"
           onFinish={quantityHandleSubmit(quantityOperations)}
         >
-          <Form.Item label="Quantity" labelAlign="left">
+          <Form.Item>
             <Controller
               name="quantity"
               control={quantityControl}
@@ -352,6 +385,14 @@ const WarehouseProducts = () => {
               )}
             />
           </Form.Item>
+          <div className="text-end">
+            <Button className="me-1" onClick={handleCloseQuantityModal}>
+              Cancel
+            </Button>
+            <Button htmlType="submit" type="primary">
+              {operationType === "add" ? "Add" : "Subtract"}
+            </Button>
+          </div>
         </Form>
       </DraggableModal>
     </div>

@@ -16,9 +16,9 @@ import CompanyList from "./pages/company/CompanyList";
 import CompanyForm from "./pages/company/CompanyForm";
 import Profile from "./containers/Profile";
 import ProductList from "./pages/product/ProductList";
-import Span from "./pages/span/Span";
+import Expense from "./pages/expense/Expense";
 import WarehouseProducts from "./pages/warehouse/WarehouseProducts";
-import UserSpan from "./pages/user/UserSpan";
+import UserExpense from "./pages/user/UserExpense";
 import OrderList from "./pages/order/OrderList";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
@@ -163,20 +163,20 @@ const App = () => {
               </PrivateRoute>
             }
           />
-          {/*SPAN*/}
+          {/*EXPENSE*/}
           <Route
-            path="span"
+            path="expense"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
-                <Span />
+                <Expense />
               </PrivateRoute>
             }
           />
           <Route
-            path="user-span/:username"
+            path="user-expense/:username"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
-                <UserSpan />
+                <UserExpense />
               </PrivateRoute>
             }
           />

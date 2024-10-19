@@ -1,21 +1,21 @@
 import { Card, Table, Tag } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getSpanByUsername } from "../../store/actions/span/span";
+import { getExpenseByUsername } from "../../store/actions/expense/expense";
 import { useParams } from "react-router-dom";
 
-const UserSpan = () => {
+const UserExpense = () => {
   const dispatch = useDispatch();
-  const { spanByUsername, isLoading } = useSelector((state) => state.span);
+  const { expenseByUsername, isLoading } = useSelector(
+    (state) => state.expense
+  );
   const { username } = useParams();
 
   useEffect(() => {
     if (username) {
-      dispatch(getSpanByUsername(username));
+      dispatch(getExpenseByUsername(username));
     }
   }, [dispatch, username]);
-
-  console.log("spanByUsername:", spanByUsername);
 
   const columns = [
     {
@@ -42,7 +42,7 @@ const UserSpan = () => {
   ];
 
   const totalPrice =
-    spanByUsername?.reduce((acc, item) => acc + item.price, 0) || 0;
+    expenseByUsername?.reduce((acc, item) => acc + item.price, 0) || 0;
   const formattedTotalPrice = new Intl.NumberFormat("en-US").format(totalPrice);
 
   return (
@@ -61,7 +61,7 @@ const UserSpan = () => {
         <Table
           size="small"
           loading={isLoading}
-          dataSource={spanByUsername}
+          dataSource={expenseByUsername}
           scroll={{ x: 700 }}
           columns={columns}
           rowKey="id"
@@ -72,4 +72,4 @@ const UserSpan = () => {
   );
 };
 
-export default UserSpan;
+export default UserExpense;

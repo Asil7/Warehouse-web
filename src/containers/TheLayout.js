@@ -87,7 +87,7 @@ const TheLayout = () => {
   };
 
   useEffect(() => {
-    const savedKey = localStorage.getItem("selectedMenuKey") || "companies";
+    const savedKey = localStorage.getItem("selectedMenuKey") || "orders";
     setSelectedKey(savedKey);
 
     if (location.pathname === "/") {

@@ -15,30 +15,30 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  createSpan,
-  deleteSpan,
-  getSpanList,
-  updateSpan,
-} from "../../store/actions/span/span";
+  createExpense,
+  deleteExpense,
+  getExpenseList,
+  updateExpense,
+} from "../../store/actions/expense/expense";
 import UserService from "../../services/UserService";
 import DraggableModal from "../../components/modal/DraggableModal";
 import dayjs from "dayjs";
 import { getUsersList } from "../../store/actions/user/user";
 
-const Span = () => {
+const Expense = () => {
   const { control, handleSubmit, reset } = useForm();
   const [modal, setModal] = useState(false);
-  const [span, setSpan] = useState();
+  const [expense, setExpense] = useState();
   const dispatch = useDispatch();
-  const { spanList, isLoading } = useSelector((state) => state.span);
+  const { expenseList, isLoading } = useSelector((state) => state.expense);
   const { userList } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getSpanList());
-    if (span) {
-      reset(span);
+    dispatch(getExpenseList());
+    if (expense) {
+      reset(expense);
     }
-  }, [dispatch, span, reset]);
+  }, [dispatch, expense, reset]);
 
   useEffect(() => {
     dispatch(getUsersList());
@@ -46,46 +46,46 @@ const Span = () => {
 
   const handleOpenModal = (item) => {
     setModal(true);
-    setSpan(item);
+    setExpense(item);
   };
 
   const handleModalClose = () => {
     setModal(false);
-    setSpan({});
+    setExpense({});
     reset({});
   };
 
   const onFinish = async (data) => {
     try {
       let res;
-      if (span) {
-        res = await dispatch(updateSpan(data));
+      if (expense) {
+        res = await dispatch(updateExpense(data));
       } else {
-        res = await dispatch(createSpan(data));
+        res = await dispatch(createExpense(data));
       }
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
         handleModalClose();
-        dispatch(getSpanList());
+        dispatch(getExpenseList());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }
     } catch (e) {}
   };
 
-  const handleDeleteSpan = async (id) => {
+  const handleDeleteExpense = async (id) => {
     try {
-      let res = await dispatch(deleteSpan(id));
+      let res = await dispatch(deleteExpense(id));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
-        dispatch(getSpanList());
+        dispatch(getExpenseList());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }
     } catch (e) {}
   };
 
-  const ActionComponent = ({ item, handleDeleteSpan, handleOpenModal }) => {
+  const ActionComponent = ({ item, handleDeleteExpense, handleOpenModal }) => {
     return (
       <div>
         <button
@@ -99,7 +99,7 @@ const Span = () => {
           title="Are you sure to Delete"
           okText="Yes"
           cancelText="No"
-          onConfirm={() => handleDeleteSpan(item.id)}
+          onConfirm={() => handleDeleteExpense(item.id)}
         >
           <button title="Delete" className="btn btn-sm btn-outline-danger me-1">
             <i className="bi bi-trash" />
@@ -144,7 +144,7 @@ const Span = () => {
       render: (_, item) => (
         <ActionComponent
           item={item}
-          handleDeleteSpan={handleDeleteSpan}
+          handleDeleteExpense={handleDeleteExpense}
           handleOpenModal={handleOpenModal}
         />
       ),
@@ -156,13 +156,13 @@ const Span = () => {
       <Card
         size="small"
         extra={
-          UserService.hasPermission("ADD_SPAN") && (
+          UserService.hasPermission("ADD_EXPENSE") && (
             <Button
               className="mt-1 mb-1"
               onClick={() => handleOpenModal()}
               type="primary"
             >
-              Create Span
+              Create Expense
             </Button>
           )
         }
@@ -170,7 +170,7 @@ const Span = () => {
         <Table
           size="small"
           loading={isLoading}
-          dataSource={spanList}
+          dataSource={expenseList}
           scroll={{ x: 1000 }}
           columns={columns}
           rowKey="id"
@@ -179,7 +179,7 @@ const Span = () => {
       </Card>
       <DraggableModal
         width={800}
-        title={span ? "Edit Span" : "Create Span"}
+        title={expense ? "Edit expense" : "Create expense"}
         visible={modal}
         modalClose={handleModalClose}
       >
@@ -313,4 +313,4 @@ const Span = () => {
   );
 };
 
-export default Span;
+export default Expense;

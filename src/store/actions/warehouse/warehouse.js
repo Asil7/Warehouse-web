@@ -48,3 +48,29 @@ export const deleteWarehouseProduct = createAsyncThunk(
     }
   }
 );
+
+export const addQuantity = createAsyncThunk(
+  "update/AddQuantity",
+  async (data) => {
+    try {
+      const { id, quantity } = data;
+      const res = await api.put(`warehouse/addQuantity/${id}/${quantity}`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
+export const subtractQuantity = createAsyncThunk(
+  "update/SubtractQuantity",
+  async (data) => {
+    try {
+      const { id, quantity } = data;
+      const res = await api.put(`warehouse/subtractQuantity/${id}/${quantity}`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);

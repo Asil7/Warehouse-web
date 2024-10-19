@@ -24,9 +24,9 @@ export const getMenuItems = () => {
       ],
     },
     {
-      key: "span",
+      key: "expense",
       icon: <i className="bi bi-graph-down-arrow"></i>,
-      label: "Span",
+      label: "Expense",
     },
     {
       key: "companies",

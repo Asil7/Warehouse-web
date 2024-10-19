@@ -1,22 +1,22 @@
 import { Card, Table, Tag } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { getSpanByUsername } from "../store/actions/span/span";
+import { getExpenseByUsername } from "../store/actions/expense/expense";
 import { useEffect } from "react";
 import UserService from "../services/UserService";
 
 const Profile = () => {
   const username = UserService.getSubject();
   const dispatch = useDispatch();
-  const { spanByUsername, isLoading } = useSelector((state) => state.span);
+  const { expenseByUsername, isLoading } = useSelector(
+    (state) => state.expense
+  );
 
   useEffect(() => {
     if (username) {
-      let res = dispatch(getSpanByUsername(username));
+      let res = dispatch(getExpenseByUsername(username));
       console.log(res);
     }
   }, [dispatch, username]);
-
-  console.log("spanByUsername:", spanByUsername);
 
   const columns = [
     {
@@ -43,7 +43,7 @@ const Profile = () => {
   ];
 
   const totalPrice =
-    spanByUsername?.reduce((acc, item) => acc + item.price, 0) || 0;
+    expenseByUsername?.reduce((acc, item) => acc + item.price, 0) || 0;
   const formattedTotalPrice = new Intl.NumberFormat("en-US").format(totalPrice);
 
   return (
@@ -62,7 +62,7 @@ const Profile = () => {
         <Table
           size="small"
           loading={isLoading}
-          dataSource={spanByUsername}
+          dataSource={expenseByUsername}
           scroll={{ x: 700 }}
           columns={columns}
           rowKey="id"

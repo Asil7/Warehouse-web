@@ -67,9 +67,9 @@ const UserList = () => {
             <i className="bi bi-cash-stack"></i>
           </button>
         )}
-        <Link to={`/user-span/${item.username}`}>
+        <Link to={`/user-expense/${item.username}`}>
           <button
-            title="User span"
+            title="User expense"
             className="btn btn-sm btn-outline-secondary me-1"
           >
             <i className="bi bi-graph-down-arrow" />
