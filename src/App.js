@@ -20,6 +20,7 @@ import Expense from "./pages/expense/Expense";
 import WarehouseProducts from "./pages/warehouse/WarehouseProducts";
 import UserExpense from "./pages/user/UserExpense";
 import OrderList from "./pages/order/OrderList";
+import OrderForm from "./pages/order/OrderForm";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -50,6 +51,14 @@ const App = () => {
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <OrderList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="order-form"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <OrderForm />
               </PrivateRoute>
             }
           />
