@@ -33,21 +33,26 @@ const OrderForm = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    watchedProducts.forEach((item, index) => {
-      const selectedProduct = warehouseProductList.find(
-        (product) => product.product === item.product
-      );
+    if (Array.isArray(watchedProducts) && Array.isArray(warehouseProductList)) {
+      watchedProducts.forEach((item, index) => {
+        const selectedProduct = warehouseProductList.find(
+          (product) => product.product === item.product
+        );
 
-      if (
-        selectedProduct &&
-        previousProductsRef.current[index] !== item.product
-      ) {
-        setValue(`products[${index}].type`, selectedProduct.type);
-        setValue(`products[${index}].maxQuantity`, selectedProduct.quantity);
-      }
+        if (
+          selectedProduct &&
+          previousProductsRef.current[index] !== item.product
+        ) {
+          setValue(`products[${index}].type`, selectedProduct.type || "");
+          setValue(
+            `products[${index}].maxQuantity`,
+            selectedProduct.quantity || ""
+          );
+        }
 
-      previousProductsRef.current[index] = item.product;
-    });
+        previousProductsRef.current[index] = item.product;
+      });
+    }
   }, [watchedProducts, warehouseProductList, setValue]);
 
   const onSubmit = (data) => {
@@ -87,7 +92,7 @@ const OrderForm = () => {
                         }
                         status={fieldState.invalid ? "error" : ""}
                         options={companyList.map((value) => ({
-                          value: value.name,
+                          value: value.id,
                           label: value.name,
                         }))}
                       />
