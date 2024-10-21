@@ -21,6 +21,7 @@ import WarehouseProducts from "./pages/warehouse/WarehouseProducts";
 import UserExpense from "./pages/user/UserExpense";
 import OrderList from "./pages/order/OrderList";
 import OrderForm from "./pages/order/OrderForm";
+import ProductReceipt from "./pages/warehouse/ProductReceipt";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -191,10 +192,18 @@ const App = () => {
           />
           {/*Warehouse*/}
           <Route
-            path="warehouseProducts"
+            path="warehouse-products"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <WarehouseProducts />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="products-receipt"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <ProductReceipt />
               </PrivateRoute>
             }
           />

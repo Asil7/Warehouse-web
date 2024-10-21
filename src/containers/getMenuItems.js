@@ -14,8 +14,12 @@ export const getMenuItems = () => {
       label: "Warehouse",
       children: [
         {
-          key: "warehouseProducts",
+          key: "warehouse-products",
           label: "Warehouse products",
+        },
+        {
+          key: "products-receipt",
+          label: "Products Receipt",
         },
         {
           key: "products",
