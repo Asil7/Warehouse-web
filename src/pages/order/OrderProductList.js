@@ -1,4 +1,4 @@
-import { Card } from "antd";
+import { Card, Table } from "antd";
 
 const OrderProductList = () => {
   const columns = [
@@ -21,7 +21,16 @@ const OrderProductList = () => {
 
   return (
     <div>
-      <Card></Card>
+      <Card>
+        <Table
+          size="small"
+          // loading={isLoading}
+          // dataSource={orderList}
+          columns={columns}
+          rowKey="id"
+          pagination={{ pageSize: 20 }}
+        />
+      </Card>
     </div>
   );
 };

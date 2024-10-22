@@ -21,12 +21,14 @@ const OrderList = () => {
   const ActionComponent = ({ item }) => {
     return (
       <div>
-        <button
-          title="Product List"
-          className="btn btn-sm btn-outline-primary me-1"
-        >
-          <i className="bi bi-list" />
-        </button>
+        <Link to={`/order-product-list/${item.id}`}>
+          <button
+            title="Product List"
+            className="btn btn-sm btn-outline-primary me-1"
+          >
+            <i className="bi bi-list" />
+          </button>
+        </Link>
         {item.locationMap && (
           <button
             onClick={() => window.open(item.locationMap)}
@@ -52,11 +54,6 @@ const OrderList = () => {
       key: "company",
     },
     {
-      title: "User",
-      dataIndex: "username",
-      key: "username",
-    },
-    {
       title: "Company Phone",
       dataIndex: "phone",
       key: "phone",
@@ -70,6 +67,11 @@ const OrderList = () => {
       title: "Location",
       dataIndex: "location",
       key: "location",
+    },
+    {
+      title: "User",
+      dataIndex: "username",
+      key: "username",
     },
     {
       title: "Delivered",
