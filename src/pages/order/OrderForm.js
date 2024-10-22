@@ -1,15 +1,27 @@
-import { Card, Col, Form, Input, Row, Select, Tag, Button, Space } from "antd";
+import {
+  Card,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Tag,
+  Button,
+  Space,
+  message,
+} from "antd";
 import { useEffect, useRef } from "react";
 import { Controller, useForm, useFieldArray, useWatch } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompanyList } from "../../store/actions/company/company";
 import { getWarehouseProducts } from "../../store/actions/warehouse/warehouse";
+import { createOrder } from "../../store/actions/order/order";
 
 const OrderForm = () => {
   const dispatch = useDispatch();
   const { control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
-      products: [{ product: "", quantity: "", type: "", maxQuantity: "" }],
+      productList: [{ product: "", quantity: "", type: "", totalWeight: "" }],
     },
   });
   const { companyList, isLoading } = useSelector((state) => state.company);
@@ -17,12 +29,12 @@ const OrderForm = () => {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "products",
+    name: "productList",
   });
 
   const watchedProducts = useWatch({
     control,
-    name: "products",
+    name: "productList",
   });
 
   const previousProductsRef = useRef([]);
@@ -33,7 +45,7 @@ const OrderForm = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (Array.isArray(watchedProducts) && Array.isArray(warehouseProductList)) {
+    if (watchedProducts && Array.isArray(watchedProducts)) {
       watchedProducts.forEach((item, index) => {
         const selectedProduct = warehouseProductList.find(
           (product) => product.product === item.product
@@ -43,9 +55,9 @@ const OrderForm = () => {
           selectedProduct &&
           previousProductsRef.current[index] !== item.product
         ) {
-          setValue(`products[${index}].type`, selectedProduct.type || "");
+          setValue(`productList[${index}].type`, selectedProduct.type || "");
           setValue(
-            `products[${index}].maxQuantity`,
+            `productList[${index}].totalWeight`,
             selectedProduct.quantity || ""
           );
         }
@@ -55,9 +67,16 @@ const OrderForm = () => {
     }
   }, [watchedProducts, warehouseProductList, setValue]);
 
-  const onSubmit = (data) => {
-    reset({});
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      let res = await dispatch(createOrder(data));
+      if (res.payload.status === 200) {
+        reset({});
+        message.success(res.payload.data.message);
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (error) {}
   };
 
   return (
@@ -68,7 +87,7 @@ const OrderForm = () => {
             <Col span={6}>
               <Form.Item labelAlign="left" label="Company">
                 <Controller
-                  name="company"
+                  name="companyId"
                   control={control}
                   rules={{ required: "Company selection is required" }}
                   render={({ field, fieldState }) => (
@@ -112,7 +131,7 @@ const OrderForm = () => {
             <Col span={6}>
               <Form.Item label="User" labelAlign="left">
                 <Controller
-                  name="user"
+                  name="username"
                   control={control}
                   rules={{ required: "User is required" }}
                   render={({ field, fieldState }) => (
@@ -144,7 +163,7 @@ const OrderForm = () => {
                     align="baseline"
                   >
                     <Controller
-                      name={`products[${index}].product`}
+                      name={`productList[${index}].product`}
                       control={control}
                       rules={{ required: "Product selection is required" }}
                       render={({ field, fieldState }) => (
@@ -185,7 +204,7 @@ const OrderForm = () => {
                     />
 
                     <Controller
-                      name={`products[${index}].quantity`}
+                      name={`productList[${index}].quantity`}
                       control={control}
                       rules={{
                         required: "Quantity is required",
@@ -208,7 +227,7 @@ const OrderForm = () => {
                     />
 
                     <Controller
-                      name={`products[${index}].type`}
+                      name={`productList[${index}].type`}
                       control={control}
                       render={({ field, fieldState }) => (
                         <Form.Item
@@ -225,7 +244,7 @@ const OrderForm = () => {
                     />
 
                     <Controller
-                      name={`products[${index}].maxQuantity`}
+                      name={`productList[${index}].totalWeight`}
                       control={control}
                       render={({ field, fieldState }) => (
                         <Form.Item
@@ -253,7 +272,7 @@ const OrderForm = () => {
                       product: "",
                       quantity: "",
                       type: "",
-                      maxQuantity: "",
+                      totalWeight: "",
                     })
                   }
                 >

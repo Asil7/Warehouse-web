@@ -9,6 +9,7 @@ import company from "./slice/company/company";
 import product from "./slice/product/product";
 import expense from "./slice/expense/expense";
 import warehouse from "./slice/warehouse/warehouse";
+import order from "./slice/order/order";
 
 export const throwMiddleware = () => (next) => (action) => {
   next(action);
@@ -25,6 +26,7 @@ const reducer = combineReducers({
   product,
   expense,
   warehouse,
+  order,
 });
 
 export default configureStore({

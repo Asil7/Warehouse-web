@@ -1,9 +1,45 @@
-import { Button, Card, Table } from "antd";
+import { Button, Card, Checkbox, Table } from "antd";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import UserService from "../../services/UserService";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrderList } from "../../store/actions/order/order";
+import { useEffect } from "react";
 
 const OrderList = () => {
+  const dispatch = useDispatch();
+  const { orderList, isLoading } = useSelector((state) => state.order);
+
+  useEffect(() => {
+    dispatch(getOrderList());
+  }, [dispatch]);
+
+  const handleCheckboxChange = (orderId) => {
+    console.log(`Order ${orderId} delivered status changed`);
+  };
+
+  const ActionComponent = ({ item }) => {
+    return (
+      <div>
+        <button
+          title="Product List"
+          className="btn btn-sm btn-outline-primary me-1"
+        >
+          <i className="bi bi-list" />
+        </button>
+        {item.locationMap && (
+          <button
+            onClick={() => window.open(item.locationMap)}
+            title="Location"
+            className="btn btn-sm btn-outline-warning me-1"
+          >
+            <i className="bi bi-geo-alt-fill" />
+          </button>
+        )}
+      </div>
+    );
+  };
+
   const columns = [
     {
       title: "ID",
@@ -17,8 +53,18 @@ const OrderList = () => {
     },
     {
       title: "User",
-      dataIndex: "user",
-      key: "user",
+      dataIndex: "username",
+      key: "username",
+    },
+    {
+      title: "Company Phone",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
+      title: "Total Weight",
+      dataIndex: "totalWeight",
+      key: "totalWeight",
     },
     {
       title: "Location",
@@ -29,6 +75,12 @@ const OrderList = () => {
       title: "Delivered",
       dataIndex: "delivered",
       key: "delivered",
+      render: (delivered, record) => (
+        <Checkbox
+          checked={delivered}
+          onChange={() => handleCheckboxChange(record.id)}
+        />
+      ),
     },
     {
       title: "Created At",
@@ -41,6 +93,7 @@ const OrderList = () => {
       title: "Action",
       dataIndex: "action",
       key: "action",
+      render: (_, item) => <ActionComponent item={item} />,
     },
   ];
 
@@ -60,8 +113,8 @@ const OrderList = () => {
       >
         <Table
           size="small"
-          // loading={isLoading}
-          // dataSource={companyList}
+          loading={isLoading}
+          dataSource={orderList}
           columns={columns}
           rowKey="id"
           scroll={{ x: 1200 }}
