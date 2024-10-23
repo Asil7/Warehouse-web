@@ -1,4 +1,4 @@
-import { Card, Row, Col, Divider, Table } from "antd";
+import { Card, Row, Col, Divider, Table, Button } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,6 +6,7 @@ import {
   getOrderProductList,
 } from "../../store/actions/order/order";
 import { useParams } from "react-router-dom";
+import { PrinterOutlined } from "@ant-design/icons";
 
 const OrderProductList = () => {
   const dispatch = useDispatch();
@@ -44,9 +45,72 @@ const OrderProductList = () => {
     },
   ];
 
+  // Function to print the card
+  const printCard = () => {
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Order</title>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.21.5/antd.min.css" />
+          <style>
+            body { font-family: Arial, sans-serif; }
+            .print-card { padding: 20px; }
+            h2 { text-align: center; }
+          </style>
+        </head>
+        <body>
+          <div class="print-card">
+            <h2>Order Details</h2>
+            <div>
+              ${items
+                .map(
+                  (item) =>
+                    `<strong>${item.label}:</strong> ${item.value}<br />`
+                )
+                .join("")}
+            </div>
+            <h3>Product List</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr>
+                  <th style="border: 1px solid black; padding: 8px;">Product</th>
+                  <th style="border: 1px solid black; padding: 8px;">Quantity</th>
+                  <th style="border: 1px solid black; padding: 8px;">Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${orderProductList
+                  .map(
+                    (item) => `
+                  <tr>
+                    <td style="border: 1px solid black; padding: 8px;">${item.product}</td>
+                    <td style="border: 1px solid black; padding: 8px;">${item.quantity}</td>
+                    <td style="border: 1px solid black; padding: 8px;">${item.type}</td>
+                  </tr>
+                `
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
   return (
     <div>
-      <Card>
+      <Card
+        size="small"
+        extra={
+          <Button className="m-1" type="primary" onClick={printCard}>
+            Print Order <PrinterOutlined />
+          </Button>
+        }
+      >
         <Card>
           <Row gutter={16}>
             {items.map((item, index) => (

@@ -71,6 +71,7 @@ const OrderForm = () => {
   }, [watchedProducts, warehouseProductList, setValue]);
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
       let res = await dispatch(createOrder(data));
       if (res.payload.status === 200) {
@@ -265,7 +266,7 @@ const OrderForm = () => {
                         >
                           <Input
                             readOnly
-                            placeholder="Max Quantity"
+                            placeholder="Total Weight"
                             {...field}
                             status={fieldState.invalid ? "error" : ""}
                           />
