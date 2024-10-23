@@ -1,9 +1,9 @@
-import { Button, Card, Checkbox, Table } from "antd";
+import { Button, Card, Checkbox, message, Popconfirm, Table } from "antd";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import UserService from "../../services/UserService";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrderList } from "../../store/actions/order/order";
+import { deleteOrder, getOrderList } from "../../store/actions/order/order";
 import { useEffect } from "react";
 
 const OrderList = () => {
@@ -16,6 +16,18 @@ const OrderList = () => {
 
   const handleCheckboxChange = (orderId) => {
     console.log(`Order ${orderId} delivered status changed`);
+  };
+
+  const handleDeleteOrder = async (id) => {
+    try {
+      let res = await dispatch(deleteOrder(id));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getOrderList());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
   };
 
   const ActionComponent = ({ item }) => {
@@ -38,6 +50,16 @@ const OrderList = () => {
             <i className="bi bi-geo-alt-fill" />
           </button>
         )}
+        <Popconfirm
+          title="Are you sure to Delete"
+          okText="Yes"
+          cancelText="No"
+          onConfirm={() => handleDeleteOrder(item.id)}
+        >
+          <button title="Delete" className="btn btn-sm btn-outline-danger me-1">
+            <i className="bi bi-trash" />
+          </button>
+        </Popconfirm>
       </div>
     );
   };

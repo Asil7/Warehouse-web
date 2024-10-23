@@ -5,6 +5,12 @@
   background-position: center;
 }
 
+@media (max-width: 600px) {
+  .login-background {
+    background-image: url("../../img/warehouseMobile.webp");
+  }
+}
+
 .login-background::before {
   content: "";
   position: absolute;

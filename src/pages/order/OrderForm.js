@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCompanyList } from "../../store/actions/company/company";
 import { getWarehouseProducts } from "../../store/actions/warehouse/warehouse";
 import { createOrder } from "../../store/actions/order/order";
+import { getUsersList } from "../../store/actions/user/user";
 
 const OrderForm = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const OrderForm = () => {
   });
   const { companyList, isLoading } = useSelector((state) => state.company);
   const { warehouseProductList } = useSelector((state) => state.warehouse);
+  const { userList } = useSelector((state) => state.user);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -42,6 +44,7 @@ const OrderForm = () => {
   useEffect(() => {
     dispatch(getCompanyList());
     dispatch(getWarehouseProducts());
+    dispatch(getUsersList());
   }, [dispatch]);
 
   useEffect(() => {
@@ -129,23 +132,33 @@ const OrderForm = () => {
 
           <Row>
             <Col span={6}>
-              <Form.Item label="User" labelAlign="left">
+              <Form.Item label="User">
                 <Controller
                   name="username"
                   control={control}
-                  rules={{ required: "User is required" }}
                   render={({ field, fieldState }) => (
                     <>
-                      <Input
-                        placeholder="User"
+                      <Select
+                        placeholder="--Choose--"
+                        allowClear
                         {...field}
+                        loading={isLoading}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                          (option?.label ?? "").includes(input)
+                        }
+                        filterSort={(optionA, optionB) =>
+                          (optionA?.label ?? "")
+                            .toLowerCase()
+                            .localeCompare((optionB?.label ?? "").toLowerCase())
+                        }
                         status={fieldState.invalid ? "error" : ""}
+                        options={userList.map((value) => ({
+                          value: value.username,
+                          label: value.username,
+                        }))}
                       />
-                      {fieldState.invalid && (
-                        <div className="text-danger">
-                          {fieldState.error?.message}
-                        </div>
-                      )}
                     </>
                   )}
                 />
