@@ -120,7 +120,7 @@ const OrderForm = () => {
                         }))}
                       />
                       {fieldState.invalid && (
-                        <div className="text-danger">
+                        <div className="position-absolute text-danger">
                           {fieldState.error?.message}
                         </div>
                       )}
@@ -137,6 +137,7 @@ const OrderForm = () => {
                 <Controller
                   name="username"
                   control={control}
+                  rules={{ required: "User selection is required" }}
                   render={({ field, fieldState }) => (
                     <>
                       <Select
@@ -160,6 +161,11 @@ const OrderForm = () => {
                           label: value.username,
                         }))}
                       />
+                      {fieldState.invalid && (
+                        <div className="position-absolute text-danger">
+                          {fieldState.error?.message}
+                        </div>
+                      )}
                     </>
                   )}
                 />
@@ -249,6 +255,7 @@ const OrderForm = () => {
                         >
                           <Input
                             readOnly
+                            autoComplete="off"
                             placeholder="Type"
                             {...field}
                             status={fieldState.invalid ? "error" : ""}
@@ -265,6 +272,7 @@ const OrderForm = () => {
                           validateStatus={fieldState.invalid ? "error" : ""}
                         >
                           <Input
+                            autoComplete="off"
                             readOnly
                             placeholder="Total Weight"
                             {...field}

@@ -41,6 +41,7 @@ const ProductReceipt = () => {
       let res = await dispatch(createProductReceipt(data));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
+        handleModalClose();
         dispatch(getReceivedProducts());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
