@@ -40,6 +40,7 @@ const OrderForm = () => {
   });
 
   const previousProductsRef = useRef([]);
+  const productSelectRefs = useRef([]); // Ref to store product select inputs
 
   useEffect(() => {
     dispatch(getCompanyList());
@@ -82,6 +83,38 @@ const OrderForm = () => {
       }
     } catch (error) {}
   };
+
+  const onQuantityKeyDown = (index) => (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault(); // Prevent default tab behavior
+      // Focus on the next product select field
+      if (productSelectRefs.current[index + 1]) {
+        productSelectRefs.current[index + 1].focus();
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "+") {
+        append({
+          product: "",
+          quantity: "",
+          type: "",
+          totalWeight: "",
+        });
+        e.preventDefault();
+      } else if (e.key === "-" && fields.length > 0) {
+        remove(fields.length - 1);
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [append, remove, fields.length]);
 
   return (
     <div>
@@ -212,6 +245,9 @@ const OrderForm = () => {
                                     (optionB?.label ?? "").toLowerCase()
                                   )
                               }
+                              ref={(el) =>
+                                (productSelectRefs.current[index] = el)
+                              } // Save ref to product select
                               status={fieldState.invalid ? "error" : ""}
                               options={warehouseProductList.map((value) => ({
                                 value: value.product,
@@ -239,6 +275,7 @@ const OrderForm = () => {
                           <Input
                             placeholder="Quantity"
                             type="number"
+                            onKeyDown={onQuantityKeyDown(index)} // Handle keydown event
                             {...field}
                             status={fieldState.invalid ? "error" : ""}
                           />
@@ -305,10 +342,12 @@ const OrderForm = () => {
           </Row>
 
           <Row>
-            <Col>
-              <Button type="primary" htmlType="submit">
-                Save
-              </Button>
+            <Col span={24}>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Submit Order
+                </Button>
+              </Form.Item>
             </Col>
           </Row>
         </Form>

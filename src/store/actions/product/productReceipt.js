@@ -24,3 +24,15 @@ export const createProductReceipt = createAsyncThunk(
     }
   }
 );
+
+export const editReceivedProduct = createAsyncThunk(
+  "edit/ReceivedProduct",
+  async (data) => {
+    try {
+      const res = await api.put(`products-receipt/${data.id}`, data);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);

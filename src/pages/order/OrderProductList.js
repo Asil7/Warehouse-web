@@ -1,4 +1,4 @@
-import { Card, Row, Col, Divider, Table, Button } from "antd";
+import { Card, Row, Col, Divider, Button } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,6 +7,7 @@ import {
 } from "../../store/actions/order/order";
 import { useParams } from "react-router-dom";
 import { PrinterOutlined } from "@ant-design/icons";
+import CustomTable from "../../components/table/CustomTable";
 
 const OrderProductList = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ const OrderProductList = () => {
       title: "Quantity",
       dataIndex: "quantity",
       key: "quantity",
+      editable: true,
     },
     {
       title: "Type",
@@ -121,10 +123,10 @@ const OrderProductList = () => {
           </Row>
         </Card>
         <Divider />
-        <Table
+        <CustomTable
           size="small"
           loading={isLoading}
-          dataSource={orderProductList}
+          data={orderProductList}
           columns={columns}
           rowKey="id"
           scroll={{ x: 300 }}

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   createProductReceipt,
+  editReceivedProduct,
   getReceivedProducts,
 } from "../../store/actions/product/productReceipt";
 import { useForm, Controller } from "react-hook-form";
@@ -49,22 +50,38 @@ const ProductReceipt = () => {
     } catch (e) {}
   };
 
+  const handleEditReceivedProduct = async (data) => {
+    try {
+      let res = await dispatch(editReceivedProduct(data));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getReceivedProducts());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      width: 150,
     },
     {
       title: "Product",
       dataIndex: "product",
       key: "product",
       searchable: true,
+      width: 400,
     },
     {
       title: "Quantity",
       dataIndex: "quantity",
       key: "quantity",
+      width: 300,
+      editable: true,
       render: (quantity) => (
         <span style={{ color: quantity < 0 ? "red" : "inherit" }}>
           {quantity}
@@ -75,11 +92,14 @@ const ProductReceipt = () => {
       title: "Type",
       dataIndex: "type",
       key: "type",
+      width: 300,
     },
     {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
+      width: 300,
+
       render: (createdAt) => dayjs(createdAt).format("MM-DD-YYYY hh:mm"),
     },
   ];
@@ -106,6 +126,7 @@ const ProductReceipt = () => {
           columns={columns}
           scroll={{ x: 600 }}
           rowKey="id"
+          onEdit={handleEditReceivedProduct}
         />
       </Card>
       <DraggableModal
@@ -174,6 +195,9 @@ const ProductReceipt = () => {
                   render={({ field, fieldState }) => (
                     <>
                       <Input
+                        autoComplete="off"
+                        type="number"
+                        allowClear
                         placeholder="Quantity"
                         {...field}
                         status={fieldState.invalid ? "error" : ""}

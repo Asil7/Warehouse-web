@@ -209,7 +209,7 @@ const App = () => {
             }
           />
           <Route
-            path="products-receipt"
+            path="received-products"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <ProductReceipt />
