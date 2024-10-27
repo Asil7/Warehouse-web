@@ -10,18 +10,6 @@ export const getOrderList = createAsyncThunk("get/OrderList", async () => {
   }
 });
 
-export const getOrderProductList = createAsyncThunk(
-  "get/OrderProductList",
-  async (orderId) => {
-    try {
-      const res = await api.get(`order/products/${orderId}`);
-      return res;
-    } catch (e) {
-      return e;
-    }
-  }
-);
-
 export const getOrderById = createAsyncThunk("get/OrderById", async (id) => {
   try {
     const res = await api.get(`order/${id}`);
@@ -48,3 +36,41 @@ export const deleteOrder = createAsyncThunk("delete/Order", async (id) => {
     return e;
   }
 });
+
+//ORDER PRODUCT
+
+export const getOrderProductList = createAsyncThunk(
+  "get/OrderProductList",
+  async (orderId) => {
+    try {
+      const res = await api.get(`order/products/${orderId}`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
+export const editOrderProduct = createAsyncThunk(
+  "edit/OrderProduct",
+  async (data) => {
+    try {
+      const res = await api.put(`order-product/${data.id}`, data);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
+export const deleteOrderProduct = createAsyncThunk(
+  "delete/OrderProduct",
+  async (id) => {
+    try {
+      const res = await api.delete(`order-product/${id}`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table } from "antd";
+import { Button, Input, Popconfirm, Space, Table } from "antd";
 import Highlighter from "react-highlight-words";
 
 const CustomTable = ({
@@ -11,6 +11,7 @@ const CustomTable = ({
   pagination,
   rowKey,
   onEdit,
+  onDelete,
 }) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -187,6 +188,16 @@ const CustomTable = ({
                   Edit
                 </Button>
               )}
+              <Popconfirm
+                title="Are you sure to delete?"
+                onConfirm={() => onDelete(record.id)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="link" className="text-danger">
+                  Delete
+                </Button>
+              </Popconfirm>
             </Space>
           ),
         },

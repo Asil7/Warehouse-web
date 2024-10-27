@@ -9,6 +9,7 @@ import {
   Dropdown,
   theme,
   Segmented,
+  Image,
 } from "antd";
 import {
   LogoutOutlined,
@@ -19,6 +20,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import UserService from "../services/UserService";
+import logoImage from "../img/children.png";
 
 const { darkAlgorithm, defaultAlgorithm } = theme;
 const { Header: AntHeader } = Layout;
@@ -122,9 +124,7 @@ const Header = ({
                 className="me-3"
               />
             )}
-            <div className="logo" style={{ fontSize: "24px" }}>
-              Logo
-            </div>
+            <Image src={logoImage} alt="Logo" width={40} />
           </Row>
         </Col>
 

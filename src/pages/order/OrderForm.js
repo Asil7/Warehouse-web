@@ -10,7 +10,7 @@ import {
   Space,
   message,
 } from "antd";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Controller, useForm, useFieldArray, useWatch } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompanyList } from "../../store/actions/company/company";
@@ -71,18 +71,21 @@ const OrderForm = () => {
     }
   }, [watchedProducts, warehouseProductList, setValue]);
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    try {
-      let res = await dispatch(createOrder(data));
-      if (res.payload.status === 200) {
-        reset({});
-        message.success(res.payload.data.message);
-      } else if (res.payload.status === 409) {
-        message.error(res.payload.response.data.message);
-      }
-    } catch (error) {}
-  };
+  const onSubmit = useCallback(
+    async (data) => {
+      console.log(data);
+      try {
+        let res = await dispatch(createOrder(data));
+        if (res.payload.status === 200) {
+          reset({});
+          message.success(res.payload.data.message);
+        } else if (res.payload.status === 409) {
+          message.error(res.payload.response.data.message);
+        }
+      } catch (error) {}
+    },
+    [dispatch, reset]
+  ); // Add necessary dependencies
 
   const onQuantityKeyDown = (index) => (e) => {
     if (e.key === "Tab") {
@@ -107,6 +110,9 @@ const OrderForm = () => {
       } else if (e.key === "-" && fields.length > 0) {
         remove(fields.length - 1);
         e.preventDefault();
+      } else if (e.key === "Enter" && e.code === "NumpadEnter") {
+        handleSubmit(onSubmit)(); // Submit the form when Numpad Enter is pressed
+        e.preventDefault();
       }
     };
 
@@ -114,7 +120,7 @@ const OrderForm = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [append, remove, fields.length]);
+  }, [append, remove, fields.length, handleSubmit, onSubmit]);
 
   return (
     <div>
@@ -345,7 +351,7 @@ const OrderForm = () => {
             <Col span={24}>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
-                  Submit Order
+                  Save
                 </Button>
               </Form.Item>
             </Col>

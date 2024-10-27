@@ -1,7 +1,9 @@
-import { Card, Row, Col, Divider, Button } from "antd";
+import { Card, Row, Col, Button, message } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  deleteOrderProduct,
+  editOrderProduct,
   getOrderById,
   getOrderProductList,
 } from "../../store/actions/order/order";
@@ -21,6 +23,30 @@ const OrderProductList = () => {
     dispatch(getOrderById(id));
   }, [dispatch, id]);
 
+  const handleEditOrderProduct = async (data) => {
+    try {
+      let res = await dispatch(editOrderProduct(data));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getOrderProductList(id));
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
+  const handleDeleteOrderProduct = async (productId) => {
+    try {
+      let res = await dispatch(deleteOrderProduct(productId));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getOrderProductList(id));
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
   const items = [
     { label: "Company", value: orderById.company },
     { label: "Phone", value: orderById.phone },
@@ -33,21 +59,23 @@ const OrderProductList = () => {
       title: "Product",
       dataIndex: "product",
       key: "product",
+      width: 400,
     },
     {
       title: "Quantity",
       dataIndex: "quantity",
       key: "quantity",
       editable: true,
+      width: 400,
     },
     {
       title: "Type",
       dataIndex: "type",
       key: "type",
+      width: 400,
     },
   ];
 
-  // Function to print the card
   const printCard = () => {
     const printWindow = window.open("", "_blank");
     printWindow.document.write(`
@@ -122,7 +150,9 @@ const OrderProductList = () => {
             ))}
           </Row>
         </Card>
-        <Divider />
+        <div className="mt-3 mb-3 text-end">
+          <Button>Add Product</Button>
+        </div>
         <CustomTable
           size="small"
           loading={isLoading}
@@ -131,6 +161,8 @@ const OrderProductList = () => {
           rowKey="id"
           scroll={{ x: 300 }}
           pagination={false}
+          onEdit={handleEditOrderProduct}
+          onDelete={handleDeleteOrderProduct}
         />
       </Card>
     </div>
