@@ -56,22 +56,25 @@ const App = () => {
                 <OrderList />
               </PrivateRoute>
             }
+            name="Orders"
           />
           <Route
-            path="order-form"
+            path="orders/order-form"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <OrderForm />
               </PrivateRoute>
             }
+            name="Add Order"
           />
           <Route
-            path="order-product-list/:id"
+            path="orders/order-product-list/:id"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <OrderProductList />
               </PrivateRoute>
             }
+            name="Order product list"
           />
           {/* USER */}
           <Route
@@ -83,20 +86,22 @@ const App = () => {
             }
           />
           <Route
-            path="user-form"
+            path="users/user-form"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <UserForm />
               </PrivateRoute>
             }
+            name="Create User"
           />
           <Route
-            path="user-form/:id"
+            path="users/user-form/:id"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <UserForm />
               </PrivateRoute>
             }
+            name="Edit User"
           />
           {/* ROLE */}
           <Route
@@ -148,6 +153,7 @@ const App = () => {
                 <CompanyList />
               </PrivateRoute>
             }
+            name="Companies"
           />
           <Route
             path="companies/company-form"
@@ -156,6 +162,7 @@ const App = () => {
                 <CompanyForm />
               </PrivateRoute>
             }
+            name="Create Company"
           />
           <Route
             path="company-form/:id"
@@ -164,6 +171,7 @@ const App = () => {
                 <CompanyForm />
               </PrivateRoute>
             }
+            name="Edit Company"
           />
           {/*Profile*/}
           <Route

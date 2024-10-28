@@ -75,7 +75,7 @@ const UserList = () => {
             <i className="bi bi-graph-down-arrow" />
           </button>
         </Link>
-        <Link to={`/user-form/${item.id}`}>
+        <Link to={`/users/user-form/${item.id}`}>
           <button title="Edit" className="btn btn-sm btn-outline-success me-1">
             <i className="bi bi-pencil-square" />
           </button>
@@ -256,7 +256,7 @@ const UserList = () => {
         size="small"
         extra={
           UserService.hasPermission("ADD_USER") && (
-            <Link to={"/user-form"}>
+            <Link to={"/users/user-form"}>
               <Button type="primary">Create User</Button>
             </Link>
           )

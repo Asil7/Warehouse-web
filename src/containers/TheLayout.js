@@ -162,7 +162,9 @@ const TheLayout = () => {
             <Breadcrumb className="mb-2">
               {getBreadcrumbItems(location.pathname).map((item, index) => (
                 <Breadcrumb.Item key={index}>
-                  <Link to={item.path}>{item.title}</Link>
+                  <Link className="text-decoration-none" to={item.path}>
+                    {item.title}
+                  </Link>
                 </Breadcrumb.Item>
               ))}
             </Breadcrumb>
