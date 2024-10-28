@@ -84,6 +84,7 @@ const App = () => {
                 <UserList />
               </PrivateRoute>
             }
+            name="Users"
           />
           <Route
             path="users/user-form"
@@ -111,6 +112,7 @@ const App = () => {
                 <RoleList />
               </PrivateRoute>
             }
+            name="Roles"
           />
           <Route
             path="role-form"
@@ -119,6 +121,7 @@ const App = () => {
                 <RoleForm />
               </PrivateRoute>
             }
+            name="Create Role"
           />
           <Route
             path="role-form/:id"
@@ -127,6 +130,7 @@ const App = () => {
                 <RoleForm />
               </PrivateRoute>
             }
+            name="Edit Role"
           />
           <Route
             path="role-permission/:id"
@@ -135,6 +139,7 @@ const App = () => {
                 <RolePermissionForm />
               </PrivateRoute>
             }
+            name="Role Permissions"
           />
           {/* PERMISSION */}
           <Route
@@ -144,6 +149,7 @@ const App = () => {
                 <PermissionList />
               </PrivateRoute>
             }
+            name="Permissions"
           />
           {/*COMPANY*/}
           <Route
@@ -165,7 +171,7 @@ const App = () => {
             name="Create Company"
           />
           <Route
-            path="company-form/:id"
+            path="companies/company-form/:id"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <CompanyForm />
@@ -181,6 +187,7 @@ const App = () => {
                 <Profile />
               </PrivateRoute>
             }
+            name="Profile"
           />
           {/*Product*/}
           <Route
@@ -190,6 +197,7 @@ const App = () => {
                 <ProductList />
               </PrivateRoute>
             }
+            name="Products"
           />
           {/*EXPENSE*/}
           <Route
@@ -199,14 +207,16 @@ const App = () => {
                 <Expense />
               </PrivateRoute>
             }
+            name="Expense"
           />
           <Route
-            path="user-expense/:username"
+            path="users/user-expense/:username"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <UserExpense />
               </PrivateRoute>
             }
+            name="Expense"
           />
           {/*Warehouse*/}
           <Route
@@ -216,6 +226,7 @@ const App = () => {
                 <WarehouseProducts />
               </PrivateRoute>
             }
+            name="Warehouse Products"
           />
           <Route
             path="received-products"
@@ -224,6 +235,7 @@ const App = () => {
                 <ProductReceipt />
               </PrivateRoute>
             }
+            name="Received Products"
           />
           <Route
             path="store"
@@ -232,6 +244,7 @@ const App = () => {
                 <Store />
               </PrivateRoute>
             }
+            name="Store"
           />
         </Route>
       </Routes>

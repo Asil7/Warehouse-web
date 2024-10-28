@@ -1,57 +1,3 @@
-// import React, { useState } from "react";
-// import { Layout } from "antd";
-// import MenuItems from "./MenuItems";
-// import SiderContent from "./SiderContent";
-// import { Outlet } from "react-router-dom";
-
-// const { Header, Sider, Content } = Layout;
-
-// const TheLayout = () => {
-//   const [selectedOption, setSelectedOption] = useState(() => {
-//     return localStorage.getItem("SelectedMenu") || "Users";
-//   });
-
-//   const handleNavbarClick = ({ key }) => {
-//     setSelectedOption(key);
-//     localStorage.setItem("SelectedMenu", key);
-//   };
-
-//   return (
-//     <Layout style={{ minHeight: "100vh" }}>
-//       <Header
-//         style={{
-//           display: "flex",
-//           alignItems: "center",
-//           backgroundColor: "#fff",
-//         }}
-//       >
-//         <MenuItems
-//           handleNavbarClick={handleNavbarClick}
-//           selectedOption={selectedOption}
-//         />
-//       </Header>
-//       <Layout>
-//         <Sider width={220} style={{ background: "#fff" }}>
-//           <SiderContent selectedOption={selectedOption} />
-//         </Sider>
-//         <Layout style={{ padding: "24px", paddingRight: "4px" }}>
-//           <Content
-//             style={{
-//               overflowY: "auto",
-//               height: "calc(90vh - 64px)",
-//               paddingRight: "14px",
-//             }}
-//           >
-//             <Outlet />
-//           </Content>
-//         </Layout>
-//       </Layout>
-//     </Layout>
-//   );
-// };
-
-// export default TheLayout;
-
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, ConfigProvider, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
@@ -107,7 +53,13 @@ const TheLayout = () => {
   }, []);
 
   const getBreadcrumbItems = (pathname) => {
-    const pathParts = pathname.split("/").filter(Boolean);
+    const pathParts = pathname
+      .split("/")
+      .filter(Boolean)
+      .filter((part) => {
+        return part && !/^[\d]+$/.test(part);
+      });
+
     return pathParts.map((part, index) => ({
       title: part.charAt(0).toUpperCase() + part.slice(1),
       path: `/${pathParts.slice(0, index + 1).join("/")}`,

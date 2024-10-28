@@ -39,7 +39,7 @@ const CompanyList = () => {
             <i className="bi bi-geo-alt-fill" />
           </button>
         )}
-        <Link to={`/company-form/${item.id}`}>
+        <Link to={`/companies/company-form/${item.id}`}>
           <button title="Edit" className="btn btn-sm btn-outline-success me-1">
             <i className="bi bi-pencil-square" />
           </button>
