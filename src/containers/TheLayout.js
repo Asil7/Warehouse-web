@@ -53,8 +53,8 @@
 // export default TheLayout;
 
 import React, { useEffect, useState } from "react";
-import { ConfigProvider, Layout, Menu, theme } from "antd";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Breadcrumb, ConfigProvider, Layout, Menu, theme } from "antd";
+import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
 import Header from "./Header";
 import { getMenuItems } from "./getMenuItems";
 
@@ -106,6 +106,14 @@ const TheLayout = () => {
     };
   }, []);
 
+  const getBreadcrumbItems = (pathname) => {
+    const pathParts = pathname.split("/").filter(Boolean);
+    return pathParts.map((part, index) => ({
+      title: part.charAt(0).toUpperCase() + part.slice(1),
+      path: `/${pathParts.slice(0, index + 1).join("/")}`,
+    }));
+  };
+
   return (
     <ConfigProvider
       theme={{
@@ -151,6 +159,13 @@ const TheLayout = () => {
             setCustomTheme={setCustomTheme}
           />
           <Content className="custom-scrollbar content-scroll">
+            <Breadcrumb className="mb-2">
+              {getBreadcrumbItems(location.pathname).map((item, index) => (
+                <Breadcrumb.Item key={index}>
+                  <Link to={item.path}>{item.title}</Link>
+                </Breadcrumb.Item>
+              ))}
+            </Breadcrumb>
             <div
               style={{
                 background: colorBgContainer,

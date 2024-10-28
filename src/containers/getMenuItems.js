@@ -22,6 +22,10 @@ export const getMenuItems = () => {
           label: "Received Products",
         },
         {
+          key: "store",
+          label: "Store",
+        },
+        {
           key: "products",
           label: "Products",
         },

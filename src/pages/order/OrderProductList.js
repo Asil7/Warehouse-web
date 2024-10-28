@@ -1,7 +1,18 @@
-import { Card, Row, Col, Button, message } from "antd";
-import { useEffect } from "react";
+import {
+  Card,
+  Row,
+  Col,
+  Button,
+  message,
+  Form,
+  Space,
+  Select,
+  Input,
+} from "antd";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  createOrderProduct,
   deleteOrderProduct,
   editOrderProduct,
   getOrderById,
@@ -10,18 +21,82 @@ import {
 import { useParams } from "react-router-dom";
 import { PrinterOutlined } from "@ant-design/icons";
 import CustomTable from "../../components/table/CustomTable";
+import DraggableModal from "../../components/modal/DraggableModal";
+import { Controller, useForm, useFieldArray, useWatch } from "react-hook-form";
+import { getWarehouseProducts } from "../../store/actions/warehouse/warehouse";
 
 const OrderProductList = () => {
+  const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
+  const { control, handleSubmit, reset, setValue } = useForm({
+    defaultValues: {
+      productList: [{ product: "", quantity: "", type: "", totalWeight: "" }],
+    },
+  });
   const { orderProductList, orderById, isLoading } = useSelector(
     (state) => state.order
   );
   const { id } = useParams();
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "productList",
+  });
+
+  const watchedProducts = useWatch({
+    control,
+    name: "productList",
+  });
+
+  const { warehouseProductList } = useSelector((state) => state.warehouse);
+
+  const previousProductsRef = useRef([]);
+  const productSelectRefs = useRef([]);
+
   useEffect(() => {
-    dispatch(getOrderProductList(id));
-    dispatch(getOrderById(id));
+    if (watchedProducts && Array.isArray(watchedProducts)) {
+      watchedProducts.forEach((item, index) => {
+        const selectedProduct = warehouseProductList.find(
+          (product) => product.product === item.product
+        );
+
+        if (
+          selectedProduct &&
+          previousProductsRef.current[index] !== item.product
+        ) {
+          setValue(`productList[${index}].type`, selectedProduct.type || "");
+          setValue(
+            `productList[${index}].totalWeight`,
+            selectedProduct.quantity || ""
+          );
+        }
+
+        previousProductsRef.current[index] = item.product;
+      });
+    }
+  }, [watchedProducts, warehouseProductList, setValue]);
+
+  useEffect(() => {
+    dispatch(getWarehouseProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getOrderProductList(id));
+      dispatch(getOrderById(id));
+    }
   }, [dispatch, id]);
+
+  const handleOpenModal = () => {
+    setModal(true);
+  };
+
+  const handleCloseModal = useCallback(() => {
+    setModal(false);
+    reset({
+      productList: [{ product: "", quantity: "", type: "", totalWeight: "" }],
+    });
+  }, [reset]);
 
   const handleEditOrderProduct = async (data) => {
     try {
@@ -46,6 +121,34 @@ const OrderProductList = () => {
       }
     } catch (e) {}
   };
+
+  const onQuantityKeyDown = (index) => (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      if (productSelectRefs.current[index + 1]) {
+        productSelectRefs.current[index + 1].focus();
+      }
+    }
+  };
+
+  const onSubmit = useCallback(
+    async (data) => {
+      data = { productList: data.productList, orderId: orderById?.id };
+      console.log(data);
+      try {
+        let res = await dispatch(createOrderProduct(data));
+        if (res.payload.status === 200) {
+          handleCloseModal();
+          dispatch(getOrderProductList(id));
+          reset({});
+          message.success(res.payload.data.message);
+        } else if (res.payload.status === 409) {
+          message.error(res.payload.response.data.message);
+        }
+      } catch (error) {}
+    },
+    [dispatch, reset, orderById.id, handleCloseModal, id]
+  );
 
   const items = [
     { label: "Company", value: orderById.company },
@@ -131,6 +234,31 @@ const OrderProductList = () => {
     printWindow.print();
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "+") {
+        append({
+          product: "",
+          quantity: "",
+          type: "",
+          totalWeight: "",
+        });
+        e.preventDefault();
+      } else if (e.key === "-" && fields.length > 0) {
+        remove(fields.length - 1);
+        e.preventDefault();
+      } else if (e.code === "NumpadEnter") {
+        handleSubmit(onSubmit)();
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [append, remove, fields.length, handleSubmit, onSubmit]);
+
   return (
     <div>
       <Card
@@ -151,7 +279,7 @@ const OrderProductList = () => {
           </Row>
         </Card>
         <div className="mt-3 mb-3 text-end">
-          <Button>Add Product</Button>
+          <Button onClick={() => handleOpenModal()}>Add Product</Button>
         </div>
         <CustomTable
           size="small"
@@ -165,6 +293,159 @@ const OrderProductList = () => {
           onDelete={handleDeleteOrderProduct}
         />
       </Card>
+      <DraggableModal
+        width={1000}
+        title="Add Product"
+        visible={modal}
+        modalClose={handleCloseModal}
+      >
+        <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
+          <Row>
+            <Col span={24}>
+              <Form.Item label="Products" labelAlign="left">
+                {fields.map((item, index) => (
+                  <Space
+                    key={item.id}
+                    style={{ display: "flex", marginBottom: 8 }}
+                    align="baseline"
+                  >
+                    <Controller
+                      name={`productList[${index}].product`}
+                      control={control}
+                      rules={{ required: "Product selection is required" }}
+                      render={({ field, fieldState }) => (
+                        <Col span={24}>
+                          <Form.Item
+                            validateStatus={fieldState.invalid ? "error" : ""}
+                            help={fieldState.error?.message}
+                          >
+                            <Select
+                              placeholder="--Choose--"
+                              style={{ width: "200px" }}
+                              allowClear
+                              {...field}
+                              loading={isLoading}
+                              showSearch
+                              optionFilterProp="children"
+                              filterOption={(input, option) =>
+                                (option?.label ?? "")
+                                  .toLowerCase()
+                                  .includes(input.toLowerCase())
+                              }
+                              filterSort={(optionA, optionB) =>
+                                (optionA?.label ?? "")
+                                  .toLowerCase()
+                                  .localeCompare(
+                                    (optionB?.label ?? "").toLowerCase()
+                                  )
+                              }
+                              ref={(el) =>
+                                (productSelectRefs.current[index] = el)
+                              } // Save ref to product select
+                              status={fieldState.invalid ? "error" : ""}
+                              options={warehouseProductList.map((value) => ({
+                                value: value.product,
+                                label: value.product,
+                              }))}
+                            />
+                          </Form.Item>
+                        </Col>
+                      )}
+                    />
+
+                    <Controller
+                      name={`productList[${index}].quantity`}
+                      control={control}
+                      rules={{
+                        required: "Quantity is required",
+                        validate: (value) =>
+                          value > 0 || "Quantity must be greater than 0",
+                      }}
+                      render={({ field, fieldState }) => (
+                        <Form.Item
+                          validateStatus={fieldState.invalid ? "error" : ""}
+                          help={fieldState.error?.message}
+                        >
+                          <Input
+                            placeholder="Quantity"
+                            type="number"
+                            onKeyDown={onQuantityKeyDown(index)}
+                            {...field}
+                            status={fieldState.invalid ? "error" : ""}
+                          />
+                        </Form.Item>
+                      )}
+                    />
+
+                    <Controller
+                      name={`productList[${index}].type`}
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <Form.Item
+                          validateStatus={fieldState.invalid ? "error" : ""}
+                        >
+                          <Input
+                            readOnly
+                            autoComplete="off"
+                            placeholder="Type"
+                            {...field}
+                            status={fieldState.invalid ? "error" : ""}
+                          />
+                        </Form.Item>
+                      )}
+                    />
+
+                    <Controller
+                      name={`productList[${index}].totalWeight`}
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <Form.Item
+                          validateStatus={fieldState.invalid ? "error" : ""}
+                        >
+                          <Input
+                            autoComplete="off"
+                            readOnly
+                            placeholder="Total Weight"
+                            {...field}
+                            status={fieldState.invalid ? "error" : ""}
+                          />
+                        </Form.Item>
+                      )}
+                    />
+
+                    <Button type="danger" onClick={() => remove(index)}>
+                      Remove
+                    </Button>
+                  </Space>
+                ))}
+                <Button
+                  type="dashed"
+                  onClick={() =>
+                    append({
+                      product: "",
+                      quantity: "",
+                      type: "",
+                      totalWeight: "",
+                    })
+                  }
+                >
+                  Add Product
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={24}>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Save
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+      </DraggableModal>
     </div>
   );
 };

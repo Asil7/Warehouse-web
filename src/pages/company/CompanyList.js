@@ -122,7 +122,7 @@ const CompanyList = () => {
         size="small"
         extra={
           UserService.hasPermission("ADD_COMPANY") && (
-            <Link to={"/company-form"}>
+            <Link to={"/companies/company-form"}>
               <Button className="mt-1 mb-1" type="primary">
                 Create Company
               </Button>

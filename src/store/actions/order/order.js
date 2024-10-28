@@ -63,6 +63,18 @@ export const editOrderProduct = createAsyncThunk(
   }
 );
 
+export const createOrderProduct = createAsyncThunk(
+  "create/OrderProduct",
+  async (data) => {
+    try {
+      const res = await api.post(`order-product/${data.orderId}`, data);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
 export const deleteOrderProduct = createAsyncThunk(
   "delete/OrderProduct",
   async (id) => {

@@ -94,7 +94,7 @@
 .content-scroll {
   overflow: auto;
   height: calc(90vh - 64px);
-  padding: 14px;
+  padding: 5px 14px 14px;
 }
 
 .ant-layout-header {
