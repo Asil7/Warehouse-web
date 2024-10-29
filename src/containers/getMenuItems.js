@@ -7,6 +7,16 @@ export const getMenuItems = () => {
       key: "orders",
       icon: <i className="bi bi-cart4"></i>,
       label: "Order",
+      children: [
+        {
+          key: "order-list",
+          label: "Order List",
+        },
+        {
+          key: "orders",
+          label: "Orders",
+        },
+      ],
     },
     {
       key: "warehouse",

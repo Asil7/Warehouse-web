@@ -2,7 +2,7 @@ import axios from "axios";
 import UserService from "../services/UserService";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "http://192.168.7.48:8080/api",
   headers: {
     "Content-Type": "application/json",
   },

@@ -24,6 +24,7 @@ import CustomTable from "../../components/table/CustomTable";
 import DraggableModal from "../../components/modal/DraggableModal";
 import { Controller, useForm, useFieldArray, useWatch } from "react-hook-form";
 import { getWarehouseProducts } from "../../store/actions/warehouse/warehouse";
+import UserService from "../../services/UserService";
 
 const OrderProductList = () => {
   const [modal, setModal] = useState(false);
@@ -264,9 +265,11 @@ const OrderProductList = () => {
       <Card
         size="small"
         extra={
-          <Button className="m-1" type="primary" onClick={printCard}>
-            Print Order <PrinterOutlined />
-          </Button>
+          UserService.hasPermission("PRINT_ORDER") && (
+            <Button className="m-1" type="primary" onClick={printCard}>
+              Print Order <PrinterOutlined />
+            </Button>
+          )
         }
       >
         <Card>
