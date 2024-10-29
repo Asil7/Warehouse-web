@@ -82,11 +82,6 @@ const ProductReceipt = () => {
       key: "quantity",
       width: 300,
       editable: true,
-      render: (quantity) => (
-        <span style={{ color: quantity < 0 ? "red" : "inherit" }}>
-          {quantity}
-        </span>
-      ),
     },
     {
       title: "Type",
