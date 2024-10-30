@@ -4,27 +4,25 @@ import UserService from "../../services/UserService";
 import CustomTable from "../../components/table/CustomTable";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  createProductReceipt,
-  editReceivedProduct,
-  getReceivedProducts,
-} from "../../store/actions/product/productReceipt";
+import { editReceivedProduct } from "../../store/actions/product/productReceipt";
 import { useForm, Controller } from "react-hook-form";
 import DraggableModal from "../../components/modal/DraggableModal";
 import { getProductList } from "../../store/actions/product/product";
+import {
+  createStoreProduct,
+  getStoreProducts,
+} from "../../store/actions/store/store";
 
 const Store = () => {
   const { control, handleSubmit, reset, setValue } = useForm();
   const [modal, setModal] = useState(false);
   const [selectedProductType, setSelectedProductType] = useState("");
   const dispatch = useDispatch();
-  const { receivedProductList, isLoading } = useSelector(
-    (state) => state.productReceipt
-  );
+  const { storeProductList, isLoading } = useSelector((state) => state.store);
   const { productList } = useSelector((state) => state.product);
 
   useEffect(() => {
-    dispatch(getReceivedProducts());
+    dispatch(getStoreProducts());
     dispatch(getProductList());
   }, [dispatch]);
 
@@ -39,11 +37,11 @@ const Store = () => {
 
   const onFinish = async (data) => {
     try {
-      let res = await dispatch(createProductReceipt(data));
+      let res = await dispatch(createStoreProduct(data));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
         handleModalClose();
-        dispatch(getReceivedProducts());
+        dispatch(getStoreProducts());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }
@@ -55,7 +53,7 @@ const Store = () => {
       let res = await dispatch(editReceivedProduct(data));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
-        dispatch(getReceivedProducts());
+        dispatch(getStoreProducts());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }
@@ -74,7 +72,7 @@ const Store = () => {
       dataIndex: "product",
       key: "product",
       searchable: true,
-      width: 400,
+      width: 300,
     },
     {
       title: "Quantity",
@@ -94,13 +92,13 @@ const Store = () => {
       title: "Type",
       dataIndex: "type",
       key: "type",
-      width: 300,
+      width: 150,
     },
     {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
-      width: 300,
+      width: 250,
 
       render: (createdAt) => dayjs(createdAt).format("MM-DD-YYYY hh:mm"),
     },
@@ -124,7 +122,7 @@ const Store = () => {
       >
         <CustomTable
           loading={isLoading}
-          data={receivedProductList}
+          data={storeProductList}
           columns={columns}
           scroll={{ x: 600 }}
           rowKey="id"
@@ -132,14 +130,14 @@ const Store = () => {
         />
       </Card>
       <DraggableModal
-        width={800}
+        width={900}
         title={"Add Product"}
         visible={modal}
         modalClose={handleModalClose}
       >
         <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
           <Row gutter={16}>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item labelAlign="left" label="Product">
                 <Controller
                   name="product"
@@ -188,7 +186,7 @@ const Store = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item label="Quantity" labelAlign="left">
                 <Controller
                   name="quantity"
@@ -214,7 +212,33 @@ const Store = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
+              <Form.Item label="Price" labelAlign="left">
+                <Controller
+                  name="price"
+                  control={control}
+                  rules={{ required: "Price is required" }}
+                  render={({ field, fieldState }) => (
+                    <>
+                      <Input
+                        autoComplete="off"
+                        type="number"
+                        allowClear
+                        placeholder="Price"
+                        {...field}
+                        status={fieldState.invalid ? "error" : ""}
+                      />
+                      {fieldState.invalid && (
+                        <div className="position-fixed text-danger">
+                          {fieldState.error?.message}
+                        </div>
+                      )}
+                    </>
+                  )}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
               <Form.Item label="Type" labelAlign="left">
                 <Controller
                   name="type"

@@ -11,6 +11,7 @@ import expense from "./slice/expense/expense";
 import warehouse from "./slice/warehouse/warehouse";
 import order from "./slice/order/order";
 import productReceipt from "./slice/product/productReceipt";
+import store from "./slice/store/store";
 
 export const throwMiddleware = () => (next) => (action) => {
   next(action);
@@ -29,6 +30,7 @@ const reducer = combineReducers({
   warehouse,
   order,
   productReceipt,
+  store,
 });
 
 export default configureStore({
