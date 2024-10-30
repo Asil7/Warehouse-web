@@ -71,7 +71,7 @@ const TheLayout = () => {
       theme={{
         algorithm: customTheme,
         token: {
-          // fontFamily: "Advent Pro",
+          fontFamily: "Sriracha",
         },
       }}
     >
