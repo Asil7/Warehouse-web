@@ -4,12 +4,13 @@ import UserService from "../../services/UserService";
 import CustomTable from "../../components/table/CustomTable";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { editReceivedProduct } from "../../store/actions/product/productReceipt";
 import { useForm, Controller } from "react-hook-form";
 import DraggableModal from "../../components/modal/DraggableModal";
 import { getProductList } from "../../store/actions/product/product";
 import {
   createStoreProduct,
+  deleteStoreProduct,
+  editStoreProduct,
   getStoreProducts,
 } from "../../store/actions/store/store";
 
@@ -48,9 +49,21 @@ const Store = () => {
     } catch (e) {}
   };
 
-  const handleEditReceivedProduct = async (data) => {
+  const handleEditStoreProduct = async (data) => {
     try {
-      let res = await dispatch(editReceivedProduct(data));
+      let res = await dispatch(editStoreProduct(data));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getStoreProducts());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
+  const handleDeleteStoreProduct = async (id) => {
+    try {
+      let res = await dispatch(deleteStoreProduct(id));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
         dispatch(getStoreProducts());
@@ -126,7 +139,8 @@ const Store = () => {
           columns={columns}
           scroll={{ x: 600 }}
           rowKey="id"
-          onEdit={handleEditReceivedProduct}
+          onEdit={handleEditStoreProduct}
+          onDelete={handleDeleteStoreProduct}
         />
       </Card>
       <DraggableModal

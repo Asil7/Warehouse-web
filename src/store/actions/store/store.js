@@ -24,3 +24,27 @@ export const createStoreProduct = createAsyncThunk(
     }
   }
 );
+
+export const editStoreProduct = createAsyncThunk(
+  "edit/StoreProduct",
+  async (data) => {
+    try {
+      const res = await api.put(`store/${data.id}`, data);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
+export const deleteStoreProduct = createAsyncThunk(
+  "delete/StoreProduct",
+  async (id) => {
+    try {
+      const res = await api.delete(`store/${id}`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
