@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   createProductReceipt,
+  deleteReceivedProduct,
   editReceivedProduct,
   getReceivedProducts,
 } from "../../store/actions/product/productReceipt";
@@ -53,6 +54,18 @@ const ProductReceipt = () => {
   const handleEditReceivedProduct = async (data) => {
     try {
       let res = await dispatch(editReceivedProduct(data));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getReceivedProducts());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
+  const handleDeleteReceivedProduct = async (id) => {
+    try {
+      let res = await dispatch(deleteReceivedProduct(id));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
         dispatch(getReceivedProducts());
@@ -122,6 +135,7 @@ const ProductReceipt = () => {
           scroll={{ x: 600 }}
           rowKey="id"
           onEdit={handleEditReceivedProduct}
+          onDelete={handleDeleteReceivedProduct}
         />
       </Card>
       <DraggableModal

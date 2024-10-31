@@ -36,3 +36,15 @@ export const editReceivedProduct = createAsyncThunk(
     }
   }
 );
+
+export const deleteReceivedProduct = createAsyncThunk(
+  "delete/ReceivedProduct",
+  async (id) => {
+    try {
+      const res = await api.delete(`products-receipt/${id}`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
