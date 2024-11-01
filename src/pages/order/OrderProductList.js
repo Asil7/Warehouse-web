@@ -8,6 +8,7 @@ import {
   Space,
   Select,
   Input,
+  Divider,
 } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -281,9 +282,15 @@ const OrderProductList = () => {
             ))}
           </Row>
         </Card>
-        <div className="mt-3 mb-3 text-end">
-          <Button onClick={() => handleOpenModal()}>Add Product</Button>
-        </div>
+
+        {UserService.hasPermission("ADD_ORDER_PRODUCT") ? (
+          <div className="mt-3 mb-3 text-end">
+            <Button onClick={() => handleOpenModal()}>Add Product</Button>
+          </div>
+        ) : (
+          <Divider orientation="left">Product List</Divider>
+        )}
+
         <CustomTable
           size="small"
           loading={isLoading}

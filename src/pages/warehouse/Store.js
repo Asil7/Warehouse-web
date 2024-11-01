@@ -122,7 +122,7 @@ const Store = () => {
       <Card
         size="small"
         extra={
-          UserService.hasPermission("ADD_WAREHOUSE_PRODUCT") && (
+          UserService.hasPermission("ADD_STORE_PRODUCT") && (
             <Button
               className="mt-1 mb-1"
               onClick={() => handleOpenModal()}

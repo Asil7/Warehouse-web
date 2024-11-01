@@ -1,17 +1,17 @@
-import { Button, Card, Checkbox, Table } from "antd";
-import { Link, useNavigate } from "react-router-dom";
-import UserService from "../../services/UserService";
+import { Card, Checkbox, Table } from "antd";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrderList } from "../../store/actions/order/order";
+import { getOrderListByUser } from "../../store/actions/order/order";
 import { useEffect } from "react";
+import UserService from "../../services/UserService";
 
 const OrderByUsername = () => {
   const dispatch = useDispatch();
-  const { orderList, isLoading } = useSelector((state) => state.order);
+  const { orderListByUser, isLoading } = useSelector((state) => state.order);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getOrderList());
+    dispatch(getOrderListByUser(UserService.getSubject()));
   }, [dispatch]);
 
   const handleCheckboxChange = (orderId) => {
@@ -20,7 +20,7 @@ const OrderByUsername = () => {
 
   const ActionComponent = ({ item }) => {
     const handleLocationClick = (event) => {
-      event.stopPropagation(); // Prevents row click event
+      event.stopPropagation();
       window.open(item.locationMap);
     };
 
@@ -72,29 +72,18 @@ const OrderByUsername = () => {
 
   return (
     <div>
-      <Card
-        size="small"
-        extra={
-          UserService.hasPermission("ADD_ORDER") && (
-            <Link to={"/orders/order-form"}>
-              <Button className="mt-1 mb-1" type="primary">
-                Add Order
-              </Button>
-            </Link>
-          )
-        }
-      >
+      <Card size="small">
         <Table
           size="small"
           loading={isLoading}
-          dataSource={orderList}
+          dataSource={orderListByUser}
           columns={columns}
           rowKey="id"
           scroll={{ x: 300 }}
           pagination={{ pageSize: 20 }}
           onRow={(record) => ({
             onClick: () => {
-              navigate(`/orders/order-product-list/${record.id}`);
+              navigate(`/orders/order-products/${record.id}`);
             },
           })}
         />

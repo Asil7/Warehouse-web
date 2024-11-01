@@ -4,16 +4,16 @@ import UserService from "../services/UserService";
 
 export const getMenuItems = () => {
   return [
-    UserService.hasPermission("VIEW_ORDER_LIST") && {
+    {
       key: "orders",
       icon: <i className="bi bi-cart4"></i>,
       label: "Order",
       children: [
-        {
+        UserService.hasPermission("VIEW_ORDER_LIST") && {
           key: "order-list",
           label: "Order List",
         },
-        {
+        UserService.hasPermission("VIEW_ORDER_LIST_BY_USER") && {
           key: "orders",
           label: "Orders",
         },
@@ -24,19 +24,19 @@ export const getMenuItems = () => {
       icon: <i className="bi bi-house-door-fill"></i>,
       label: "Warehouse",
       children: [
-        {
+        UserService.hasPermission("VIEW_WAREHOUSE_PRODUCT_LIST") && {
           key: "warehouse-products",
           label: "Warehouse products",
         },
-        {
+        UserService.hasPermission("VIEW_RECEIVED_PRODUCT_LIST") && {
           key: "received-products",
           label: "Received Products",
         },
-        {
+        UserService.hasPermission("VIEW_STORE_PRODUCT_LIST") && {
           key: "store",
           label: "Store",
         },
-        {
+        UserService.hasPermission("VIEW_PRODUCT_LIST") && {
           key: "products",
           label: "Products",
         },
@@ -68,11 +68,11 @@ export const getMenuItems = () => {
       icon: <i className="bi bi-shield-lock"></i>,
       label: "Security",
       children: [
-        {
+        UserService.hasPermission("VIEW_ROLE_LIST") && {
           key: "roles",
           label: "Roles",
         },
-        {
+        UserService.hasPermission("VIEW_PERMISSION_LIST") && {
           key: "permissions",
           label: "Permissions",
         },

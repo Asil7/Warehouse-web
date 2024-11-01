@@ -69,7 +69,7 @@ const App = () => {
             name="Orders"
           />
           <Route
-            path="orders/order-form"
+            path="order-list/order-form"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <OrderForm />
@@ -78,13 +78,23 @@ const App = () => {
             name="Add Order"
           />
           <Route
-            path="orders/order-product-list/:id"
+            path="order-list/order-product-list/:id"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <OrderProductList />
               </PrivateRoute>
             }
             name="Order product list"
+          />
+
+          <Route
+            path="orders/order-products/:id"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <OrderProductList />
+              </PrivateRoute>
+            }
+            name="Order products"
           />
           {/* USER */}
           <Route

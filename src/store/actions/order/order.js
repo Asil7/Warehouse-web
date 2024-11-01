@@ -10,6 +10,18 @@ export const getOrderList = createAsyncThunk("get/OrderList", async () => {
   }
 });
 
+export const getOrderListByUser = createAsyncThunk(
+  "get/OrderListByUser",
+  async (username) => {
+    try {
+      const res = await api.get(`order/user?username=${username}`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
 export const getOrderById = createAsyncThunk("get/OrderById", async (id) => {
   try {
     const res = await api.get(`order/${id}`);

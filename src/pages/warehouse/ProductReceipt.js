@@ -117,7 +117,7 @@ const ProductReceipt = () => {
       <Card
         size="small"
         extra={
-          UserService.hasPermission("ADD_WAREHOUSE_PRODUCT") && (
+          UserService.hasPermission("ADD_PRODUCT_RECEIPT") && (
             <Button
               className="mt-1 mb-1"
               onClick={() => handleOpenModal()}

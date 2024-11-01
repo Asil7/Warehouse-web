@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   getOrderById,
   getOrderList,
+  getOrderListByUser,
   getOrderProductList,
 } from "../../actions/order/order";
 
@@ -9,6 +10,7 @@ const slice = createSlice({
   name: "order",
   initialState: {
     orderList: [],
+    orderListByUser: [],
     orderById: {},
     orderProductList: [],
     isLoading: false,
@@ -30,6 +32,18 @@ const slice = createSlice({
       .addCase(getOrderList.rejected, (state) => {
         state.isLoading = false;
         state.orderList = [];
+      })
+
+      .addCase(getOrderListByUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getOrderListByUser.fulfilled, (state, action) => {
+        state.orderListByUser = action.payload.data.object;
+        state.isLoading = false;
+      })
+      .addCase(getOrderListByUser.rejected, (state) => {
+        state.isLoading = false;
+        state.orderListByUser = [];
       })
 
       .addCase(getOrderById.pending, (state) => {

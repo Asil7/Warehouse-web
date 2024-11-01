@@ -33,7 +33,7 @@ const OrderList = () => {
   const ActionComponent = ({ item }) => {
     return (
       <div>
-        <Link to={`/orders/order-product-list/${item.id}`}>
+        <Link to={`/order-list/order-product-list/${item.id}`}>
           <button
             title="Product List"
             className="btn btn-sm btn-outline-primary me-1"
@@ -127,7 +127,7 @@ const OrderList = () => {
         size="small"
         extra={
           UserService.hasPermission("ADD_ORDER") && (
-            <Link to={"/orders/order-form"}>
+            <Link to={"/order-list/order-form"}>
               <Button className="mt-1 mb-1" type="primary">
                 Add Order
               </Button>
