@@ -6,7 +6,7 @@ import api from "../../../api";
 export const login = createAsyncThunk("login", async (data) => {
   try {
     const res = await axios.post(
-      `https://192.168.7.48:8080/api/auth/login`,
+      `https://192.168.1.30:8080/api/auth/login`,
       data
     ); //`https://192.168.7.48:8080/api/auth/login`,
     return res;
