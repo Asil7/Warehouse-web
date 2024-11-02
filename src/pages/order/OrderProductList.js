@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   createOrderProduct,
   deleteOrderProduct,
+  editOrderDeliveredStatus,
   editOrderProduct,
   getOrderById,
   getOrderProductList,
@@ -122,6 +123,24 @@ const OrderProductList = () => {
         message.error(res.payload.response.data.message);
       }
     } catch (e) {}
+  };
+
+  const handleChangeDeliveredStatus = async () => {
+    const payload = {
+      id: id,
+      delivered: true,
+    };
+    try {
+      let res = await dispatch(editOrderDeliveredStatus(payload));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getOrderProductList(id));
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {
+      message.error("Failed to update the delivered status");
+    }
   };
 
   const onQuantityKeyDown = (index) => (e) => {
@@ -302,6 +321,16 @@ const OrderProductList = () => {
           onEdit={handleEditOrderProduct}
           onDelete={handleDeleteOrderProduct}
         />
+        {orderById.delivered === false && (
+          <div className="mt-2 text-end">
+            <Button
+              type="primary"
+              onClick={() => handleChangeDeliveredStatus()}
+            >
+              Delivered
+            </Button>
+          </div>
+        )}
       </Card>
       <DraggableModal
         width={1000}

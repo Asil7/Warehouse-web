@@ -3,7 +3,11 @@ import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import UserService from "../../services/UserService";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteOrder, getOrderList } from "../../store/actions/order/order";
+import {
+  deleteOrder,
+  editOrderDeliveredStatus,
+  getOrderList,
+} from "../../store/actions/order/order";
 import { useEffect } from "react";
 
 const OrderList = () => {
@@ -14,8 +18,22 @@ const OrderList = () => {
     dispatch(getOrderList());
   }, [dispatch]);
 
-  const handleCheckboxChange = (orderId) => {
-    console.log(`Order ${orderId} delivered status changed`);
+  const handleChangeDeliveredStatus = async (data) => {
+    const payload = {
+      id: data.id,
+      delivered: !data.delivered, // Toggle delivered status
+    };
+    try {
+      let res = await dispatch(editOrderDeliveredStatus(payload));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getOrderList());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {
+      message.error("Failed to update the delivered status");
+    }
   };
 
   const handleDeleteOrder = async (id) => {
@@ -100,12 +118,17 @@ const OrderList = () => {
       dataIndex: "delivered",
       key: "delivered",
       render: (delivered, record) => (
-        <Checkbox
-          checked={delivered}
-          onChange={() => handleCheckboxChange(record.id)}
-        />
+        <Popconfirm
+          title="Are you sure you want to change the delivered status?"
+          onConfirm={() => handleChangeDeliveredStatus(record)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Checkbox checked={delivered} onChange={(e) => e.preventDefault()} />
+        </Popconfirm>
       ),
     },
+
     {
       title: "Created At",
       dataIndex: "createdAt",

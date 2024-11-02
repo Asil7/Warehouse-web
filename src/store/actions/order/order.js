@@ -49,6 +49,20 @@ export const deleteOrder = createAsyncThunk("delete/Order", async (id) => {
   }
 });
 
+export const editOrderDeliveredStatus = createAsyncThunk(
+  "edit/OrderDelivered",
+  async (data) => {
+    try {
+      const res = await api.put(
+        `order/${data.id}/delivered?delivered=${data.delivered}`
+      );
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
 //ORDER PRODUCT
 
 export const getOrderProductList = createAsyncThunk(
