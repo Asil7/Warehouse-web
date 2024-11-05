@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Popconfirm, Space, Table } from "antd";
+import { Button, Input, message, Popconfirm, Space, Table } from "antd";
 import Highlighter from "react-highlight-words";
 
 const CustomTable = ({
@@ -20,6 +20,13 @@ const CustomTable = ({
   const searchInput = useRef(null);
 
   const isEditing = (record) => record.id === editingKey;
+
+  const validateEditableData = () => {
+    // Check if any of the editable fields are empty
+    return Object.keys(editableData).every((key) => {
+      return editableData[key] !== undefined && editableData[key] !== "";
+    });
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -118,12 +125,16 @@ const CustomTable = ({
   });
 
   const handleEdit = (record) => {
-    console.log("Editing record:", record);
     setEditingKey(record.id);
     setEditableData({ ...record });
   };
 
   const handleSave = async () => {
+    if (!validateEditableData()) {
+      message.error("Please complete the form");
+      return;
+    }
+
     if (onEdit) {
       await onEdit(editableData);
     }
@@ -142,7 +153,11 @@ const CustomTable = ({
       if (col.editable && isEditing(record)) {
         return (
           <Input
-            value={editableData[col.dataIndex] || text}
+            value={
+              editableData[col.dataIndex] !== undefined
+                ? editableData[col.dataIndex]
+                : text
+            }
             onChange={(e) => handleChange(e, col.dataIndex)}
             onPressEnter={handleSave}
           />

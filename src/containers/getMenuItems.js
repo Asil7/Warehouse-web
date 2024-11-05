@@ -33,14 +33,19 @@ export const getMenuItems = () => {
           label: "Received Products",
         },
         UserService.hasPermission("VIEW_STORE_PRODUCT_LIST") && {
-          key: "store",
-          label: "Store",
+          key: "store-history",
+          label: "Store History",
         },
         UserService.hasPermission("VIEW_PRODUCT_LIST") && {
           key: "products",
           label: "Products",
         },
       ],
+    },
+    {
+      key: "store",
+      icon: <i className="bi bi-shop"></i>,
+      label: "Store",
     },
     UserService.hasPermission("VIEW_EXPENSE_LIST") && {
       key: "expense",

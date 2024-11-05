@@ -1,23 +1,33 @@
-import { Button, Card, Col, Form, Input, message, Row, Select } from "antd";
-import dayjs from "dayjs";
-import UserService from "../../services/UserService";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  message,
+  Popconfirm,
+  Row,
+  Select,
+} from "antd";
 import CustomTable from "../../components/table/CustomTable";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import DraggableModal from "../../components/modal/DraggableModal";
-import { getProductList } from "../../store/actions/product/product";
 import {
-  createStoreProduct,
-  deleteStoreProduct,
-  editStoreProduct,
+  addStoreProduct,
   getStoreProducts,
+  updateStorePaidStatus,
+  updateStoreProduct,
+  updateStoreReceivedStatus,
 } from "../../store/actions/store/store";
+import { useEffect, useState } from "react";
+import DraggableModal from "../../components/modal/DraggableModal";
+import { useForm, Controller } from "react-hook-form";
+import { getProductList } from "../../store/actions/product/product";
 
 const Store = () => {
-  const { control, handleSubmit, reset, setValue } = useForm();
   const [modal, setModal] = useState(false);
   const [selectedProductType, setSelectedProductType] = useState("");
+  const { control, handleSubmit, reset, setValue } = useForm();
   const dispatch = useDispatch();
   const { storeProductList, isLoading } = useSelector((state) => state.store);
   const { productList } = useSelector((state) => state.product);
@@ -38,7 +48,7 @@ const Store = () => {
 
   const onFinish = async (data) => {
     try {
-      let res = await dispatch(createStoreProduct(data));
+      let res = await dispatch(addStoreProduct(data));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
         handleModalClose();
@@ -46,101 +56,139 @@ const Store = () => {
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }
-    } catch (e) {}
+    } catch (error) {
+      message.error(error.message, 6);
+    }
   };
 
-  const handleEditStoreProduct = async (data) => {
+  const handleUpdateProduct = async (data) => {
     try {
-      let res = await dispatch(editStoreProduct(data));
+      const payload = {
+        id: data.id,
+        product: data.product,
+        quantity: data.quantity,
+        price: data.price,
+        type: data.type,
+      };
+      let res = await dispatch(updateStoreProduct(payload));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        handleModalClose();
+        dispatch(getStoreProducts());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (error) {
+      message.error(error.message, 6);
+    }
+  };
+
+  const handleChangeReceivedStatus = async (data) => {
+    try {
+      const payload = { ...data, received: !data.received };
+      let res = await dispatch(updateStoreReceivedStatus(payload));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
         dispatch(getStoreProducts());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }
-    } catch (e) {}
+    } catch (error) {
+      message.error(error.message, 6);
+    }
   };
 
-  const handleDeleteStoreProduct = async (id) => {
+  const handleChangePaidStatus = async (data) => {
+    console.log(data);
+    const payload = {
+      id: data.id,
+      paid: !data.paid,
+    };
     try {
-      let res = await dispatch(deleteStoreProduct(id));
+      let res = await dispatch(updateStorePaidStatus(payload));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
         dispatch(getStoreProducts());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }
-    } catch (e) {}
+    } catch (e) {
+      message.error("Failed to update the paid status");
+    }
   };
 
   const columns = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      width: 150,
+      title: "Received",
+      dataIndex: "received",
+      key: "received",
+      width: 250,
+      render: (received, record) => (
+        <Popconfirm
+          title="Mark as received?"
+          onConfirm={() => handleChangeReceivedStatus(record)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Checkbox checked={received} onChange={(e) => e.preventDefault()} />
+        </Popconfirm>
+      ),
     },
     {
       title: "Product",
       dataIndex: "product",
       key: "product",
-      searchable: true,
-      width: 300,
+      width: 350,
     },
     {
       title: "Quantity",
       dataIndex: "quantity",
       key: "quantity",
-      width: 300,
       editable: true,
+      width: 250,
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      width: 300,
       editable: true,
-    },
-    {
-      title: "Type",
-      dataIndex: "type",
-      key: "type",
-      width: 150,
-    },
-    {
-      title: "Created At",
-      dataIndex: "createdAt",
-      key: "createdAt",
       width: 250,
-
-      render: (createdAt) => dayjs(createdAt).format("MM-DD-YYYY hh:mm"),
+    },
+    {
+      title: "Paid",
+      dataIndex: "paid",
+      key: "paid",
+      width: 250,
+      render: (paid, record) => (
+        <Popconfirm
+          title="Mark as paid?"
+          onConfirm={() => handleChangePaidStatus(record)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Checkbox checked={paid} onChange={(e) => e.preventDefault()} />
+        </Popconfirm>
+      ),
     },
   ];
-
   return (
     <div>
       <Card
         size="small"
         extra={
-          UserService.hasPermission("ADD_STORE_PRODUCT") && (
-            <Button
-              className="mt-1 mb-1"
-              onClick={() => handleOpenModal()}
-              type="primary"
-            >
-              Add Product
-            </Button>
-          )
+          <Button onClick={() => handleOpenModal()} type="primary">
+            Add Product
+          </Button>
         }
       >
         <CustomTable
           loading={isLoading}
           data={storeProductList}
           columns={columns}
-          scroll={{ x: 600 }}
+          //   scroll={{ x: 600 }}
           rowKey="id"
-          onEdit={handleEditStoreProduct}
-          onDelete={handleDeleteStoreProduct}
+          onEdit={handleUpdateProduct}
+          //   onDelete={handleDeleteStoreProduct}
         />
       </Card>
       <DraggableModal

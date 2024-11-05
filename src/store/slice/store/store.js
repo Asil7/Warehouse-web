@@ -1,19 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getStoreProducts } from "../../actions/store/store";
+import {
+  getStoreHistoryProducts,
+  getStoreProducts,
+} from "../../actions/store/store";
 
 const slice = createSlice({
   name: "store",
   initialState: {
+    storeHistoryProductList: [],
     storeProductList: [],
     isLoading: false,
   },
   reducers: {
     clearCart: (state) => {
-      state.storeProductList = [];
+      state.storeHistoryProductList = [];
     },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getStoreHistoryProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getStoreHistoryProducts.fulfilled, (state, action) => {
+        state.storeHistoryProductList = action.payload.data.object;
+        state.isLoading = false;
+      })
+      .addCase(getStoreHistoryProducts.rejected, (state) => {
+        state.isLoading = false;
+        state.storeHistoryProductList = [];
+      })
+
       .addCase(getStoreProducts.pending, (state) => {
         state.isLoading = true;
       })
