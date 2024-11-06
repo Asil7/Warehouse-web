@@ -14,6 +14,7 @@ import CustomTable from "../../components/table/CustomTable";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addStoreProduct,
+  getProductFromWarehouse,
   getStoreProducts,
   updateStorePaidStatus,
   updateStoreProduct,
@@ -23,6 +24,35 @@ import { useEffect, useState } from "react";
 import DraggableModal from "../../components/modal/DraggableModal";
 import { useForm, Controller } from "react-hook-form";
 import { getProductList } from "../../store/actions/product/product";
+import { createStyles } from "antd-style";
+
+const useStyle = createStyles(({ css }) => ({
+  primaryButton: css`
+    color: #fff;
+    cursor: pointer;
+
+    > span {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+    }
+
+    &::before {
+      color: #fff;
+      content: "";
+      background: linear-gradient(135deg, #6253e1, #04befe);
+      position: absolute;
+      inset: 0;
+      opacity: 1;
+      border-radius: inherit;
+    }
+
+    &:hover::before {
+      color: #fff;
+      background: linear-gradient(135deg, #4939da, #006cdf);
+    }
+  `,
+}));
 
 const Store = () => {
   const [modal, setModal] = useState(false);
@@ -31,6 +61,7 @@ const Store = () => {
   const dispatch = useDispatch();
   const { storeProductList, isLoading } = useSelector((state) => state.store);
   const { productList } = useSelector((state) => state.product);
+  const { styles } = useStyle();
 
   useEffect(() => {
     dispatch(getStoreProducts());
@@ -117,6 +148,20 @@ const Store = () => {
     }
   };
 
+  const handleGetProductsFromWarehouse = async () => {
+    try {
+      let res = await dispatch(getProductFromWarehouse());
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getStoreProducts());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (error) {
+      message.error(error.message, 5);
+    }
+  };
+
   const columns = [
     {
       title: "Received",
@@ -174,6 +219,18 @@ const Store = () => {
   return (
     <div>
       <Card
+        title={
+          <Popconfirm
+            okText="Yes"
+            cancelText="No"
+            title="Getting products will erase changes. Continue?"
+            onConfirm={handleGetProductsFromWarehouse}
+          >
+            <Button className={styles.primaryButton}>
+              Get Products from Warehouse
+            </Button>
+          </Popconfirm>
+        }
         size="small"
         extra={
           <Button onClick={() => handleOpenModal()} type="primary">

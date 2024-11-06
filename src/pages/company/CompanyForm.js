@@ -1,23 +1,24 @@
-import { Button, Card, Col, Form, Input, message, Tag } from "antd";
+import { Button, Card, Col, Form, Input, message, Select, Tag } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { getRoleList } from "../../store/actions/role/role";
 import { useEffect } from "react";
 import {
   createCompany,
   getCompanyById,
   updateCompany,
 } from "../../store/actions/company/company";
+import { getUsersList } from "../../store/actions/user/user";
 
 const CompanyForm = () => {
   const { control, handleSubmit, reset, setValue } = useForm();
   const dispatch = useDispatch();
   const { companyById } = useSelector((state) => state.company);
   const { id } = useParams();
+  const { userList, isLoading } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getRoleList());
+    dispatch(getUsersList());
     if (id) dispatch(getCompanyById(id));
   }, [dispatch, id]);
 
@@ -105,6 +106,43 @@ const CompanyForm = () => {
                     {...field}
                     status={fieldState.invalid ? "error" : ""}
                   />
+                )}
+              />
+            </Form.Item>
+            <Form.Item label="User">
+              <Controller
+                name="username"
+                control={control}
+                rules={{ required: "User selection is required" }}
+                render={({ field, fieldState }) => (
+                  <>
+                    <Select
+                      placeholder="--Choose--"
+                      allowClear
+                      {...field}
+                      loading={isLoading}
+                      showSearch
+                      optionFilterProp="children"
+                      filterOption={(input, option) =>
+                        (option?.label ?? "").includes(input)
+                      }
+                      filterSort={(optionA, optionB) =>
+                        (optionA?.label ?? "")
+                          .toLowerCase()
+                          .localeCompare((optionB?.label ?? "").toLowerCase())
+                      }
+                      status={fieldState.invalid ? "error" : ""}
+                      options={userList.map((value) => ({
+                        value: value.username,
+                        label: value.username,
+                      }))}
+                    />
+                    {fieldState.invalid && (
+                      <div className="position-absolute text-danger">
+                        {fieldState.error?.message}
+                      </div>
+                    )}
+                  </>
                 )}
               />
             </Form.Item>

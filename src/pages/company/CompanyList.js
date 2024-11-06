@@ -84,6 +84,12 @@ const CompanyList = () => {
       width: 200,
     },
     {
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
+      width: 200,
+    },
+    {
       title: "Description",
       dataIndex: "description",
       key: "description",

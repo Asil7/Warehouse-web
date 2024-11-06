@@ -40,7 +40,7 @@ const OrderForm = () => {
   });
 
   const previousProductsRef = useRef([]);
-  const productSelectRefs = useRef([]); // Ref to store product select inputs
+  const productSelectRefs = useRef([]);
 
   useEffect(() => {
     dispatch(getCompanyList());
@@ -85,12 +85,11 @@ const OrderForm = () => {
       } catch (error) {}
     },
     [dispatch, reset]
-  ); // Add necessary dependencies
+  );
 
   const onQuantityKeyDown = (index) => (e) => {
     if (e.key === "Tab") {
-      e.preventDefault(); // Prevent default tab behavior
-      // Focus on the next product select field
+      e.preventDefault();
       if (productSelectRefs.current[index + 1]) {
         productSelectRefs.current[index + 1].focus();
       }
@@ -111,7 +110,7 @@ const OrderForm = () => {
         remove(fields.length - 1);
         e.preventDefault();
       } else if (e.key === "Enter" && e.code === "NumpadEnter") {
-        handleSubmit(onSubmit)(); // Submit the form when Numpad Enter is pressed
+        handleSubmit(onSubmit)();
         e.preventDefault();
       }
     };
@@ -157,6 +156,15 @@ const OrderForm = () => {
                           value: value.id,
                           label: value.name,
                         }))}
+                        onChange={(value) => {
+                          field.onChange(value);
+                          const selectedCompany = companyList.find(
+                            (p) => p.id === value
+                          );
+                          if (selectedCompany) {
+                            setValue("username", selectedCompany?.username);
+                          }
+                        }}
                       />
                       {fieldState.invalid && (
                         <div className="position-absolute text-danger">
@@ -183,7 +191,6 @@ const OrderForm = () => {
                         placeholder="--Choose--"
                         allowClear
                         {...field}
-                        loading={isLoading}
                         showSearch
                         optionFilterProp="children"
                         filterOption={(input, option) =>
@@ -253,7 +260,7 @@ const OrderForm = () => {
                               }
                               ref={(el) =>
                                 (productSelectRefs.current[index] = el)
-                              } // Save ref to product select
+                              }
                               status={fieldState.invalid ? "error" : ""}
                               options={warehouseProductList.map((value) => ({
                                 value: value.product,
@@ -281,7 +288,7 @@ const OrderForm = () => {
                           <Input
                             placeholder="Quantity"
                             type="number"
-                            onKeyDown={onQuantityKeyDown(index)} // Handle keydown event
+                            onKeyDown={onQuantityKeyDown(index)}
                             {...field}
                             status={fieldState.invalid ? "error" : ""}
                           />

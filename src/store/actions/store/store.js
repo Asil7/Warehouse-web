@@ -125,3 +125,15 @@ export const updateStoreProduct = createAsyncThunk(
     }
   }
 );
+
+export const getProductFromWarehouse = createAsyncThunk(
+  "get/GetProductFromWarehouse",
+  async () => {
+    try {
+      const res = await api.get(`store/warehouse`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);

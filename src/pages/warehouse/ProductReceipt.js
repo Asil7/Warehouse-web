@@ -87,7 +87,7 @@ const ProductReceipt = () => {
       dataIndex: "product",
       key: "product",
       searchable: true,
-      width: 400,
+      width: 300,
     },
     {
       title: "Quantity",
@@ -95,6 +95,12 @@ const ProductReceipt = () => {
       key: "quantity",
       width: 300,
       editable: true,
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      width: 300,
     },
     {
       title: "Type",
@@ -139,14 +145,14 @@ const ProductReceipt = () => {
         />
       </Card>
       <DraggableModal
-        width={800}
+        width={900}
         title={"Add Product"}
         visible={modal}
         modalClose={handleModalClose}
       >
         <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
           <Row gutter={16}>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item labelAlign="left" label="Product">
                 <Controller
                   name="product"
@@ -195,7 +201,7 @@ const ProductReceipt = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <Form.Item label="Quantity" labelAlign="left">
                 <Controller
                   name="quantity"
@@ -221,7 +227,33 @@ const ProductReceipt = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
+              <Form.Item label="Price" labelAlign="left">
+                <Controller
+                  name="price"
+                  control={control}
+                  rules={{ required: "Price is required" }}
+                  render={({ field, fieldState }) => (
+                    <>
+                      <Input
+                        autoComplete="off"
+                        type="number"
+                        allowClear
+                        placeholder="Price"
+                        {...field}
+                        status={fieldState.invalid ? "error" : ""}
+                      />
+                      {fieldState.invalid && (
+                        <div className="position-fixed text-danger">
+                          {fieldState.error?.message}
+                        </div>
+                      )}
+                    </>
+                  )}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
               <Form.Item label="Type" labelAlign="left">
                 <Controller
                   name="type"
