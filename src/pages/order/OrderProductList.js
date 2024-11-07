@@ -40,6 +40,7 @@ const OrderProductList = () => {
     (state) => state.order
   );
   const { id } = useParams();
+  const [delivered, setDelivered] = useState(orderById?.delivered || false);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -55,6 +56,12 @@ const OrderProductList = () => {
 
   const previousProductsRef = useRef([]);
   const productSelectRefs = useRef([]);
+
+  useEffect(() => {
+    if (orderById) {
+      setDelivered(orderById.delivered);
+    }
+  }, [orderById]);
 
   useEffect(() => {
     if (watchedProducts && Array.isArray(watchedProducts)) {
@@ -133,6 +140,7 @@ const OrderProductList = () => {
     try {
       let res = await dispatch(editOrderDeliveredStatus(payload));
       if (res.payload.status === 200) {
+        setDelivered(true);
         message.success(res.payload.data.message);
         dispatch(getOrderProductList(id));
       } else if (res.payload.status === 409) {
@@ -316,14 +324,16 @@ const OrderProductList = () => {
           data={orderProductList}
           columns={columns}
           rowKey="id"
-          scroll={{ x: 300 }}
+          scroll={{ x: 350 }}
           pagination={false}
           onEdit={handleEditOrderProduct}
           onDelete={handleDeleteOrderProduct}
         />
-        {orderById.delivered === false && (
+
+        {!delivered && (
           <div className="mt-2 text-end">
             <Button
+              block
               type="primary"
               onClick={() => handleChangeDeliveredStatus()}
             >

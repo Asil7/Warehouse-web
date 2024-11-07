@@ -1,7 +1,10 @@
-import { Card, Checkbox, Table } from "antd";
+import { Card, Checkbox, Table, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrderListByUser } from "../../store/actions/order/order";
+import {
+  editOrderDeliveredStatus,
+  getOrderListByUser,
+} from "../../store/actions/order/order";
 import { useEffect } from "react";
 import UserService from "../../services/UserService";
 
@@ -14,8 +17,22 @@ const OrderByUsername = () => {
     dispatch(getOrderListByUser(UserService.getSubject()));
   }, [dispatch]);
 
-  const handleCheckboxChange = (orderId) => {
-    console.log(`Order ${orderId} delivered status changed`);
+  const handleChangeDeliveredStatus = async (data) => {
+    const payload = {
+      id: data.id,
+      delivered: !data.delivered,
+    };
+    try {
+      let res = await dispatch(editOrderDeliveredStatus(payload));
+      if (res.payload.status === 200) {
+        dispatch(getOrderListByUser(UserService.getSubject()));
+        message.success(res.payload.data.message);
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {
+      message.error("Failed to update the delivered status");
+    }
   };
 
   const ActionComponent = ({ item }) => {
@@ -57,7 +74,8 @@ const OrderByUsername = () => {
       render: (delivered, record) => (
         <Checkbox
           checked={delivered}
-          onChange={() => handleCheckboxChange(record.id)}
+          onClick={(event) => event.stopPropagation()}
+          onChange={() => handleChangeDeliveredStatus(record)}
         />
       ),
     },

@@ -21,7 +21,7 @@ const OrderList = () => {
   const handleChangeDeliveredStatus = async (data) => {
     const payload = {
       id: data.id,
-      delivered: !data.delivered, // Toggle delivered status
+      delivered: !data.delivered,
     };
     try {
       let res = await dispatch(editOrderDeliveredStatus(payload));
