@@ -20,7 +20,7 @@ import DraggableModal from "../../components/modal/DraggableModal";
 import { getProductList } from "../../store/actions/product/product";
 import {
   createStoreProduct,
-  deleteStoreProduct,
+  deleteStoreHistoryProduct,
   editStoreProduct,
   getStoreHistoryProducts,
   updateStoreHistoryPaidStatus,
@@ -77,7 +77,7 @@ const Store = () => {
 
   const handleDeleteStoreProduct = async (id) => {
     try {
-      let res = await dispatch(deleteStoreProduct(id));
+      let res = await dispatch(deleteStoreHistoryProduct(id));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
         dispatch(getStoreHistoryProducts());

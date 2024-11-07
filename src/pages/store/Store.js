@@ -14,6 +14,7 @@ import CustomTable from "../../components/table/CustomTable";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addStoreProduct,
+  deleteStoreProduct,
   getProductFromWarehouse,
   getStoreProducts,
   updateStorePaidStatus,
@@ -162,6 +163,18 @@ const Store = () => {
     }
   };
 
+  const handleDeleteStoreProduct = async (id) => {
+    try {
+      let res = await dispatch(deleteStoreProduct(id));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getStoreProducts());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
   const columns = [
     {
       title: "Received",
@@ -245,7 +258,7 @@ const Store = () => {
           //   scroll={{ x: 600 }}
           rowKey="id"
           onEdit={handleUpdateProduct}
-          //   onDelete={handleDeleteStoreProduct}
+          onDelete={handleDeleteStoreProduct}
         />
       </Card>
       <DraggableModal

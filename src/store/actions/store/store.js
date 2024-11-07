@@ -38,8 +38,8 @@ export const editStoreProduct = createAsyncThunk(
   }
 );
 
-export const deleteStoreProduct = createAsyncThunk(
-  "delete/StoreProduct",
+export const deleteStoreHistoryProduct = createAsyncThunk(
+  "delete/StoreHistoryProduct",
   async (id) => {
     try {
       const res = await api.delete(`store-history/${id}`);
@@ -131,6 +131,18 @@ export const getProductFromWarehouse = createAsyncThunk(
   async () => {
     try {
       const res = await api.get(`store/warehouse`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
+export const deleteStoreProduct = createAsyncThunk(
+  "delete/StoreProduct",
+  async (id) => {
+    try {
+      const res = await api.delete(`store/${id}`);
       return res;
     } catch (e) {
       return e;
