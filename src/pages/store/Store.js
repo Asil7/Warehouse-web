@@ -255,7 +255,7 @@ const Store = () => {
           loading={isLoading}
           data={storeProductList}
           columns={columns}
-          //   scroll={{ x: 600 }}
+          scroll={{ x: 600 }}
           rowKey="id"
           onEdit={handleUpdateProduct}
           onDelete={handleDeleteStoreProduct}
@@ -269,7 +269,7 @@ const Store = () => {
       >
         <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
           <Row gutter={16}>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6} lg={6} xl={6} xxl={6}>
               <Form.Item labelAlign="left" label="Product">
                 <Controller
                   name="product"
@@ -318,7 +318,7 @@ const Store = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6} lg={6} xl={6} xxl={6}>
               <Form.Item label="Quantity" labelAlign="left">
                 <Controller
                   name="quantity"
@@ -344,7 +344,7 @@ const Store = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6} lg={6} xl={6} xxl={6}>
               <Form.Item label="Price" labelAlign="left">
                 <Controller
                   name="price"
@@ -370,7 +370,7 @@ const Store = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6} lg={6} xl={6} xxl={6}>
               <Form.Item label="Type" labelAlign="left">
                 <Controller
                   name="type"

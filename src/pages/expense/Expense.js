@@ -210,7 +210,7 @@ const Expense = () => {
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={8}>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8} xxl={8}>
               <Form.Item label="Price" labelAlign="left">
                 <Controller
                   name="price"
@@ -233,7 +233,7 @@ const Expense = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8} xxl={8}>
               <Form.Item label="Username">
                 <Controller
                   name="username"
@@ -266,7 +266,7 @@ const Expense = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col xs={24} sm={12} md={8} lg={8} xl={8} xxl={8}>
               <Form.Item label="Date" labelAlign="left">
                 <Controller
                   name="date"

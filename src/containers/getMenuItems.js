@@ -42,7 +42,7 @@ export const getMenuItems = () => {
         },
       ],
     },
-    {
+    UserService.hasPermission("VIEW_STORE_PRODUCT_LIST") && {
       key: "store",
       icon: <i className="bi bi-shop"></i>,
       label: "Store",

@@ -154,7 +154,7 @@ const RoleList = () => {
           size="small"
           loading={isLoading}
           dataSource={roleList}
-          scroll={{ x: 1200 }}
+          scroll={{ x: 600 }}
           columns={columns}
           rowKey="id"
         />

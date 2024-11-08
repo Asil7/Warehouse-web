@@ -126,7 +126,7 @@ const OrderForm = () => {
       <Card size="small" title={<Tag color="cyan">Add order</Tag>}>
         <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
           <Row>
-            <Col span={6}>
+            <Col xs={24} sm={16} md={12} lg={10} xl={8} xxl={6}>
               <Form.Item labelAlign="left" label="Company">
                 <Controller
                   name="companyId"
@@ -179,7 +179,7 @@ const OrderForm = () => {
           </Row>
 
           <Row>
-            <Col span={6}>
+            <Col xs={24} sm={16} md={12} lg={10} xl={8} xxl={6}>
               <Form.Item label="User">
                 <Controller
                   name="username"

@@ -159,7 +159,7 @@ const PermissionList = () => {
           size="small"
           loading={isLoading}
           dataSource={permissionList}
-          scroll={{ x: 1000 }}
+          scroll={{ x: 700 }}
           columns={columns}
           rowKey="id"
           pagination={{ pageSize: 10 }}

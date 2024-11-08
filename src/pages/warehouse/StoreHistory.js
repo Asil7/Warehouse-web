@@ -111,7 +111,7 @@ const Store = () => {
       title: "ID",
       dataIndex: "id",
       key: "id",
-      width: 150,
+      width: 100,
     },
     {
       title: "Product",
@@ -144,7 +144,7 @@ const Store = () => {
       title: "Paid",
       dataIndex: "paid",
       key: "paid",
-      width: 250,
+      width: 150,
       render: (paid, record) => (
         <Popconfirm
           title="Mark as paid?"
@@ -160,7 +160,7 @@ const Store = () => {
       title: "Created At",
       dataIndex: "createdAt",
       key: "createdAt",
-      width: 250,
+      width: 300,
 
       render: (createdAt) => dayjs(createdAt).format("MM-DD-YYYY hh:mm"),
     },
@@ -186,7 +186,7 @@ const Store = () => {
           loading={isLoading}
           data={storeHistoryProductList}
           columns={columns}
-          scroll={{ x: 600 }}
+          scroll={{ x: 900 }}
           rowKey="id"
           onEdit={handleEditStoreProduct}
           onDelete={handleDeleteStoreProduct}
@@ -200,7 +200,7 @@ const Store = () => {
       >
         <Form layout="vertical" onFinish={handleSubmit(onFinish)}>
           <Row gutter={16}>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6} lg={6} xl={6} xxl={6}>
               <Form.Item labelAlign="left" label="Product">
                 <Controller
                   name="product"
@@ -249,7 +249,7 @@ const Store = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6} lg={6} xl={6} xxl={6}>
               <Form.Item label="Quantity" labelAlign="left">
                 <Controller
                   name="quantity"
@@ -275,7 +275,7 @@ const Store = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6} lg={6} xl={6} xxl={6}>
               <Form.Item label="Price" labelAlign="left">
                 <Controller
                   name="price"
@@ -301,7 +301,7 @@ const Store = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6} lg={6} xl={6} xxl={6}>
               <Form.Item label="Type" labelAlign="left">
                 <Controller
                   name="type"

@@ -121,38 +121,48 @@ const Header = ({
                   )
                 }
                 onClick={() => setCollapsedForPhone(!collapsedForPhone)}
-                className="me-3"
+                className="me-1"
+                style={{
+                  marginLeft: collapsedForPhone ? "0px" : "200px",
+                  transition: "margin-left 0.2s ease",
+                }}
               />
             )}
             <Image src={logoImage} alt="Logo" width={40} />
           </Row>
         </Col>
 
-        <Col>
-          <Segmented
-            className="me-4"
-            options={[
-              {
-                value: "light",
-                icon: <i className="bi bi-sun-fill text-warning"></i>,
-                title: "light",
-              },
-              { value: "dark", icon: <MoonOutlined />, title: "dark" },
-            ]}
-            onChange={handleThemeChange}
-            value={selectedTheme}
-          />
-          <Dropdown
-            menu={{
-              items: profile,
-            }}
-            trigger={["click"]}
-            placement="bottomRight"
-            overlayStyle={{ minWidth: "140px" }}
-          >
-            <Avatar className="bg-primary" size="16" icon={<UserOutlined />} />
-          </Dropdown>
-        </Col>
+        {collapsedForPhone && (
+          <Col>
+            <Segmented
+              className="me-4"
+              options={[
+                {
+                  value: "light",
+                  icon: <i className="bi bi-sun-fill text-warning"></i>,
+                  title: "light",
+                },
+                { value: "dark", icon: <MoonOutlined />, title: "dark" },
+              ]}
+              onChange={handleThemeChange}
+              value={selectedTheme}
+            />
+            <Dropdown
+              menu={{
+                items: profile,
+              }}
+              trigger={["click"]}
+              placement="bottomRight"
+              overlayStyle={{ minWidth: "140px" }}
+            >
+              <Avatar
+                className="bg-primary"
+                size="16"
+                icon={<UserOutlined />}
+              />
+            </Dropdown>
+          </Col>
+        )}
       </Row>
     </AntHeader>
   );

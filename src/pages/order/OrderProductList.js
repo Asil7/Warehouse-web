@@ -29,6 +29,7 @@ import { getWarehouseProducts } from "../../store/actions/warehouse/warehouse";
 import UserService from "../../services/UserService";
 
 const OrderProductList = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 700);
   const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
   const { control, handleSubmit, reset, setValue } = useForm({
@@ -56,6 +57,17 @@ const OrderProductList = () => {
 
   const previousProductsRef = useRef([]);
   const productSelectRefs = useRef([]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 700);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (orderById) {
@@ -333,7 +345,7 @@ const OrderProductList = () => {
         {!delivered && (
           <div className="mt-2 text-end">
             <Button
-              block
+              block={isMobile}
               type="primary"
               onClick={() => handleChangeDeliveredStatus()}
             >

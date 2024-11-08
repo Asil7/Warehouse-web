@@ -43,10 +43,15 @@ const TheLayout = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 700);
-    };
-    window.addEventListener("resize", handleResize);
+      const isNowMobile = window.innerWidth < 700;
+      setIsMobile(isNowMobile);
 
+      if (isNowMobile) {
+        setCollapsedForPhone(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -90,6 +95,11 @@ const TheLayout = () => {
             }
           }}
           trigger={!isMobile ? undefined : null}
+          style={{
+            position: isMobile ? "absolute" : "relative",
+            zIndex: isMobile ? 1000 : "auto",
+            height: isMobile ? "100%" : "",
+          }}
         >
           <div />
           <Menu
