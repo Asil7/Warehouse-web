@@ -132,37 +132,33 @@ const Header = ({
           </Row>
         </Col>
 
-        {collapsedForPhone && (
-          <Col>
-            <Segmented
-              className="me-4"
-              options={[
-                {
-                  value: "light",
-                  icon: <i className="bi bi-sun-fill text-warning"></i>,
-                  title: "light",
-                },
-                { value: "dark", icon: <MoonOutlined />, title: "dark" },
-              ]}
-              onChange={handleThemeChange}
-              value={selectedTheme}
-            />
-            <Dropdown
-              menu={{
-                items: profile,
-              }}
-              trigger={["click"]}
-              placement="bottomRight"
-              overlayStyle={{ minWidth: "140px" }}
-            >
-              <Avatar
-                className="bg-primary"
-                size="16"
-                icon={<UserOutlined />}
-              />
-            </Dropdown>
-          </Col>
-        )}
+        {/* {collapsedForPhone && ( */}
+        <Col>
+          <Segmented
+            className="me-4"
+            options={[
+              {
+                value: "light",
+                icon: <i className="bi bi-sun-fill text-warning"></i>,
+                title: "light",
+              },
+              { value: "dark", icon: <MoonOutlined />, title: "dark" },
+            ]}
+            onChange={handleThemeChange}
+            value={selectedTheme}
+          />
+          <Dropdown
+            menu={{
+              items: profile,
+            }}
+            trigger={["click"]}
+            placement="bottomRight"
+            overlayStyle={{ minWidth: "140px" }}
+          >
+            <Avatar className="bg-primary" size="16" icon={<UserOutlined />} />
+          </Dropdown>
+        </Col>
+        {/* )} */}
       </Row>
     </AntHeader>
   );

@@ -48,6 +48,30 @@ const OrderList = () => {
     } catch (e) {}
   };
 
+  const sendNotification = (id) => {
+    if (Notification.permission === "granted") {
+      const notification = new Notification("New Order Update", {
+        body: "Check the product list for order updates.",
+      });
+
+      notification.onclick = () => {
+        window.open(`/order-list/order-product-list/${id}`, "_blank");
+      };
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          const notification = new Notification("New Order Update", {
+            body: "Check the product list for order updates.",
+          });
+
+          notification.onclick = () => {
+            window.open(`/order-list/order-product-list/${id}`, "_blank");
+          };
+        }
+      });
+    }
+  };
+
   const ActionComponent = ({ item }) => {
     return (
       <div>
@@ -78,6 +102,13 @@ const OrderList = () => {
             <i className="bi bi-trash" />
           </button>
         </Popconfirm>
+        <button
+          onClick={() => sendNotification(item.id)}
+          title="Send Notification"
+          className="btn btn-sm btn-outline-info me-1"
+        >
+          <i className="bi bi-bell" />
+        </button>
       </div>
     );
   };

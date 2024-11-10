@@ -177,10 +177,10 @@ const Store = () => {
 
   const columns = [
     {
-      title: "Received",
+      // title: "Received",
       dataIndex: "received",
       key: "received",
-      width: 250,
+      width: 50,
       render: (received, record) => (
         <Popconfirm
           title="Mark as received?"
@@ -255,7 +255,7 @@ const Store = () => {
           loading={isLoading}
           data={storeProductList}
           columns={columns}
-          scroll={{ x: 600 }}
+          scroll={{ x: 300 }}
           rowKey="id"
           onEdit={handleUpdateProduct}
           onDelete={handleDeleteStoreProduct}
