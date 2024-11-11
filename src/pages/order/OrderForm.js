@@ -332,15 +332,12 @@ const OrderForm = () => {
                       )}
                     />
 
-                    {/* <Button type="danger" onClick={() => remove(index)}>
-                      Remove
-                    </Button> */}
                     <button
                       onClick={() => remove(index)}
                       title="Remove"
                       className="btn btn-sm btn-outline-danger"
                     >
-                      <i className="bi bi-x-square"></i>
+                      <i className="bi bi-trash"></i>
                     </button>
                   </Space>
                 ))}

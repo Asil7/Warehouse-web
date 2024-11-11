@@ -1,5 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../api";
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken } from "firebase/messaging";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCKvdHGuLjO6FZsd4nVEffKm-yIHnL2uew",
+  authDomain: "warehouse-14660.firebaseapp.com",
+  projectId: "warehouse-14660",
+  storageBucket: "warehouse-14660.firebasestorage.app",
+  messagingSenderId: "528147989378",
+  appId: "1:528147989378:web:8e3445d9366b733fdfc59b",
+  measurementId: "G-674958JBV7",
+};
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
 export const getUsersList = createAsyncThunk("get/UserList", async () => {
   try {
@@ -96,3 +111,23 @@ export const giveSalary = createAsyncThunk("get/GiveSalary", async (data) => {
     return e;
   }
 });
+
+export const updateFireBaseToken = createAsyncThunk(
+  "update/FireBaseToken",
+  async (username) => {
+    try {
+      const token = await getToken(messaging, {
+        vapidKey:
+          "BJMyWHGzqJlJX1qLZ9EhfBQhkJ8eqB5kESLvaLWAqwGqftWbRYc8IZdgTNoagKD56hDvkksdSZHD3hH4bfhufAU",
+      });
+      const payload = {
+        username: username,
+        firebaseToken: token,
+      };
+      const res = await api.post(`user/update-firebase-token`, payload);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);

@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { loginSuccess } from "../../store/slice/auth/authSlice";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import "./login.css";
+import UserService from "../../services/UserService";
+import { updateFireBaseToken } from "../../store/actions/user/user";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const Login = () => {
   const { control, handleSubmit } = useForm();
@@ -23,6 +26,10 @@ const Login = () => {
 
         message.success("Login successful!");
 
+        const username = UserService.getSubject();
+
+        handleUpdateFireBaseToken(username);
+
         navigate("/");
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
@@ -31,6 +38,17 @@ const Login = () => {
       }
     } catch (error) {
       message.error("An error occurred. Please try again." + error, 30);
+    }
+  };
+
+  const handleUpdateFireBaseToken = async (username) => {
+    try {
+      const actionResult = await dispatch(updateFireBaseToken(username));
+      const result = unwrapResult(actionResult);
+      console.log(result);
+      message.success("Firebase token successfully updated!");
+    } catch (error) {
+      message.warning("Failed to update Firebase token: " + error.message);
     }
   };
 
