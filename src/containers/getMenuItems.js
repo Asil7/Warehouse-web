@@ -5,7 +5,7 @@ import UserService from "../services/UserService";
 export const getMenuItems = () => {
   return [
     {
-      key: "orders",
+      key: "order",
       icon: <i className="bi bi-cart4"></i>,
       label: "Order",
       children: [

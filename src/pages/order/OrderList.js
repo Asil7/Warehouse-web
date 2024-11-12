@@ -7,6 +7,7 @@ import {
   deleteOrder,
   editOrderDeliveredStatus,
   getOrderList,
+  sendNotification,
 } from "../../store/actions/order/order";
 import { useEffect } from "react";
 
@@ -39,6 +40,23 @@ const OrderList = () => {
   const handleDeleteOrder = async (id) => {
     try {
       let res = await dispatch(deleteOrder(id));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+        dispatch(getOrderList());
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
+  const handleSendNotification = async (id) => {
+    try {
+      const payload = {
+        userToken:
+          "fWKdRVkAJfCBh8_WknjCtJ:APA91bHV5hIzerOve3BsftZ4jWhKJdsHnnV3Iw-VyVUweOnf88SeaY3WB2EmcVSZcKOhJF3uB4GneA5viopInbx85iRXf0AKYG3Nt-dJqhmLWzikzpBQAu4",
+        orderId: id,
+      };
+      let res = await dispatch(sendNotification(payload));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
         dispatch(getOrderList());
@@ -81,6 +99,7 @@ const OrderList = () => {
         <button
           title="Send Notification"
           className="btn btn-sm btn-outline-info me-1"
+          onClick={() => handleSendNotification(item.id)}
         >
           <i className="bi bi-bell" />
         </button>

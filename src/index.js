@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux"; // Import Provider
-import { BrowserRouter } from "react-router-dom"; // Only one Router here
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -14,10 +14,21 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App /> {/* Only the App component should be inside the Router */}
+        <App />
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/firebase-messaging-sw.js")
+    .then((registration) => {
+      console.log("Service Worker registered with scope:", registration.scope);
+    })
+    .catch((error) => {
+      console.log("Service Worker registration failed:", error);
+    });
+}
 
 reportWebVitals();
