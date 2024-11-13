@@ -118,7 +118,7 @@ export const updateFireBaseToken = createAsyncThunk(
     try {
       const token = await getToken(messaging, {
         vapidKey:
-          "BJMyWHGzqJlJX1qLZ9EhfBQhkJ8eqB5kESLvaLWAqwGqftWbRYc8IZdgTNoagKD56hDvkksdSZHD3hH4bfhufAU",
+          "BIGJrmR1psYeZMjHze_HxAmMLtAHsO08IEYcSma1Wi0vEJsRb3rsEuckMb4-NZXr34FMIGkDuLsV5Dmpk93inZM",
       });
       const payload = {
         username: username,

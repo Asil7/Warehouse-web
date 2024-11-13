@@ -32,6 +32,8 @@ messaging.onBackgroundMessage((payload) => {
 self.addEventListener("notificationclick", (event) => {
   const route = event.notification.data.route;
 
+  console.log("Notification clicked, route: ", route); // Add this line to verify the route
+
   event.waitUntil(
     clients.openWindow(route).then(() => {
       event.notification.close();

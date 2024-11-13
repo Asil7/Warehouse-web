@@ -9,6 +9,7 @@ import {
   Popconfirm,
   Row,
   Select,
+  Tag,
 } from "antd";
 import CustomTable from "../../components/table/CustomTable";
 import { useDispatch, useSelector } from "react-redux";
@@ -175,6 +176,14 @@ const Store = () => {
     } catch (e) {}
   };
 
+  const calculateTotalPrice = () => {
+    const total = storeProductList.reduce(
+      (total, product) => total + product.price * product.quantity,
+      0
+    );
+    return new Intl.NumberFormat("en-US").format(total);
+  };
+
   const columns = [
     {
       // title: "Received",
@@ -260,6 +269,13 @@ const Store = () => {
           onEdit={handleUpdateProduct}
           onDelete={handleDeleteStoreProduct}
         />
+
+        <div>
+          Total Price:
+          <Tag color="cyan" className="fs-5 ms-1 p-1">
+            {calculateTotalPrice()} so'm
+          </Tag>
+        </div>
       </Card>
       <DraggableModal
         width={900}
