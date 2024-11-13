@@ -270,12 +270,14 @@ const Store = () => {
           onDelete={handleDeleteStoreProduct}
         />
 
-        <div>
-          Total Price:
-          <Tag color="cyan" className="fs-5 ms-1 p-1">
-            {calculateTotalPrice()} so'm
-          </Tag>
-        </div>
+        {storeProductList.length > 0 && (
+          <div className="mt-1">
+            Total Price:
+            <Tag color="cyan" className="fs-5 ms-1 p-1">
+              {calculateTotalPrice()} so'm
+            </Tag>
+          </div>
+        )}
       </Card>
       <DraggableModal
         width={900}
