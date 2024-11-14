@@ -44,8 +44,7 @@ const Login = () => {
   const handleUpdateFireBaseToken = async (username) => {
     try {
       const actionResult = await dispatch(updateFireBaseToken(username));
-      const result = unwrapResult(actionResult);
-      console.log(result);
+      unwrapResult(actionResult);
       message.success("Firebase token successfully updated!");
     } catch (error) {
       message.warning("Failed to update Firebase token: " + error.message);

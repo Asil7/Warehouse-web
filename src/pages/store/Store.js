@@ -271,7 +271,7 @@ const Store = () => {
         />
 
         {storeProductList.length > 0 && (
-          <div className="mt-1">
+          <div>
             Total Price:
             <Tag color="cyan" className="fs-5 ms-1 p-1">
               {calculateTotalPrice()} so'm
