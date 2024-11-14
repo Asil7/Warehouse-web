@@ -66,6 +66,11 @@ const OrderByUsername = () => {
       title: "Telefon",
       dataIndex: "phone",
       key: "phone",
+      render: (phone) => (
+        <a href={`tel:${phone}`} onClick={(event) => event.stopPropagation()}>
+          {phone}
+        </a>
+      ),
     },
     {
       title: "Delivered",
