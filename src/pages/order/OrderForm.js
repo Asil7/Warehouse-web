@@ -123,10 +123,14 @@ const OrderForm = () => {
 
   return (
     <div>
-      <Card size="small" title={<Tag color="cyan">Add order</Tag>}>
+      <Card
+        style={{ minWidth: "700px" }}
+        size="small"
+        title={<Tag color="cyan">Add order</Tag>}
+      >
         <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
           <Row>
-            <Col xs={24} sm={16} md={12} lg={10} xl={8} xxl={6}>
+            <Col xs={10} sm={12} md={12} lg={10} xl={8} xxl={6}>
               <Form.Item labelAlign="left" label="Company">
                 <Controller
                   name="companyId"
@@ -179,7 +183,7 @@ const OrderForm = () => {
           </Row>
 
           <Row>
-            <Col xs={24} sm={16} md={12} lg={10} xl={8} xxl={6}>
+            <Col xs={10} sm={12} md={12} lg={10} xl={8} xxl={6}>
               <Form.Item label="User">
                 <Controller
                   name="username"
@@ -225,7 +229,7 @@ const OrderForm = () => {
                 {fields.map((item, index) => (
                   <Space
                     key={item.id}
-                    style={{ display: "flex", marginBottom: 8 }}
+                    style={{ display: "flex", marginBottom: -15 }}
                     align="baseline"
                   >
                     <Controller

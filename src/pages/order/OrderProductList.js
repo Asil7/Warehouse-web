@@ -367,7 +367,7 @@ const OrderProductList = () => {
                 {fields.map((item, index) => (
                   <Space
                     key={item.id}
-                    style={{ display: "flex", marginBottom: 8 }}
+                    style={{ display: "flex", marginBottom: -15 }}
                     align="baseline"
                   >
                     <Controller
@@ -474,9 +474,13 @@ const OrderProductList = () => {
                       )}
                     />
 
-                    <Button type="danger" onClick={() => remove(index)}>
-                      Remove
-                    </Button>
+                    <button
+                      onClick={() => remove(index)}
+                      title="Remove"
+                      className="btn btn-sm btn-outline-danger"
+                    >
+                      <i className="bi bi-trash"></i>
+                    </button>
                   </Space>
                 ))}
                 <Button
