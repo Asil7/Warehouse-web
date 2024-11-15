@@ -76,7 +76,7 @@ const TheLayout = () => {
       theme={{
         algorithm: customTheme,
         token: {
-          fontFamily: "Sriracha",
+          fontFamily: "Mitr",
         },
       }}
     >
