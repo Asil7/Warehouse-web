@@ -122,17 +122,12 @@ const Header = ({
                 }
                 onClick={() => setCollapsedForPhone(!collapsedForPhone)}
                 className="me-1"
-                style={{
-                  marginLeft: collapsedForPhone ? "0px" : "200px",
-                  transition: "margin-left 0.2s ease",
-                }}
               />
             )}
             <Image src={logoImage} alt="Logo" width={40} />
           </Row>
         </Col>
 
-        {/* {collapsedForPhone && ( */}
         <Col>
           <Segmented
             className="me-4"
@@ -158,7 +153,6 @@ const Header = ({
             <Avatar className="bg-primary" size="16" icon={<UserOutlined />} />
           </Dropdown>
         </Col>
-        {/* )} */}
       </Row>
     </AntHeader>
   );

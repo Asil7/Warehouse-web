@@ -58,7 +58,7 @@ const DraggableModal = ({
       onCancel={modalClose}
       footer={null}
       style={{ marginTop: "3%" }}
-      maskClosable={maskClosable}
+      // maskClosable={maskClosable}
       width={width}
       modalRender={(modal) => (
         <Draggable
