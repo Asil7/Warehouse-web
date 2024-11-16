@@ -26,6 +26,7 @@ import OrderProductList from "./pages/order/OrderProductList";
 import StoreHistory from "./pages/warehouse/StoreHistory";
 import OrderByUsername from "./pages/order/OrderByUsername";
 import Store from "./pages/store/Store";
+import TodayOrderList from "./pages/order/TodayOrderList";
 
 const PrivateRoute = ({ isAuthenticated, children }) => {
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -90,6 +91,24 @@ const App = () => {
 
           <Route
             path="orders/order-products/:id"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <OrderProductList />
+              </PrivateRoute>
+            }
+            name="Order products"
+          />
+          <Route
+            path="today-orders"
+            element={
+              <PrivateRoute isAuthenticated={isAuthenticated}>
+                <TodayOrderList />
+              </PrivateRoute>
+            }
+            name="Today Orders"
+          />
+          <Route
+            path="today-orders/order-products/:id"
             element={
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <OrderProductList />

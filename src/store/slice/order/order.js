@@ -4,6 +4,7 @@ import {
   getOrderList,
   getOrderListByUser,
   getOrderProductList,
+  getTodayOrderList,
 } from "../../actions/order/order";
 
 const slice = createSlice({
@@ -11,6 +12,7 @@ const slice = createSlice({
   initialState: {
     orderList: [],
     orderListByUser: [],
+    todayOrderList: [],
     orderById: {},
     orderProductList: [],
     isLoading: false,
@@ -32,6 +34,18 @@ const slice = createSlice({
       .addCase(getOrderList.rejected, (state) => {
         state.isLoading = false;
         state.orderList = [];
+      })
+
+      .addCase(getTodayOrderList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTodayOrderList.fulfilled, (state, action) => {
+        state.todayOrderList = action.payload.data.object;
+        state.isLoading = false;
+      })
+      .addCase(getTodayOrderList.rejected, (state) => {
+        state.isLoading = false;
+        state.todayOrderList = [];
       })
 
       .addCase(getOrderListByUser.pending, (state) => {

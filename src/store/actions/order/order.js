@@ -63,6 +63,18 @@ export const editOrderDeliveredStatus = createAsyncThunk(
   }
 );
 
+export const getTodayOrderList = createAsyncThunk(
+  "get/TodayOrderList",
+  async () => {
+    try {
+      const res = await api.get(`order/today`);
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
+
 //ORDER PRODUCT
 
 export const getOrderProductList = createAsyncThunk(

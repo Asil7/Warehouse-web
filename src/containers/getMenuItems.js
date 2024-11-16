@@ -13,6 +13,10 @@ export const getMenuItems = () => {
           key: "order-list",
           label: "Order List",
         },
+        UserService.hasPermission("VIEW_TODAY_ORDER_LIST") && {
+          key: "today-orders",
+          label: "Today Orders",
+        },
         UserService.hasPermission("VIEW_ORDER_LIST_BY_USER") && {
           key: "orders",
           label: "Orders",
