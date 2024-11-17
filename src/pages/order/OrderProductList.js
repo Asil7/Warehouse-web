@@ -192,28 +192,28 @@ const OrderProductList = () => {
   );
 
   const items = [
-    { label: "Company", value: orderById.company },
-    { label: "Phone", value: orderById.phone },
-    { label: "Total Weight", value: orderById.totalWeight },
-    { label: "Location", value: orderById.location },
+    { label: "Tashkilot", value: orderById.company },
+    { label: "Telefon", value: orderById.phone },
+    { label: "Jami og'irlik", value: orderById.totalWeight },
+    { label: "Manzil", value: orderById.location },
   ];
 
   const columns = [
     {
-      title: "Product",
+      title: "Maxsulot",
       dataIndex: "product",
       key: "product",
       width: 400,
     },
     {
-      title: "Quantity",
+      title: "Soni",
       dataIndex: "quantity",
       key: "quantity",
       editable: true,
       width: 400,
     },
     {
-      title: "Type",
+      title: "Turi",
       dataIndex: "type",
       key: "type",
       width: 400,
@@ -345,11 +345,12 @@ const OrderProductList = () => {
         {!delivered && (
           <div className="mt-2 text-end">
             <Button
+              className="bg-success"
               block={isMobile}
               type="primary"
               onClick={() => handleChangeDeliveredStatus()}
             >
-              Delivered
+              Yetkazildi
             </Button>
           </div>
         )}

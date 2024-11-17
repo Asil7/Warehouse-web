@@ -73,7 +73,7 @@ const OrderByUsername = () => {
       ),
     },
     {
-      title: "Delivered",
+      title: "Yetkazildi",
       dataIndex: "delivered",
       key: "delivered",
       render: (delivered, record) => (
@@ -85,7 +85,7 @@ const OrderByUsername = () => {
       ),
     },
     {
-      title: "Action",
+      title: "Manzil",
       dataIndex: "action",
       key: "action",
       width: 100,
