@@ -37,7 +37,7 @@ const Login = () => {
         message.error("Error");
       }
     } catch (error) {
-      message.error("An error occurred. Please try again." + error, 30);
+      message.error("Please try again later. Something went wrong.");
     }
   };
 
