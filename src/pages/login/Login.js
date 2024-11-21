@@ -52,7 +52,7 @@ const Login = () => {
   };
 
   return (
-    <Row justify="center" align="top" className="login-background">
+    <Row justify="center" align="top" className="login-background p-2">
       <Col
         className="login-card-container"
         xs={24}
