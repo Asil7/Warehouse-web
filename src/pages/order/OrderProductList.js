@@ -200,7 +200,7 @@ const OrderProductList = () => {
 
   const columns = [
     {
-      title: "Maxsulot",
+      title: "Mahsulot",
       dataIndex: "product",
       key: "product",
       width: 400,
@@ -222,20 +222,50 @@ const OrderProductList = () => {
 
   const printCard = () => {
     const printWindow = window.open("", "_blank");
+
+    const today = new Date();
+    const formattedDate = `${today.getDate()}/${
+      today.getMonth() + 1
+    }/${today.getFullYear()}`;
+
     printWindow.document.write(`
       <html>
         <head>
           <title>Print Order</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.21.5/antd.min.css" />
           <style>
-            body { font-family: Arial, sans-serif; }
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
             .print-card { padding: 20px; }
             h2 { text-align: center; }
+            h3 {
+              text-align: center;
+              font-weight: bold;
+            }
+            table { width: 100%; border-collapse: collapse;}
+            th, td { border: 1px solid black; padding: 8px; }
+            .footer { 
+            display: flex; 
+            justify-content: space-between; 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            right: 0;
+            page-break-inside: avoid;
+          }
+            @page {
+              size: portrait; 
+              margin: 20mm;
+            }
+            @media print {
+              .footer { 
+                page-break-before: always;
+              }
+            }
           </style>
         </head>
         <body>
           <div class="print-card">
-            <h2>Order Details</h2>
+            <h2>Buyurtma</h2>
             <div>
               ${items
                 .map(
@@ -244,13 +274,13 @@ const OrderProductList = () => {
                 )
                 .join("")}
             </div>
-            <h3>Product List</h3>
-            <table style="width: 100%; border-collapse: collapse;">
+            <h3>Mahsulotlar ro'yxati</h3>
+            <table>
               <thead>
                 <tr>
-                  <th style="border: 1px solid black; padding: 8px;">Product</th>
-                  <th style="border: 1px solid black; padding: 8px;">Quantity</th>
-                  <th style="border: 1px solid black; padding: 8px;">Type</th>
+                  <th>Mahsulot</th>
+                  <th>Soni</th>
+                  <th>Turi</th>
                 </tr>
               </thead>
               <tbody>
@@ -258,19 +288,24 @@ const OrderProductList = () => {
                   .map(
                     (item) => `
                   <tr>
-                    <td style="border: 1px solid black; padding: 8px;">${item.product}</td>
-                    <td style="border: 1px solid black; padding: 8px;">${item.quantity}</td>
-                    <td style="border: 1px solid black; padding: 8px;">${item.type}</td>
+                    <td>${item.product}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.type}</td>
                   </tr>
                 `
                   )
                   .join("")}
               </tbody>
             </table>
+            <div class="footer">
+              <p>Sana: ${formattedDate}</p>
+              <p>Imzo: ______________________</p>
+            </div>
           </div>
         </body>
       </html>
     `);
+
     printWindow.document.close();
     printWindow.print();
   };
