@@ -252,7 +252,7 @@ const Store = () => {
         }
       >
         <CustomTable
-          // loading={isLoading}
+          loading={isLoading}
           data={storeProductList}
           columns={columns}
           scroll={{ x: 300 }}

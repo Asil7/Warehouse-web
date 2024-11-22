@@ -60,7 +60,7 @@ const OrderProductList = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 700);
+      setIsMobile(window.innerWidth < 1000);
     };
     window.addEventListener("resize", handleResize);
 
