@@ -191,14 +191,10 @@ const Store = () => {
       key: "received",
       width: 50,
       render: (received, record) => (
-        <Popconfirm
-          title="Mark as received?"
-          onConfirm={() => handleChangeReceivedStatus(record)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Checkbox checked={received} onChange={(e) => e.preventDefault()} />
-        </Popconfirm>
+        <Checkbox
+          checked={received}
+          onChange={() => handleChangeReceivedStatus(record)}
+        />
       ),
     },
     {
@@ -227,17 +223,14 @@ const Store = () => {
       key: "paid",
       width: 250,
       render: (paid, record) => (
-        <Popconfirm
-          title="Mark as paid?"
-          onConfirm={() => handleChangePaidStatus(record)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Checkbox checked={paid} onChange={(e) => e.preventDefault()} />
-        </Popconfirm>
+        <Checkbox
+          checked={paid}
+          onChange={() => handleChangePaidStatus(record)}
+        />
       ),
     },
   ];
+
   return (
     <div>
       <Card
@@ -248,9 +241,7 @@ const Store = () => {
             title="Getting products will erase changes. Continue?"
             onConfirm={handleGetProductsFromWarehouse}
           >
-            <Button className={styles.primaryButton}>
-              Get Products from Warehouse
-            </Button>
+            <Button className={styles.primaryButton}>Get Products</Button>
           </Popconfirm>
         }
         size="small"
@@ -261,7 +252,7 @@ const Store = () => {
         }
       >
         <CustomTable
-          loading={isLoading}
+          // loading={isLoading}
           data={storeProductList}
           columns={columns}
           scroll={{ x: 300 }}
