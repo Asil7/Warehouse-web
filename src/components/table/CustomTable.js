@@ -153,6 +153,7 @@ const CustomTable = ({
       if (col.editable && isEditing(record)) {
         return (
           <Input
+            style={{ minWidth: "60px" }}
             value={
               editableData[col.dataIndex] !== undefined
                 ? editableData[col.dataIndex]
