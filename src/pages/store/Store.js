@@ -202,6 +202,7 @@ const Store = () => {
       dataIndex: "product",
       key: "product",
       width: 350,
+      // searchable: true,
     },
     {
       title: "Quantity",

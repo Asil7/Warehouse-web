@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Button, Input, message, Popconfirm, Space, Table } from "antd";
 import Highlighter from "react-highlight-words";
@@ -18,11 +18,25 @@ const CustomTable = ({
   const [editingKey, setEditingKey] = useState("");
   const [editableData, setEditableData] = useState({});
   const searchInput = useRef(null);
+  const [isMobile, setIsMobile] = useState();
 
   const isEditing = (record) => record.id === editingKey;
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 450);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const validateEditableData = () => {
-    // Check if any of the editable fields are empty
     return Object.keys(editableData).every((key) => {
       return editableData[key] !== undefined && editableData[key] !== "";
     });
@@ -146,27 +160,29 @@ const CustomTable = ({
     setEditableData({ ...editableData, [dataIndex]: e.target.value });
   };
 
-  const enhancedColumns = columns.map((col) => ({
-    ...col,
-    ...(col.searchable ? getColumnSearchProps(col.dataIndex) : {}),
-    render: (text, record) => {
-      if (col.editable && isEditing(record)) {
-        return (
-          <Input
-            style={{ minWidth: "60px" }}
-            value={
-              editableData[col.dataIndex] !== undefined
-                ? editableData[col.dataIndex]
-                : text
-            }
-            onChange={(e) => handleChange(e, col.dataIndex)}
-            onPressEnter={handleSave}
-          />
-        );
-      }
-      return col.render ? col.render(text, record) : text;
-    },
-  }));
+  const enhancedColumns = columns
+    .filter((col) => !(isMobile && col.key === "paid" && editingKey))
+    .map((col) => ({
+      ...col,
+      ...(col.searchable ? getColumnSearchProps(col.dataIndex) : {}),
+      render: (text, record) => {
+        if (col.editable && isEditing(record)) {
+          return (
+            <Input
+              style={{ minWidth: "70px" }}
+              value={
+                editableData[col.dataIndex] !== undefined
+                  ? editableData[col.dataIndex]
+                  : text
+              }
+              onChange={(e) => handleChange(e, col.dataIndex)}
+              onPressEnter={handleSave}
+            />
+          );
+        }
+        return col.render ? col.render(text, record) : text;
+      },
+    }));
 
   return (
     <Table
