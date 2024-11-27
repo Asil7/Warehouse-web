@@ -76,12 +76,12 @@ const ProductReceipt = () => {
   };
 
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      width: 150,
-    },
+    // {
+    //   title: "ID",
+    //   dataIndex: "id",
+    //   key: "id",
+    //   width: 150,
+    // },
     {
       title: "Product",
       dataIndex: "product",

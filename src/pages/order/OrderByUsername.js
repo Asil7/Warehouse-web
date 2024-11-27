@@ -102,7 +102,7 @@ const OrderByUsername = () => {
           dataSource={orderListByUser}
           columns={columns}
           rowKey="id"
-          scroll={{ x: 300 }}
+          scroll={{ x: 380 }}
           pagination={{ pageSize: 20 }}
           onRow={(record) => ({
             onClick: () => {

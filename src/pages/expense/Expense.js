@@ -110,11 +110,11 @@ const Expense = () => {
   };
 
   const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
+    // {
+    //   title: "ID",
+    //   dataIndex: "id",
+    //   key: "id",
+    // },
     {
       title: "Reason",
       dataIndex: "reason",
@@ -171,7 +171,7 @@ const Expense = () => {
           size="small"
           loading={isLoading}
           dataSource={expenseList}
-          scroll={{ x: 1000 }}
+          scroll={{ x: 600 }}
           columns={columns}
           rowKey="id"
           pagination={{ pageSize: 10 }}
