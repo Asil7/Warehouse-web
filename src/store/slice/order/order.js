@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  createOrder,
   getOrderById,
   getOrderList,
   getOrderListByUser,
@@ -16,6 +17,7 @@ const slice = createSlice({
     orderById: {},
     orderProductList: [],
     isLoading: false,
+    createOrderLoading: false,
   },
   reducers: {
     clearCart: (state) => {
@@ -82,6 +84,16 @@ const slice = createSlice({
       .addCase(getOrderProductList.rejected, (state) => {
         state.isLoading = false;
         state.orderProductList = [];
+      })
+
+      .addCase(createOrder.pending, (state) => {
+        state.createOrderLoading = true;
+      })
+      .addCase(createOrder.fulfilled, (state, action) => {
+        state.createOrderLoading = false;
+      })
+      .addCase(createOrder.rejected, (state) => {
+        state.createOrderLoading = false;
       });
   },
 });

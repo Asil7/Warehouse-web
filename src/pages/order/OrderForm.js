@@ -28,6 +28,7 @@ const OrderForm = () => {
   const { companyList, isLoading } = useSelector((state) => state.company);
   const { warehouseProductList } = useSelector((state) => state.warehouse);
   const { userList } = useSelector((state) => state.user);
+  const { createOrderLoading } = useSelector((state) => state.order);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -365,7 +366,11 @@ const OrderForm = () => {
           <Row>
             <Col span={24}>
               <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button
+                  loading={createOrderLoading}
+                  type="primary"
+                  htmlType="submit"
+                >
                   Save
                 </Button>
               </Form.Item>
