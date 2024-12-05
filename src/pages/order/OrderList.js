@@ -6,10 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteOrder,
   editOrderDeliveredStatus,
+  getOrderById,
   getOrderList,
-  sendNotification,
 } from "../../store/actions/order/order";
 import { useEffect } from "react";
+import { sendNotification } from "../../store/actions/firebase/firebase";
 
 const OrderList = () => {
   const dispatch = useDispatch();
@@ -50,16 +51,25 @@ const OrderList = () => {
   };
 
   const handleSendNotification = async (id) => {
+    const orderResponse = await dispatch(getOrderById(id));
+    const orderData = orderResponse.payload.data.object;
+
+    if (!orderData) {
+      message.error("Failed to retrieve order details");
+      return;
+    }
+
     try {
       const payload = {
         userToken:
           "fmSL3gDK1LlJvRM7-o23fL:APA91bHEdqOJHLLV7LvigCuL5SxzlFn6SKb-2hgBLclMp-B8CqU8PonF6fM28TZ5uRT2480JcvrkNg4WNvK9OpnyjOXZxf9rLJGD3WfNA9mpJ89I43bccUY",
-        orderId: id,
+        title: orderData?.company,
+        body: "Mahsulot ortib bo'lindi",
+        route: `/order-list/order-product-list/${id}`,
       };
       let res = await dispatch(sendNotification(payload));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
-        dispatch(getOrderList());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }

@@ -6,10 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteOrder,
   editOrderDeliveredStatus,
+  getOrderById,
   getTodayOrderList,
-  sendNotification,
 } from "../../store/actions/order/order";
 import { useEffect } from "react";
+import { sendNotification } from "../../store/actions/firebase/firebase";
 
 const TodayOrderList = () => {
   const dispatch = useDispatch();
@@ -51,15 +52,25 @@ const TodayOrderList = () => {
 
   const handleSendNotification = async (id) => {
     try {
+      const orderResponse = await dispatch(getOrderById(id));
+      const orderData = orderResponse.payload.data.object;
+
+      if (!orderData) {
+        message.error("Failed to retrieve order details");
+        return;
+      }
+
       const payload = {
         userToken:
-          "cUmK_qnHacptEtS_lLfoZ7:APA91bH3dsjrc0JKDHmdfkUig8pyouKgwuYZ95Q99fBv0K7-ze4tIivNFtUQyZLnoLJGUPPImcn4PQyGO9oGwwTo_OTRwFm-H_puF7EXOxhx4EBWWoZ881w",
-        orderId: id,
+          "fmSL3gDK1LlJvRM7-o23fL:APA91bHEdqOJHLLV7LvigCuL5SxzlFn6SKb-2hgBLclMp-B8CqU8PonF6fM28TZ5uRT2480JcvrkNg4WNvK9OpnyjOXZxf9rLJGD3WfNA9mpJ89I43bccUY",
+        title: orderData?.company,
+        body: "Mahsulot ortib bo'lindi",
+        route: `/order-list/order-product-list/${id}`,
       };
       let res = await dispatch(sendNotification(payload));
       if (res.payload.status === 200) {
+        console.log(res);
         message.success(res.payload.data.message);
-        dispatch(getTodayOrderList());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }
