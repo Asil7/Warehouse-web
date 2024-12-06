@@ -1,17 +1,23 @@
-import { Card, Checkbox, Table, message } from "antd";
+import { Card, Checkbox, Table, message, Grid } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   editOrderDeliveredStatus,
+  getOrderById,
   getOrderListByUser,
 } from "../../store/actions/order/order";
 import { useEffect } from "react";
 import UserService from "../../services/UserService";
+import { PhoneOutlined } from "@ant-design/icons";
+import { sendNotification } from "../../store/actions/firebase/firebase";
+
+const { useBreakpoint } = Grid;
 
 const OrderByUsername = () => {
   const dispatch = useDispatch();
   const { orderListByUser, isLoading } = useSelector((state) => state.order);
   const navigate = useNavigate();
+  const screens = useBreakpoint();
 
   useEffect(() => {
     dispatch(getOrderListByUser(UserService.getSubject()));
@@ -35,6 +41,33 @@ const OrderByUsername = () => {
     }
   };
 
+  const handleSendNotification = async (id, event) => {
+    event.stopPropagation();
+    const orderResponse = await dispatch(getOrderById(id));
+    const orderData = orderResponse.payload?.data?.object;
+
+    if (!orderData) {
+      message.error("Failed to retrieve order details");
+      return;
+    }
+
+    try {
+      const payload = {
+        userToken:
+          "d4e_Dacjt_TeFtmI1Eg92W:APA91bHvzsqlP7lQjuAcoTZKkWTAqdD2s5ke7eo-nC45i5X-2B0FkoShwMPSEhkA-n6c1Kc1AXO3boJ3p-JAkmoWrasHl22U6VH_FdquFwqYyJZftGLnflc",
+        title: orderData?.company,
+        body: "Mahsulot ortib bo'lindi",
+        route: `/order-list/order-product-list/${id}`,
+      };
+      let res = await dispatch(sendNotification(payload));
+      if (res.payload.status === 200) {
+        message.success(res.payload.data.message);
+      } else if (res.payload.status === 409) {
+        message.error(res.payload.response.data.message);
+      }
+    } catch (e) {}
+  };
+
   const ActionComponent = ({ item }) => {
     const handleLocationClick = (event) => {
       event.stopPropagation();
@@ -52,6 +85,13 @@ const OrderByUsername = () => {
             <i className="bi bi-geo-alt-fill" />
           </button>
         )}
+        <button
+          onClick={(event) => handleSendNotification(item.id, event)}
+          title="Notification"
+          className="btn btn-sm btn-outline-primary me-1"
+        >
+          <i className="bi bi-bell-fill" />
+        </button>
       </div>
     );
   };
@@ -63,13 +103,28 @@ const OrderByUsername = () => {
       key: "company",
     },
     {
-      title: "Telefon",
+      title: "Tel",
       dataIndex: "phone",
       key: "phone",
       render: (phone) => (
-        <a href={`tel:${phone}`} onClick={(event) => event.stopPropagation()}>
-          {phone}
-        </a>
+        <>
+          {screens.sm ? (
+            <a
+              href={`tel:${phone}`}
+              onClick={(event) => event.stopPropagation()}
+            >
+              {phone}
+            </a>
+          ) : (
+            <PhoneOutlined
+              onClick={(event) => {
+                event.stopPropagation();
+                window.location.href = `tel:${phone}`;
+              }}
+              style={{ fontSize: "18px", color: "green" }}
+            />
+          )}
+        </>
       ),
     },
     {
@@ -85,7 +140,7 @@ const OrderByUsername = () => {
       ),
     },
     {
-      title: "Manzil",
+      title: "Action",
       dataIndex: "action",
       key: "action",
       width: 100,
