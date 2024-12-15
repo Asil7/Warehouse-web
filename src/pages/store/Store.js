@@ -27,6 +27,7 @@ import DraggableModal from "../../components/modal/DraggableModal";
 import { useForm, Controller } from "react-hook-form";
 import { getProductList } from "../../store/actions/product/product";
 import { createStyles } from "antd-style";
+import CustomTable2 from "../../components/table/CustomTable2";
 
 const useStyle = createStyles(({ css }) => ({
   primaryButton: css`
@@ -252,7 +253,7 @@ const Store = () => {
           </Button>
         }
       >
-        <CustomTable
+        <CustomTable2
           loading={isLoading}
           data={storeProductList}
           columns={columns}
