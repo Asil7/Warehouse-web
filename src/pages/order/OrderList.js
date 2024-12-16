@@ -8,9 +8,10 @@ import {
   editOrderDeliveredStatus,
   getOrderById,
   getOrderList,
+  sendNotification,
 } from "../../store/actions/order/order";
 import { useEffect } from "react";
-import { sendNotification } from "../../store/actions/firebase/firebase";
+// import { sendNotification } from "../../store/actions/firebase/firebase";
 
 const OrderList = () => {
   const dispatch = useDispatch();
@@ -50,26 +51,43 @@ const OrderList = () => {
     } catch (e) {}
   };
 
+  // const handleSendNotification = async (id) => {
+  //   const orderResponse = await dispatch(getOrderById(id));
+  //   const orderData = orderResponse.payload.data.object;
+
+  //   if (!orderData) {
+  //     message.error("Failed to retrieve order details");
+  //     return;
+  //   }
+
+  //   try {
+  //     const payload = {
+  //       userToken:
+  //         "d4e_Dacjt_TeFtmI1Eg92W:APA91bHvzsqlP7lQjuAcoTZKkWTAqdD2s5ke7eo-nC45i5X-2B0FkoShwMPSEhkA-n6c1Kc1AXO3boJ3p-JAkmoWrasHl22U6VH_FdquFwqYyJZftGLnflc",
+  //       title: orderData?.company,
+  //       body: "Mahsulot ortib bo'lindi",
+  //       route: `/order-list/order-product-list/${id}`,
+  //     };
+  //     let res = await dispatch(sendNotification(payload));
+  //     if (res.payload.status === 200) {
+  //       message.success(res.payload.data.message);
+  //     } else if (res.payload.status === 409) {
+  //       message.error(res.payload.response.data.message);
+  //     }
+  //   } catch (e) {}
+  // };
+
   const handleSendNotification = async (id) => {
-    const orderResponse = await dispatch(getOrderById(id));
-    const orderData = orderResponse.payload.data.object;
-
-    if (!orderData) {
-      message.error("Failed to retrieve order details");
-      return;
-    }
-
     try {
       const payload = {
         userToken:
-          "d4e_Dacjt_TeFtmI1Eg92W:APA91bHvzsqlP7lQjuAcoTZKkWTAqdD2s5ke7eo-nC45i5X-2B0FkoShwMPSEhkA-n6c1Kc1AXO3boJ3p-JAkmoWrasHl22U6VH_FdquFwqYyJZftGLnflc",
-        title: orderData?.company,
-        body: "Mahsulot ortib bo'lindi",
-        route: `/order-list/order-product-list/${id}`,
+          "cqAZo43ZS2tCoG3ytrX4bx:APA91bH9RZz-VQQgbdVjYu8S4tMFgo2FiT0zY46wF5wYU74PKdYqdabDwWeIUrEGilu5Qzz6SJ3UqEfiWNN6FosqcZ2VrwxL64C1aeKH4oK2rrWPU0h6uGI",
+        orderId: id,
       };
       let res = await dispatch(sendNotification(payload));
       if (res.payload.status === 200) {
         message.success(res.payload.data.message);
+        dispatch(getOrderList());
       } else if (res.payload.status === 409) {
         message.error(res.payload.response.data.message);
       }

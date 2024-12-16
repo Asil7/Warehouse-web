@@ -125,16 +125,16 @@ export const deleteOrderProduct = createAsyncThunk(
   }
 );
 
-// export const sendNotification = createAsyncThunk(
-//   "send/Notification",
-//   async (data) => {
-//     try {
-//       const res = await api.post(
-//         `order/send?userToken=${data.userToken}&orderId=${data.orderId}`
-//       );
-//       return res;
-//     } catch (e) {
-//       return e;
-//     }
-//   }
-// );
+export const sendNotification = createAsyncThunk(
+  "send/Notification",
+  async (data) => {
+    try {
+      const res = await api.post(
+        `order/send?userToken=${data.userToken}&orderId=${data.orderId}`
+      );
+      return res;
+    } catch (e) {
+      return e;
+    }
+  }
+);
