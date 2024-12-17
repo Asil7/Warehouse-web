@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteOrder,
   editOrderDeliveredStatus,
-  getOrderById,
+  // getOrderById,
   getOrderList,
   sendNotification,
 } from "../../store/actions/order/order";

@@ -91,8 +91,24 @@ const OrderForm = () => {
   const onQuantityKeyDown = (index) => (e) => {
     if (e.key === "Tab") {
       e.preventDefault();
-      if (productSelectRefs.current[index + 1]) {
-        productSelectRefs.current[index + 1].focus();
+
+      const currentProduct = watchedProducts[index]?.product;
+      const currentQuantity = watchedProducts[index]?.quantity;
+
+      if (currentProduct && currentQuantity > 0) {
+        append({
+          product: "",
+          quantity: "",
+          type: "",
+          totalWeight: "",
+        });
+        setTimeout(() => {
+          if (productSelectRefs.current[index + 1]) {
+            productSelectRefs.current[index + 1].focus();
+          }
+        }, 0);
+      } else {
+        message.warning("Mahsulot va miqdor maydonlarini toʻldiring.");
       }
     }
   };
