@@ -287,6 +287,20 @@ const OrderForm = () => {
                                 value: value.product,
                                 label: value.product,
                               }))}
+                              onChange={(value) => {
+                                field.onChange(value);
+                                setTimeout(() => {
+                                  if (
+                                    productSelectRefs.current[
+                                      index + "_quantity"
+                                    ]
+                                  ) {
+                                    productSelectRefs.current[
+                                      index + "_quantity"
+                                    ].focus();
+                                  }
+                                }, 0);
+                              }}
                             />
                           </Form.Item>
                         </Col>
@@ -311,6 +325,10 @@ const OrderForm = () => {
                             type="number"
                             onKeyDown={onQuantityKeyDown(index)}
                             {...field}
+                            ref={(el) =>
+                              (productSelectRefs.current[index + "_quantity"] =
+                                el)
+                            }
                             status={fieldState.invalid ? "error" : ""}
                           />
                         </Form.Item>
