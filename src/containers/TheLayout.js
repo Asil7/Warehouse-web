@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, ConfigProvider, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
+import Snowfall from "react-snowfall";
 import Header from "./Header";
 import { getMenuItems } from "./getMenuItems";
+import snow from "../img/snow.png";
 
 const { Content, Sider } = Layout;
 const { defaultAlgorithm, darkAlgorithm } = theme;
@@ -71,6 +73,9 @@ const TheLayout = () => {
     }));
   };
 
+  const snowImage = new Image();
+  snowImage.src = snow;
+
   return (
     <ConfigProvider
       theme={{
@@ -81,6 +86,12 @@ const TheLayout = () => {
       }}
     >
       <Layout style={{ minHeight: "100vh", position: "relative" }}>
+        <Snowfall
+          style={{ zIndex: 1 }}
+          color="white"
+          snowflakeCount={100}
+          images={[snowImage]}
+        />
         {isMobile && !collapsedForPhone && (
           <div
             onClick={() => setCollapsedForPhone(true)}

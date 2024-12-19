@@ -336,24 +336,6 @@ const OrderForm = () => {
                     />
 
                     <Controller
-                      name={`productList[${index}].type`}
-                      control={control}
-                      render={({ field, fieldState }) => (
-                        <Form.Item
-                          validateStatus={fieldState.invalid ? "error" : ""}
-                        >
-                          <Input
-                            readOnly
-                            autoComplete="off"
-                            placeholder="Type"
-                            {...field}
-                            status={fieldState.invalid ? "error" : ""}
-                          />
-                        </Form.Item>
-                      )}
-                    />
-
-                    <Controller
                       name={`productList[${index}].totalWeight`}
                       control={control}
                       render={({ field, fieldState }) => (
@@ -364,6 +346,24 @@ const OrderForm = () => {
                             autoComplete="off"
                             readOnly
                             placeholder="Total Weight"
+                            {...field}
+                            status={fieldState.invalid ? "error" : ""}
+                          />
+                        </Form.Item>
+                      )}
+                    />
+
+                    <Controller
+                      name={`productList[${index}].type`}
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <Form.Item
+                          validateStatus={fieldState.invalid ? "error" : ""}
+                        >
+                          <Input
+                            readOnly
+                            autoComplete="off"
+                            placeholder="Type"
                             {...field}
                             status={fieldState.invalid ? "error" : ""}
                           />
