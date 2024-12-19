@@ -87,7 +87,7 @@ const TheLayout = () => {
     >
       <Layout style={{ minHeight: "100vh", position: "relative" }}>
         <Snowfall
-          style={{ zIndex: 1 }}
+          // style={{ zIndex: 1 }}
           color="white"
           snowflakeCount={100}
           images={[snowImage]}
